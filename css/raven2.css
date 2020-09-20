@@ -1,0 +1,61 @@
+.header{
+    height: 15px;
+    background-color: purple;
+    margin-left:0;
+    color:white;
+    font-size:2vh;
+    text-align:center;
+    width:100%;
+}
+.cajaNivel{
+    margin-bottom:0;
+    height:85vh;
+    position:relative;
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size: 70vh;
+}
+
+.opciones{
+    margin-top:40vh;
+    width:80%;
+    margin-left:10%;
+}
+
+.opciones input{
+    color:purple;
+    margin-left:30px; 
+}
+
+.menu{
+    width:100%;
+}
+.menu input{
+    font-size:2vh;
+    background-color: purple;
+    color:white;
+}
+
+
+
+
+.caja-externa{
+    height: 90vh;
+}
+
+
+/*opciones niveles menor a 25*/
+.opciones-superior{
+    margin-left: 10px;;
+    margin-top: 47vh;
+    height: 4vh; 
+}
+.opciones-inferior{
+    margin-top: 13vh;
+}
+.opcion{
+        padding-left:20px;
+}
+.opciones-inferior .opcion{
+    padding-left:35px;
+}

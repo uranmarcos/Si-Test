@@ -1,0 +1,86 @@
+.fwb{
+    font-weight: bolder;
+}
+.purple{
+    color:purple;
+}
+.centrarTexto{
+    text-align:center;
+}
+.red{
+    color:red;
+}
+
+
+/*header*/
+.header{
+    margin-top:0;
+    height: 50px;
+    border: solid 1px purple;
+    margin-bottom:20px;
+}
+nav a{
+    color:purple;
+    text-align:center;
+}
+nav a:hover{
+    color:purple;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+/*admin.php*/
+.cajaPrincipal{
+   margin-top:10px;
+}
+
+.cajaBoton{
+    height: 40px;
+    width:100%;
+    border: solid 1px purple;
+    margin-bottom: 5px;
+    text-align:center;
+    font-size: 20px;
+    line-height: 40px;
+    font-weight: bolder;
+    color:purple;
+}
+a:hover{
+    text-decoration:none;
+}
+
+.cajaBoton:hover{
+    background-color: purple;
+    color: white;
+}
+
+
+
+
+/*boton accion compartido*/
+.botonInput{
+    background-color: purple;
+    width: 150px;
+    height: 30px;
+    font-size:15px;
+    display:block;
+    color: white;
+}
+.botonInput:hover{
+    background-color: white;
+    color:purple;
+}
+
+h6{
+    border-bottom: solid 1px purple;
+}
+
+
+.header a{
+    color:purple;
+}
+.header a:hover{
+    color:purple;
+    text-decoration: none;
+    font-weight: bolder;
+}

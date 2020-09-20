@@ -1,5 +1,5 @@
 # Si-Test
-Proyecto desarrollado para la toma de 6 test (1 de lógica y 5 de comprensión lectora) a postulantes para una beca académica.
+Proyecto para la toma de 6 test (1 de lógica y 5 de comprensión lectora) a postulantes para una beca académica. Desarrollado con PHP y MySQL.
 Existen dos roles: postulantes y voluntario(quien controla la toma de test al usuario postulante mediante reunión via zoom por ejemplo).
 
 El usuario con rol "postulante" ingresa a la web con su DNI y la clave que le brinda el usuario voluntario. Accede a un menú en el cual tiene en principio el test de lógica. Al finalizarlo (ya sea porque lo terminó o porque se le

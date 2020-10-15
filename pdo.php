@@ -1,8 +1,8 @@
 <?php
 
-  $dsn = "mysql:dbname=fundaci_postulaciones; host=localhost; port=21";
-  $usuario = "fundaci_postulaciones";
-  $pass = "Resi.124689";
+  $dsn = "mysql:dbname=sitest; host=localhost; port=3306";
+  $usuario = "root";
+  $pass = "";
 
   try {
     $baseDeDatos = new PDO($dsn, $usuario, $pass);

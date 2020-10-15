@@ -28,7 +28,7 @@ if($_POST){
         ("UPDATE usuarios SET horaRaven = '$fecha' WHERE dni = '$dni'");
     $consulta2->execute();
 
-    echo "<script>location.href='test1.php';</script>";
+    echo "<script>location.href='testr.php';</script>";
     exit;
 }
 ?>

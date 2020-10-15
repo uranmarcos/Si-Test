@@ -13,7 +13,7 @@ $mensaje = "¡Listo! Ya transcurrió el tiempo disponible.
 if($rol == "postulante"){
       $volver = "menu.php";
       $consulta = $baseDeDatos-> prepare
-            ("UPDATE usuarios SET areas = -2 WHERE dni = '$dni'");
+            ("UPDATE usuarios SET areas = -2, test1=0 WHERE dni = '$dni'");
       $consulta->execute();
 }elseif($rol == "voluntario"){
       $volver = "admin.php";

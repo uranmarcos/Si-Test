@@ -1,128 +1,47 @@
-
 <?php
-
-session_start();
-require("pdo.php");
-
-
-
-/*
-$dni = $_SESSION["dni"];
-
-//almaceno en base de datos el tiempo restante al cambiar de nivel.
-if($_POST){
-    if ($_POST["siguiente"]){
-        $tiempoRaven = $_POST["tiempoRaven"];
-        $matriz=explode(":",$tiempoRaven); //con eso hemos conseguido $matriz[0]=34  y $matriz[1]=12.
-        $tiempoRestante=($matriz[0]*60)+$matriz[1]; 
-        
-        $consulta =  $baseDeDatos -> prepare
-            ("UPDATE usuarios SET tiempoRaven='$tiempoRestante' WHERE dni = '$dni'");
-            $consulta -> execute();
-    }
-}    
+ 
+ $password = substr($_POST["dni"], -6);
+ echo($password);
 
 
-            //consulto en base de datos tiempo disponible y almaceno en variable.
-            $consulta = $baseDeDatos-> prepare
-                            ("SELECT tiempoRaven FROM usuarios WHERE dni = '$dni'");
-                $consulta->execute();
-                $consultaRaven = $consulta->fetch(PDO::FETCH_ASSOC);
-
-                $tiempo = $consultaRaven["tiempoRaven"];
+ ?>
 
 
-?>
-
-<!--asigno a js el valor disponible para el usuario en bdd -->
-
-
-<!-- cargado ya-->
-<script type="text/javascript">
-               var seg = <?php echo $tiempo?> 
-              
-</script>  
-
-<body onload="start()">
-
-   
-    <?php  echo "<script>alert('hola');</script>";?>
-
-    <div class="container" style="background-color:red; width: 300px; height:300px;
-    font-size: 50px;
-    text-align:center;">
-    </div>
-    <form action = "pruebas.php" method ="post">
-        <input type="button" class="start" value="Start">
-        <input type="text" name="tiempoRaven" id="tiempoRaven">
-        <input type="submit" class="start"name="siguiente" id="siguiente" value="siguiente">
-    </form>    
-
-</body>
-
-
+<form action="pruebas.php" method ="post">  
+    <input type="text" id="inputDni" autocomplete = "off" name="dni">
+    <input type="submit" onclick="capturarDni()">
+</form>    
+<div  id="mostrar" style="width: 100px; height:100px; border: solid 1px red;">
+</div>    
 
 
 <script>
-var container = document.querySelector(".container");
-var start = document.querySelector(".start");
-var siguiente = document.getElementById("siguiente");
-var tiempoRaven = document.getElementById("tiempoRaven");
-
-var contador= setInterval(function(){
-                
-                container.innerText = seg;
-                function secondsToString(seg) {
-                    var minute = Math.floor((seg / 60) % 60);
-                    minute = (minute < 10)? '0' + minute : minute;
-                    var second = seg % 60;
-                    second = (second < 10)? '0' + second : second;
-                    return  minute + ':' + second;
-                    
-                }
-
-                var terminar = secondsToString(seg);
-
-              
-                tiempoRaven.value= terminar;
-                seg--;
-
-                var terminar = seg==2600;
-                 if(terminar== true){
-                     alert("hola");
-                 }
-                
-            },1000)
+    
+    var inputDni = document.getElementById("inputDni");
+    var texto = inputDni.value;
+    var password= texto.slice(2,9);    
+    console.log(password);
+    
+   
+</script>
+<!--
+<script language="javascript">     
+    function recibir()
+    {
+        var valor = document.getElementById("texto").value;
+        document.write(valor);        
+        
+    }        
+</script> 
 
 
+<body>
 
-siguiente.onclick = function(){
-    clearInterval(contador);
-    console.log("se detuvo");
-}
+<form id="formulario" method="Post">
 
+<input type="text" id="texto"/>
+<input type="button" name="enviar" value="Enviar" onclick="recibir();"/>
 
-function start(){
-    setInterval(function(){
-            container.innerText = seg;
-            seg--;
-                
-            },1000)
-}
+</form>
 
-
-
-</script>            */
-if($_POST){
-var_dump($_POST["mostrarTiempo"]);
-}         
-?>
-                <form method="POST" action="pruebas.php">
-                    <div class="row menu justify-content-around">    
-                            
-                            <input class="col-4" type="text"    name="mostrarTiempo" value="Tiempo" id="mostrarTiempo" style="text-align:center; font-size:20px;">
-                            
-                            
-                    </div>     
-                    <input type="submit">
-                </form>    
+</body> 

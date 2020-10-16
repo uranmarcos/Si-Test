@@ -20,7 +20,12 @@ if($_POST){
         $datosUsuarios =$consulta -> fetchAll(PDO::FETCH_ASSOC);
 
         if(empty($datosUsuarios)){
-            $password = rand(100000, 999999);
+            if($rol=="postulante"){
+                $password = rand(100000, 999999);
+            }else if($rol == "voluntario"){
+                                
+                $password = substr($_POST["dni"], -6);
+            }    
                 $consultaUsuario =  $baseDeDatos -> prepare
                 ("INSERT INTO usuarios
                 VALUES ('$nombre', '$apellido', '$dni','$password', '$rol', '-2','-2','-2','-2','-2','-2','-1', '1', 's/d', '45' )");
@@ -62,7 +67,7 @@ if($_POST){
                 VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
                 $consultaArea9 -> execute();
 
-                $usuarioCreado="Se ha creado exitosamente el siguiente usuario:  $nombre - $apellido - dni:$dni - clave:$password";
+                $usuarioCreado="Se ha creado exitosamente el siguiente usuario:  $nombre - $apellido - dni: $dni - clave: $password";
             }else{
             $errorDni="El dni ya está registrado";
         }

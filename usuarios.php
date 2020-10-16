@@ -32,6 +32,12 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                 </aside>
                 <main class="col-10 col-md-9">        
                     <h6 class="fwb purple">Crear un nuevo Usuario</h5>
+                    <p>
+                        Si al usuario se le asigna rol: "postulante" se le generará una clave aleatoria de 6 dígitos.
+                        <br>
+                        Si al usuario se le asigna rol: "voluntario" se le generará una clave igual a los últimos 6 dígitos de su DNI. El usuario podrá
+                         luego modificar su contraseña ingresando al menú superior derecho.
+                    </p>    
                     <form class="formulario" action="usuarios.php" method="POST">
                         <div class="row justify-content-center">        
                                 <div class="col-10 col-md-3">    

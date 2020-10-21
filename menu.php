@@ -133,7 +133,7 @@ if(isset($_POST["test1"])){
             en el botón, no podrás ingresar nuevamente luego. Recuerda al finalizar, presionar el botón "terminar"</h6>
           
             <form action="menu.php" method= "POST">
-                  <h6 class="red">  <?php echo $_SESSION["mensaje"]?></h6>
+                 
                   <!-- boton para raven -->
                   <div class="caja-boton">
                           <input <?php echo $ocultarRaven?> type="submit" class="boton-test" name="test1" value="Test 1">

@@ -42,9 +42,9 @@ if($_POST){
 
                                 if($testAHabilitar=="test1"){
                                     if(empty($_POST["tiempo"])){
-                                        $tiempoDisponible=45;
+                                        $tiempoDisponible=2700;
                                     } else{
-                                        $tiempoDisponible=$_POST["tiempo"];
+                                        $tiempoDisponible=$_POST["tiempo"]*60;
                                     }
                                     $consulta = $baseDeDatos-> prepare
                                         ("UPDATE usuarios SET $testAHabilitar = -2, nivelRaven=1, horaRaven='s/d',

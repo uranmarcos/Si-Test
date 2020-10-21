@@ -275,7 +275,11 @@ require("respuestasCorrectas.php");
                 $consulta2 = $baseDeDatos-> prepare
                             ("UPDATE usuarios SET areas = -2, test1=0 WHERE dni = '$dni'");
                 $consulta2->execute();
-                echo "<script>location.href='menu.php';</script>";
+                if($rol=="postulante"){
+                    echo "<script>location.href='menu.php';</script>";
+                }else {
+                    echo "<script>location.href='admin.php';</script>";
+                }        
         }
     }        
 

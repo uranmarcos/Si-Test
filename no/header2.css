@@ -1,0 +1,60 @@
+.fwb{
+    font-weight: bolder;
+}
+.purple{
+    color:purple;
+}
+
+
+
+.header{
+    margin-top:0;
+    padding-top:0;
+    width: 100%;
+    display:inline-flex;
+    flex-direction: row;
+    height: 50px;
+    
+    margin-bottom:20px;
+}
+
+
+.navLeft{
+    width: 50%;
+    height:50px;
+    line-height: 50px;
+    margin-top:0;
+    text-align:center;
+}
+p{
+  margin:0;
+}
+.navRight{
+    width: 50%;
+    
+}
+
+
+#menu{
+    height: 30px;
+    width: 200px;
+    color: purple;
+    margin:10px 40%;
+    font-size: 17px;
+    font-weight: bolder;
+  }
+  #superior{
+    display: none;
+  }
+  button#menu:hover + nav#superior, nav#superior:hover{
+    display: block;
+    text-align: left;
+    width: 200px;
+    margin:0 40%;
+    border: solid 1px red;
+  }
+  .opciones-burguer li{
+    list-style-type: none;
+    padding-left: 0;
+    border: solid 1px purple;
+  }

@@ -22,10 +22,10 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
     
   </head>
   <body class="container">
-        <header class="row fwb purple header align-items-center">
-                <h4 class="col-6 centrarTexto">¡Hola <?php echo $_SESSION["name"]?>!</h4>
-                <a class="col-6 centrarTexto" href="cerrarSesion.php">Cerrar Sesión</a>
-        </header>
+  <header class="row fwb purple header align-items-center">
+                    <h4 class="col-6 centrarTexto">¡Hola <?php echo $_SESSION["name"]?>!</h4>
+                    <a class="col-6 centrarTexto" href="cerrarSesion.php">Cerrar Sesión</a>
+                </header>  
         <div class="row justify-content-center cajaPrincipal">
                 <aside class="col-10 col-md-3">
                     <?php include("aside.php")?>       

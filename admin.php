@@ -23,9 +23,9 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
     
   </head>
   <body class="container">
-        <header class="row fwb purple header align-items-center">
-                    <h4 class="col-6 centrarTexto">¡Hola <?php echo $_SESSION["name"]?>!</h4>
-                    <a class="col-6 centrarTexto" href="cerrarSesion.php">Cerrar Sesión</a>
+        <header class="row fwb  header justify-content-between align-items-center">
+                    <h4 class="col-4 leftTexto">¡Hola <?php echo $_SESSION["name"]?>!</h4>
+                    <a class="col-4 centrarTexto" href="cerrarSesion.php">Cerrar Sesión</a>
         </header>  
         <div class="row justify-content-center cajaPrincipal">
                 <aside class="col-10 aside col-md-3">
@@ -51,10 +51,10 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                                     </div>
                                                                  
                                     <div class="botonMenuAdmin">
-                                        <input class="cajaBoton" name="usuarios" type="submit" value="Usuarios">
+                                        <input class="cajaBoton" name="usuarios" id="botonUsuarios" type="submit" value="Usuarios">
                                     </div> 
                                     <div class="botonMenuAdmin">
-                                        <input class="cajaBoton" name="password" type="submit" value="Contraseñas">                           
+                                        <input class="cajaBoton" name="password" id = "botonPassword" type="submit" value="Contraseñas">                           
                                     </div>    
                                     <div class="botonMenuAdmin">
                                         <input class="cajaBoton" name="test" type="submit" value="Test">         
@@ -78,275 +78,358 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                 <main class="col-10 col-md-9">        
                     <!--caja log -->
                     <div class="cajaInterna logo" style="z-index:<?php echo $zIndexLogo?>">
-                        
                     </div>  
 
                     <!-- Usuarios -->
                     <div class="cajaInterna usuarios" style="z-index : <?php echo $zIndexUsuarios?>">
-                            <h6 class="fwb purple">Crear un nuevo Usuario</h5>
-                            <p>
-                                Si al usuario se le asigna rol: "postulante" se le generará una clave aleatoria de 6 dígitos.
-                                <br>
-                                <br>
-                                Si al usuario se le asigna rol: "voluntario" se le generará una clave igual a los últimos 6 dígitos de su DNI.<br> El usuario podrá
-                                luego modificarla en la opcion "Contraseñas" del menú principal.
-                            </p>    
-                            <form class="formulario" action="admin.php" method="POST">
-                                <div class="row justify-content-center">        
-                                        <div class="col-10 col-md-3">    
-                                            <label class="fwb">Nombre</label>
-                                            <br>
-                                            <input type="text" required name="name" autocomplete="off" value="">    
-                                        </div>
-                                        <div class="col-10 col-md-3"> 
-                                            <label class="fwb">Apellido</label>
-                                            <br>
-                                            <input type="text" required autocomplete="off" name="lastName" value="">
-                                        </div>
-                                        <div class="col-10 col-md-3">  
-                                            <label class="fwb">DNI</label>
-                                            <br>
-                                            <input type="int" required autocomplete="off" name="dni" value="">   
-                                        </div>   
-                                        
-                                        <div class="col-10 col-md-3">
-                                            <label class="fwb">Rol</label>
-                                            <br>
-                                            <select name="rol">Rol
+                        <!-- Crear Usuario -->    
+                        <article>    
+                            <div class="row anchoRow justify-content-between headerArticle">   
+                                <h6 class="fwb purple">Crear usuario</h6> 
+                                <button class="verMas <?php echo  $visibilidadBotonMasCrearUsuario?>" name="CrearUsuario" id="verMasCrearUsuario"> Ver +</button>
+                                <button class="verMenos <?php echo  $visibilidadBotonMenosCrearUsuario?>" name="CrearUsuario" id="verMenosCrearUsuario"> Ver -</button>  
+                            </div>
+                            <div class="<?php echo $visibilidadCajaCrearUsuario?>" id="cajaCrearUsuario">    
+                                <div class="row respuestaAConsulta">
+                                    <p>
+                                        Si al usuario se le asigna rol: "postulante" se le generará una clave aleatoria de 6 dígitos.
+                                        <br>
+                                        <br>
+                                        Si al usuario se le asigna rol: "voluntario" se le generará una clave igual a los últimos 6 dígitos de su DNI.<br> El usuario podrá
+                                        luego modificarla en la opcion "Contraseñas" del menú principal.
+                                    </p>
+                                </div>        
+                                <form class="formulario" action="admin.php" method="POST">
+                                    <div class="row  respuestaAConsulta justify-content-between" >
+                                        <label class="col-2 fwb">Nombre:</label>  
+                                        <input class="col-3" type="text" required name="name" autocomplete="off" value="">    
+                                        <div class="offset-2"></div>
+                                        <label class="col-2 fwb">Apellido:</label>    
+                                        <input class="col-3" type="text" required autocomplete="off" name="lastName" value="">
+                                    </div>    
+                                    <div class="row  respuestaAConsulta justify-content-between" >
+                                        <label class="col-2 fwb">DNI:</label>
+                                        <input class="col-3" type="int" required autocomplete="off" name="dni" value=""> 
+                                        <div class="offset-2"></div>    
+                                        <label class="col-2 fwb">Rol</label>    
+                                        <select class="col-3" name="rol">Rol:
                                                 <option value="postulante">Postulante</option>
                                                 <option value="voluntario">Voluntario</option>
-                                            </select>           
-                                        </div>
-                                </div>  
-                                <br>      
-                                <div class="red centrarTexto">
-                                        <?php echo $errorDni?> 
-                                </div> 
-                                <p class="centrarTexto"> <?php echo $usuarioCreado; ?></p>
+                                        </select>   
+                                    </div>  
+                                    <div class="row  respuestaAConsulta justify-content-between" >
+                                        <label class="col-2 fwb">Email:</label>
+                                        <input class="col-3" type="text" autocomplete="off" name="email" placeholder="Solo rol voluntario" value=""> 
+                                        <div class="offset-2"></div>
+                                        <div class="offset-2"></div> 
+                                        <input  type="submit" class="col-3 botonInput" name="crearUsuario" value="crear">
+                                    </div>
+
+                                    <div class="respuestaAConsulta fwb <?php echo $colorMensaje?>">
+                                            <?php echo $mensajeUsuarios?> 
+                                    </div> 
+                                   
                                 
-                                <div class="row justify-content-center">
-                                        <input type="submit" class="botonInput" name="crear" value="crear">
+                                </form> 
+                            </div>
+                        </article>     
+                        <!-- Modificar Usuario -->
+                        <article>    
+                            <div class="row anchoRow justify-content-between headerArticle">   
+                                <h6 class="fwb purple">Modificar usuario</h6> 
+                                <button class="verMas" name="ModificarUsuario" id="verMasModificarUsuario"> Ver +</button>
+                                <button class="verMenos ocultar" name="ModificarUsuario" id="verMenosModificarUsuario"> Ver -</button>  
+                            </div>
+                            <div class="<?php echo $visibilidadCajaModificarUsuario?>" id="cajaModificarUsuario">    
+                                <div class="row respuestaAConsulta">
+                                    <p>   
+
+                                        Modificar Usuario
+                                    </p>
                                 </div>
-                            </form> 
-                    </div>
+                            </div>
+                        </article>  
+                        <!-- Eliminar Usuario -->
+                        <article>    
+                            <div class="row anchoRow justify-content-between headerArticle">   
+                                <h6 class="fwb purple">Eliminar usuario</h6> 
+                                <button class="verMas" name="EliminarUsuario" id="verMasEliminarUsuario"> Ver +</button>
+                                <button class="verMenos ocultar" name="EliminarUsuario" id="verMenosEliminarUsuario"> Ver -</button>  
+                            </div>
+                            <div class="<?php echo $visibilidadCajaEliminarUsuario?>" id="cajaEliminarUsuario">    
+                                <div class="row respuestaAConsulta">
+                                    <p>   
+
+                                        Eliminar Usuario
+                                    </p>
+                                </div>
+                            </div>
+                        </article>  
+                    </div>         
 
                     <!-- Contraseñas -->
                     <div class="cajaInterna password" style="z-index : <?php echo $zIndexPassword?>">
-                            <form class="formulario" action="admin.php" method="POST">
-                                <article>    
-                                        <h6 class="fwb purple">Consultar Contraseña</h6>
-                                        <div class="row justify-content-around">        
-                                            <label class="col-1 fwb centrarTexto">DNI</label>
-                                            <input class="col-2" type="text" name="dniConsulta" autocomplete="off" value="">    
+                        <!-- Consultar Password-->   
+                        <article> 
+                            <div class="row anchoRow justify-content-between headerArticle">
+                                <h6 class="fwb purple">Consultar Contraseña</h6>
+                                <button class="verMas <?php echo $visibilidadBotonMasConsultarPassword?>" name="ConsultaPassword" id="verMasConsultaPassword"> Ver +</buton>
+                                <button class="verMenos <?php echo $visibilidadBotonMenosConsultarPassword?>" name="ConsultaPassword" id="verMenosConsultaPassword"> Ver -</button>
+                            </div>
+                            <form class="formulario" action="admin.php" method="POST">                    
+                                <div id="cajaConsultaPassword" class="<?php echo $visibilidadCajaConsultarPassword?>">
+                                    <div class="row respuestaAConsulta justify-content-around">        
+                                        <label class="col-2 fwb centrarTexto">DNI</label>
+                                            <input class="col-3" type="text" name="dniConsulta" autocomplete="off" value="">    
                                             <div class="offset-2"></div>
                                             <div class="offset-2"></div>
-                                            <input class="col-2 botonInput" type="submit" name="consulta" value="Consultar">
-                                        </div>
-                                        <p class="red">
-                                            <?php echo $errorDniConsulta ?>
+                                            <input class="col-3 botonInput" type="submit" name="consulta" value="Consultar">
+                                    </div>
+                                    <div class="row respuestaAConsulta">  
+                                        <p class="<?php echo $colorMensaje?> fwb">
+                                            <?php echo $mensajeConsultaPassword ?>
                                         </p>
-                                        <p>    
-                                            <?php echo $consulta ?>
-                                        </p>    
-                                </article>
-                                <article>
-                                        <h6 class="fwb purple">Resetear Contraseña</h6>
-                                        <p>Esta opción generará una contraseña de 6 dígitos aleatorios para el usuario ingresado. 
+                                    </div>      
+                                </div>
+                            </form>        
+                        </article>
+                        <!-- Reset Password -->     
+                        <article>
+                            <div class="row anchoRow justify-content-between headerArticle">
+                                <h6 class="fwb purple">Resetear Contraseña</h6>
+                                <button class="verMas <?php echo $visibilidadBotonMasResetPassword?>" name="ResetPassword" id="verMasResetPassword"> Ver +</button>
+                                <button class="verMenos <?php echo $visibilidadBotonMenosResetPassword?>" name="ResetPassword" id="verMenosResetPassword"> Ver -</button>
+                            </div> 
+                            <form class="formulario" action="admin.php" method="POST">
+                                <div id="cajaResetPassword" class="<?php echo $visibilidadCajaResetPassword?>">
+                                    <div class="row respuestaAConsulta">
+                                        <p>
+                                            Esta opción generará una contraseña de 6 dígitos aleatorios para el usuario ingresado. 
                                             <br>
                                             Solo podrá resetearle la contraseña a usuarios con rol "postulante"
                                         </p>
-                                        <div class="row justify-content-around">        
-                                            <label class="col-1 fwb centrarTexto">DNI</label>
-                                            <input class="col-2" type="text" name="dniReset" autocomplete="off" value="">    
+                                    </div>    
+                                    <div class="row respuestaAConsulta justify-content-around">        
+                                        <label class="col-2 fwb centrarTexto">DNI</label>
+                                            <input class="col-3" type="text" name="dniReset" autocomplete="off" value="">    
                                             <div class="offset-2"></div>
                                             <div class="offset-2"></div>
-                                            <input class="col-2 botonInput" type="submit" name="reset" value="Resetear"> 
-                                        </div>
-                                        <p class="red">
-                                            <?php echo $errorDniReset ?>
+                                            <input class="col-3 botonInput" type="submit" name="reset" value="Resetear"> 
+                                    </div>
+                                    <div class="row respuestaAConsulta">
+                                        <p class="<?php echo $colorMensaje?>">
+                                            <?php echo $mensajeResetPassword ?>
                                         </p>
-                                        <p>
-                                            <?php echo $reset ?>    
-                                        </p>
-                                </article>
-                                <article>
-                                        <h6 class="fwb purple">Cambiar Contraseña</h6>
+                                    </div>    
+                                </div>
+                            </form>            
+                        </article>
+                        <!-- Cambiar Password-->     
+                        <article>
+                            <div class="row anchoRow justify-content-between headerArticle">
+                                <h6 class="fwb purple">Cambiar Contraseña</h6>
+                                <button class="verMas <?php echo $visibilidadBotonMasCambiarPassword?>" name="CambiarPassword" id="verMasCambiarPassword"> Ver +</button>
+                                <button class="verMenos <?php echo $visibilidadBotonMenosCambiarPassword?>" name="CambiarPassword" id="verMenosCambiarPassword"> Ver -</button>
+                            </div> 
+                            <form class="formulario" action="admin.php" method="POST">                        
+                                <div id="cajaCambiarPassword" class="<?php echo $visibilidadCajaCambiarPassword?>">
+                                    <div class="row respuestaAConsulta ">
                                         <p>
                                             Esta opción permite modificar la contraseña por la que usted elija (debe poseer seis dígitos).
                                             <br>
                                             Solo podrá modificar su contraseña.
                                         </p>
-                                        <div class="row justify-content-around">        
-                                            <label class="col-4 fwb leftTexto">Contraseña Actual</label>
-                                            <input class="col-4 " type="text" name="oldPassword" autocomplete="off" value="">
-                                            <div class="offset-2"></div>                                           
-                                        </div>
-                                        <div class="row justify-content-around"> 
-                                            <label class="col-4 fwb leftTexto">Nueva Contraseña</label>
-                                            <input class="col-4" type="text" name="newPassword" autocomplete="off" value="">
-                                            <div class="offset-2"></div>
-                                        </div>
-                                        <div class="row justify-content-around">     
-                                            <label class="col-4 fwb leftTexto">Confirme Nueva Contraseña</label>    
-                                            <input class="col-4" type="text" name="confirmPassword" autocomplete="off" value="">
-                                            <div class="offset-2"></div>
-                                        </div>
-                                   
-                                        <div class="row justify-content-around"> 
-                                            <div class="offset-1">
-                                            </div>
-                                            <div class="offset-2">
-                                            </div>
-                                            <div class="offset-2">
-                                            </div>
-                                            <div class="offset-2">
-                                            </div>
-                                            <input class="col-2 botonInput" type="submit" name="cambiarPassword" value="Cambiar"> 
-                                        </div>
-                                        <p class="red">
-                                            <?php echo $errorPassword ?>
-                                            <br>
-                                            <?php echo $errorConfirmPassword?>
-                                            <br>
-                                            <?php echo $errorDigitosPassword ?>
-                                            <?php echo $cambioPasswordExitoso ?>
+                                    </div>    
+                                    <div class="row justify-content-around">        
+                                        <label class="col-4 fwb leftTexto">Contraseña Actual</label>
+                                        <input class="col-4 " type="text" name="oldPassword" autocomplete="off" value="">
+                                        <div class="offset-2"></div>                                           
+                                    </div>
+                                    <div class="row justify-content-around"> 
+                                        <label class="col-4 fwb leftTexto">Nueva Contraseña</label>
+                                        <input class="col-4" type="text" name="newPassword" autocomplete="off" value="">
+                                        <div class="offset-2"></div>
+                                    </div>
+                                    <div class="row justify-content-around">     
+                                        <label class="col-4 fwb leftTexto">Confirme Nueva Contraseña</label>    
+                                        <input class="col-4" type="text" name="confirmPassword" autocomplete="off" value="">
+                                        <div class="offset-2"></div>
+                                    </div>
+                                    <div class="row respuestaAConsulta justify-content-around"> 
+                                        <div class="offset-2"></div>
+                                        <div class="offset-3"></div>
+                                        <div class="offset-2"></div>
+                                        <div class="offset-2"></div>
+                                        <input class="col-3 botonInput" type="submit" name="cambiarPassword" value="Cambiar"> 
+                                    </div>
+                                    <div class="row respuestaAConsulta">
+                                        <p class="<?php echo $colorMensaje?>">
+                                            <?php echo $mensajeCambiarPassword ?>
                                         </p>
-                                        <p>
-                                            <?php echo $reset ?>    
-                                        </p>
-                                </article>    
-                            </form>  
+                                    </div>    
+                                </div> 
+                            </form>
+                        </article>    
                     </div>
                     
                     <!-- Test  -->
                     <div class="cajaInterna test" style="z-index:<?php echo $zIndexTest?>">
+                        <!--  Habilitar Test -->
+                        <article>
+                            <div class="row anchoRow justify-content-between headerArticle">
+                                <h6 class="fwb purple">Habilitar Test</h6>
+                                <button class="verMas <?php echo $visibilidadBotonMasHabilitarTest?>" name="HabilitarTest" id="verMasHabilitarTest"> Ver +</button>
+                                <button class="verMenos <?php echo $visibilidadBotonMenosHabilitarTest?>" name="HabilitarTest" id="verMenosHabilitarTest"> Ver -</button>
+                            </div> 
                             <form class="formulario" action="admin.php" method="POST">
-                                <!--  Habilitar Test -->
-                                <article>
-                                    <h6 class="fwb purple">Habilitar Test</h6>
-                                    <div>
+                                <div id="cajaHabilitarTest" class="<?php echo $visibilidadCajaHabilitarTest?>">    
+                                    <div class="row respuestaAConsulta">
                                         <p>Al hacerlo, se borrarán los resultados que el usuario haya obtenido en el mismo. <br> 
-                                        Si habilita Raven, podrá ingresar el tiempo que desea brindarle al usuario. En caso de no ingresar ningún valor
-                                        se le asignarán 45 minutos para la realización del test.</p>                        
-                                        <div class="row anchoRow justify-content-between" >    
-                                                <label class="col-1 fwb">DNI:</label> 
-                                                <input class="col-2" type="text" name="dniAHabilitar" autocomplete="off" value=""> 
-                                                <label class="col-2 fwb">Test:</label> 
-                                                <select class="col-2" name="testAHabilitar">Test
-                                                            <option value="none"></option>
-                                                            <option value="test1">Raven</option>
-                                                            <option value="areas">Áreas</option>
-                                                            <option value="area2">Área 2</option>
-                                                            <option value="area3">Área 3</option>
-                                                            <option value="area6">Área 6</option>
-                                                            <option value="area8">Área 8</option>
-                                                            <option value="area9">Área 9</option>
-                                                </select> 
-                                                <div class="offset-2"></div>
-                                        </div>        
-                                        <div class="row anchoRow justify-content-between" >   
-                                                <label class="col-1 fwb">Minutos:</label>  
-                                                <input class="col-2" type="number" name="tiempoParaTest" autocomplete="off" value="minutos Raven">  
-                                                <div class="offset-2"></div>
-                                                <div class="offset-2"></div>
-                                                <input class="col-2 botonInput" type="submit" name="habilitarTest" value="Habilitar">
-                                                
-                                        </div>
+                                            Si habilita Raven, podrá ingresar el tiempo que desea brindarle al usuario. En caso de no ingresar ningún valor
+                                            se le asignarán 45 minutos para la realización del test.
+                                        </p>                        
                                     </div>    
-                                    <p class="red">
+                                    <div class="row  respuestaAConsulta justify-content-between" >    
+                                        <label class="col-1 fwb">DNI:</label> 
+                                        <input class="col-2" type="text" name="dniAHabilitar" autocomplete="off" value=""> 
+                                        <label class="col-2 fwb">Test:</label> 
+                                        <select class="col-2" name="testAHabilitar">Test
+                                            <option value="none"></option>
+                                            <option value="test1">Raven</option>
+                                            <option value="areas">Áreas</option>
+                                            <option value="area2">Área 2</option>
+                                            <option value="area3">Área 3</option>
+                                            <option value="area6">Área 6</option>
+                                            <option value="area8">Área 8</option>
+                                            <option value="area9">Área 9</option>
+                                        </select> 
+                                    <div class="offset-2"></div>
+                                    </div>        
+                                    <div class="row  respuestaAConsulta justify-content-between" >   
+                                        <label class="col-1 fwb">Minutos:</label>  
+                                        <input class="col-2" type="number" name="tiempoParaTest" autocomplete="off" value="minutos Raven">  
+                                        <div class="offset-2"></div>
+                                        <div class="offset-2"></div>
+                                        <input class="col-2 botonInput" type="submit" name="habilitarTest" value="Habilitar">
+                                    </div>
+                                    <div class="row respuestaAConsulta">   
+                                        <p class="red">
                                             <?php echo $errorDniCajaHabilitarTest?>
                                             <?php echo $errorTestCajaHabilitarTest?>
-                                            <?php echo $testHabilitado ?>
-                                    </p>  
-                                        
-                                </article>            
-                                <!-- Bloquear Test -->
-                                <article>
-                                    <h6 class="fwb purple">Bloquear Test</h6>
-                                    <div>
-                                            <p>Al hacerlo, se le inhabilitará el botón del mismo al usuario seleccionado.</p>                          
-                                            <div class="row anchoRow justify-content-between">        
-                                                    <label class="col-1 fwb">DNI:</label>
-                                                   
-                                                    <input class="col-2" type="text"  name="dniABloquear" autocomplete="off" value="">    
-                                                    <div class="col-2 fwb">Test:</div>
-                                                    <select class="col-2" name="testABloquear">Test
-                                                                <option value="none"></option>
-                                                                <option value="test1">Raven</option>
-                                                                <option value="areas">Áreas</option>
-                                                                <option value="area2">Área 2</option>
-                                                                <option value="area3">Área 3</option>
-                                                                <option value="area6">Área 6</option>
-                                                                <option value="area8">Área 8</option>
-                                                                <option value="area9">Área 9</option>
-                                                    </select> 
-                                                    <input class="col-2 botonInput" type="submit" name="bloquearTest" value="Bloquear">
-                                            </div>
-                                    </div>    
-                                    <p class="red">
+                                        </p>
+                                        <p class="green">
+                                            <?php echo $testHabilitado ?>  
+                                        </p>
+                                    </div>   
+                                </div> 
+                            </form>    
+                        </article>            
+                        <!-- Bloquear Test -->
+                        <article>
+                            <div class="row anchoRow justify-content-between headerArticle">
+                                <h6 class="fwb purple">Bloquear Test</h6>
+                                <button class="verMas <?php echo $visibilidadBotonMasBloquearTest?>" name="BloquearTest" id="verMasBloquearTest"> Ver +</button>
+                                <button class="verMenos <?php echo $visibilidadBotonMenosBloquearTest?>" name="BloquearTest" id="verMenosBloquearTest"> Ver -</button>
+                            </div> 
+                            <form class="formulario" action="admin.php" method="POST">
+                                <div id="cajaBloquearTest" class="<?php echo $visibilidadCajaBloquearTest?>"> 
+                                    <div class="row respuestaAConsulta">
+                                        <p>Al hacerlo, se le inhabilitará el botón del mismo al usuario seleccionado.</p>                          
+                                    </div>
+                                    <div class="row anchoRow respuestaAConsulta justify-content-between">        
+                                        <label class="col-1 fwb">DNI:</label>
+                                        <input class="col-2" type="text"  name="dniABloquear" autocomplete="off" value="">    
+                                        <label class="col-2 fwb">Test:</label>
+                                        <select class="col-2" name="testABloquear">Test
+                                                <option value="none"></option>
+                                                <option value="test1">Raven</option>
+                                                <option value="areas">Áreas</option>
+                                                <option value="area2">Área 2</option>
+                                                <option value="area3">Área 3</option>
+                                                <option value="area6">Área 6</option>
+                                                <option value="area8">Área 8</option>
+                                                <option value="area9">Área 9</option>
+                                        </select> 
+                                        <input class="col-2 botonInput" type="submit" name="bloquearTest" value="Bloquear">
+                                    </div>
+                                    <div class="row respuestaAConsulta">
+                                        <p class="red">
                                             <?php echo $errorDniCajaBloquearTest ?>
                                             <?php echo $errorTestCajaBloquearTest ?>
-                                            <?php echo $testBloqueado ?>
-                                    </p>  
-                                        
-                                </article> 
-                                <!-- consultar avance por usuario-->
-                                <article>
-                                    <h6 class="fwb purple">Consultar avance por usuario</h6>
-                                    <div class="row anchoRow justify-content-between">        
+                                        </p>
+                                        <p class="green">
+                                            <?php echo $testBloqueado ?>  
+                                        </p>
+                                    </div>    
+                                </div>
+                            </form>                                  
+                        </article> 
+                        <!-- consultar avance por usuario-->
+                        <article>
+                            <div class="row anchoRow justify-content-between headerArticle">
+                                <h6 class="fwb purple">Consultar avance por usuario</h6>
+                                <button class="verMas <?php echo $visibilidadBotonMasConsultarAvance?>" name="ConsultarAvance" id="verMasConsultarAvance"> Ver +</button>
+                                <button class="verMenos <?php echo $visibilidadBotonMenosConsultarAvance?>" name="ConsultarAvance" id="verMenosConsultarAvance"> Ver -</button>
+                            </div> 
+                            <form class="formulario" action="admin.php" method="POST">     
+                                <div id="cajaConsultarAvance" class="<?php echo $visibilidadCajaConsultarAvance?>">
+                                    <div class="row anchoRow respuestaAConsulta justify-content-between">        
                                         <label class="col-1 centrarTexto fwb">DNI:</label>
                                         <input class="col-2" type="text"  name="dniConsultaAvance" autocomplete="off" value="">
                                         <div class="offset-2"> </div>
                                         <div class="offset-2"> </div>    
                                         <input class="col-2 botonInput" type="submit" name="avance" value="Consultar">
                                     </div>  
-                                    <p class="red">
-                                        <?php echo $errorDniCajaAvanceTest ?>
-                                    </p> 
+                                    <div class="row respuestaAConsulta">   
+                                        <p class="red">
+                                            <?php echo $errorDniCajaAvanceTest ?>
+                                        </p> 
+                                    </div>  
                                     <!-- resultados sobre la consulta del avance del postulante -->
                                     <div style="display: <?php echo $mostrarAvance?>">
-                                        <div class="centrarTexto">
-                                                <strong>DNI: <?php echo $dniConsultaAvance?> </strong> 
+                                        <div class="respuestaAConsulta">
+                                            <strong>DNI: <?php echo $dniConsultaAvance?> </strong> 
                                         </div>
-                                        <div class="row justify-content-around">    
-                                            <div class="col-3">
+                                        <div class="row anchoRow respuestaAConsulta prueba justify-content-between">    
+                                            <div class="col-4">
                                                 <div>
-                                                    Raven: <?php echo $avanceRaven?>
+                                                    <em>Raven:</em> <?php echo $avanceRaven?>
                                                 </div>
                                                 <div>
-                                                    Área 2: <?php echo $avanceArea2?>
+                                                    <em>Área 2:</em> <?php echo $avanceArea2?>
                                                 </div> 
                                             </div>     
-                                            <div class="col-3">
+                                            <div class="col-4">
                                                 <div>
-                                                    Área 3: <?php echo $avanceArea3?>
+                                                    <em>Área 3:</em> <?php echo $avanceArea3?>
                                                 </div>
                                                 <div>
-                                                    Área 6: <?php echo $avanceArea6?>
+                                                    <em>Área 6:</em> <?php echo $avanceArea6?>
                                                 </div>
                                             </div>    
-                                            <div class="col-3">
+                                            <div class="col-4">
                                                 <div>
-                                                    Área 8: <?php echo $avanceArea8?>
+                                                    <em>Área 8:</em> <?php echo $avanceArea8?>
                                                 </div>
                                                 <div>
-                                                    Área 9: <?php echo $avanceArea9?>
+                                                    <em>Área 9:</em> <?php echo $avanceArea9?>
                                                 </div>
                                             </div>          
-                                            
                                         </div> 
-                                    </div>           
-                                </article>    
-                                
+                                    </div>
+                                </div>     
                             </form>   
+                        </article>    
                     </div>
 
                     <!-- Resultados  -->
                     <div class="cajaInterna resultados" style="z-index : <?php echo $zIndexResultados?>">
-                        <form class="formulario" action="admin.php" method="POST">    
-                            <article>
+                        <article>
+                            <div class="row anchoRow justify-content-between headerArticle">
                                 <h6 class="fwb purple">Consultar Resultados</h6>
-                                <div class="row anchoRow justify-content-around">  
+                            </div> 
+                            <form class="formulario" action="admin.php" method="POST">   
+                                <div class="row  respuestaAConsulta justify-content-between" >    
                                     <div class="col-1">
                                         <strong>DNI</strong>
                                     </div>      
@@ -355,16 +438,12 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                                     <div class="offset-2"></div>
                                     <input class="col-2 botonInput" type="submit" name="consultarDni" value="Consultar"> 
                                 </div> 
-                              
-                                
                                 <div class="red"> 
-                                        <?php echo $errorDniCajaResultados?> 
+                                    <?php echo $errorDniCajaResultados?> 
                                 </div>    
-                                                
-                        </form> 
-                        <div style="display:<?php echo $mostrarConsultaResultados?>">
-                                <br>
-                                <div class="row fwb purple centrarTexto justify-content-around">
+                                <div style="display:<?php echo $mostrarConsultaResultados?>">
+                                    <br>
+                                    <div class="row fwb purple centrarTexto justify-content-around">
                                         <div class="col-2">
                                             Nombre
                                         </div> 
@@ -380,9 +459,9 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                                         <div class="col-2">
                                             Texto
                                         </div> 
-                                </div>  
-                                <br>
-                                <div class="row purple centrarTexto justify-content-around">
+                                    </div>  
+                                    <br>
+                                    <div class="row purple centrarTexto justify-content-around">
                                         <div class="col-2">
                                             <?php echo $nombre?>
                                         </div> 
@@ -398,32 +477,30 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                                         <div class="col-2">
                                             <?php echo $totalAreas?>
                                         </div> 
-                                </div>  
-                                <br>  
-                                <p style="font-size:11px" class="red">
-                                    <strong>s/d:</strong> El usuario aún no ingresó al test.
-                                    <br>
-                                    Test Liberado. 
-                                    <br>
-                                    <br>                                
-                                    <strong>s/t:</strong> El usuario ingresó al test y salió del mismo sin terminarlo. 
-                                        En Raven se habrán guardado las respuestas que haya seleccionado antes de salir, en CT no.
-                                        <br>Test Bloqueado.
-                                                                
-                                </p>                         
-                        </div>
-
-
+                                    </div>  
+                                    <br>      
+                                    <p style="font-size:11px" class="red">
+                                        <strong>s/d:</strong> El usuario aún no ingresó al test.
+                                        <br>
+                                        Test Liberado. 
+                                        <br>
+                                        <br>                                
+                                        <strong>s/t:</strong> El usuario ingresó al test y salió del mismo sin terminarlo. 
+                                            En Raven se habrán guardado las respuestas que haya seleccionado antes de salir, en CT no.
+                                            <br>Test Bloqueado.
+                                                                    
+                                    </p>                         
+                                </div>
+                            </form>
+                        </article>
                     </div>
-
                 </main>                           
-                   
         </div>         
         
     
     <script src="js/jquery-3.5.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
+    <script src="js/admin.js"></script>
   </body>
 </html>

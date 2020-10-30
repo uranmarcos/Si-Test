@@ -9,13 +9,6 @@ $zIndexResultados = 0;
 $zIndexEstadisticas = 0;
 $zIndexAyuda = 0;
 
-//variables para validar Nuevo Usuario
-$errorDni="";
-$dniExistente=false;
-$usuarioCreado="";
-$password=0;
-
-
 //visibilidad de caja seleccionada según boton del menu lateral
 if($_GET){
     if(isset($_GET["usuarios"])){
@@ -27,142 +20,192 @@ if($_GET){
     if(isset($_GET["test"])){
         $zIndexTest=2;
     }
-    if(isset($_GET["resultados"])   ){
+    if(isset($_GET["resultados"])){
         $zIndexResultados=2;
     }
 }
 
+//Variables generales
+$colorMensaje="";
 
 
-//caja crear Usuarios
-if(isset($_POST["crear"])){
+//USUARIOS
+//Crear Usuarios
+$mensajeUsuarios="";
+$visibilidadCajaCrearUsuario="ocultar";
+$visibilidadBotonMasCrearUsuario="mostrar";
+$visibilidadBotonMenosCrearUsuario="ocultar";
+
+if(isset($_POST["crearUsuario"])){
     $nombre= $_POST["name"];
     $apellido = $_POST["lastName"];
     $dni = $_POST["dni"];
     $rol = $_POST["rol"];
+    $zIndexUsuarios=2;
+    $visibilidadCajaCrearUsuario="mostrar";
+    $visibilidadBotonMasCrearUsuario="ocultar";
+    $visibilidadBotonMenosCrearUsuario="mostrar";
 
-if (strlen($dni)!=8){
-    $errorDni= "El dni ingresado debe poseer 8 dígitos";
- }else{
-    $consulta = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = $dni");
-    $consulta->execute();
-    $datosUsuarios =$consulta -> fetchAll(PDO::FETCH_ASSOC);
+    if (strlen($dni)!=8){
+        $mensajeUsuarios= "El dni ingresado debe poseer 8 dígitos";
+        $colorMensaje="red";
+    }else{
+        $consulta = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = $dni");
+        $consulta->execute();
+        $datosUsuarios =$consulta -> fetchAll(PDO::FETCH_ASSOC);
 
-    if(empty($datosUsuarios)){
-        if($rol=="postulante"){
-            $password = rand(100000, 999999);
-        }else if($rol == "voluntario"){
-                            
-            $password = substr($_POST["dni"], -6);
-        }    
-            $consultaUsuario =  $baseDeDatos -> prepare
-            ("INSERT INTO usuarios
-            VALUES ('$nombre', '$apellido', '$dni','$password', '$rol', '-2','-2','-2','-2','-2','-2','-1', '1', 's/d', '45' )");
-            $consultaUsuario -> execute();
-            
-            $consultaRaven =  $baseDeDatos -> prepare
-            ("INSERT INTO test1
-            VALUES ('$dni', '0', '0','0','0','0','0','0','0', '0', '0',
-            '0', '0','0','0','0','0','0','0', '0', '0',
-            '0', '0','0','0','0','0','0','0', '0', '0',
-            '0', '0','0','0','0','0','0','0', '0', '0',
-            '0', '0','0','0','0','0','0','0', '0', '0',
-            '0', '0','0','0','0','0','0','0', '0', '0'
-            )");
-            $consultaRaven -> execute();
+        if(empty($datosUsuarios)){
+            if($rol=="postulante"){
+                $password = rand(100000, 999999);
+            }else if($rol == "voluntario"){
+                                
+                $password = substr($_POST["dni"], -6);
+            }    
+                $consultaUsuario =  $baseDeDatos -> prepare
+                ("INSERT INTO usuarios
+                VALUES ('$nombre', '$apellido', '$dni','$password', '$rol', '-2','-2','-2','-2','-2','-2','-1', '1', 's/d', '45' )");
+                $consultaUsuario -> execute();
+                
+                $consultaRaven =  $baseDeDatos -> prepare
+                ("INSERT INTO test1
+                VALUES ('$dni', '0', '0','0','0','0','0','0','0', '0', '0',
+                '0', '0','0','0','0','0','0','0', '0', '0',
+                '0', '0','0','0','0','0','0','0', '0', '0',
+                '0', '0','0','0','0','0','0','0', '0', '0',
+                '0', '0','0','0','0','0','0','0', '0', '0',
+                '0', '0','0','0','0','0','0','0', '0', '0'
+                )");
+                $consultaRaven -> execute();
 
-            $consultaArea2 =  $baseDeDatos -> prepare
-            ("INSERT INTO area2
-            VALUES ('$dni', '0', '0','0', '0', '0','0','0','0')");
-            $consultaArea2 -> execute();
+                $consultaArea2 =  $baseDeDatos -> prepare
+                ("INSERT INTO area2
+                VALUES ('$dni', '0', '0','0', '0', '0','0','0','0')");
+                $consultaArea2 -> execute();
 
-            $consultaArea3 =  $baseDeDatos -> prepare
-            ("INSERT INTO area3
-            VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
-            $consultaArea3 -> execute();
+                $consultaArea3 =  $baseDeDatos -> prepare
+                ("INSERT INTO area3
+                VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
+                $consultaArea3 -> execute();
 
-            $consultaArea6 =  $baseDeDatos -> prepare
-            ("INSERT INTO area6
-            VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
-            $consultaArea6 -> execute();
+                $consultaArea6 =  $baseDeDatos -> prepare
+                ("INSERT INTO area6
+                VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
+                $consultaArea6 -> execute();
 
-            $consultaArea8=  $baseDeDatos -> prepare
-            ("INSERT INTO area8
-            VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
-            $consultaArea8 -> execute();
+                $consultaArea8=  $baseDeDatos -> prepare
+                ("INSERT INTO area8
+                VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
+                $consultaArea8 -> execute();
 
-            $consultaArea9 =  $baseDeDatos -> prepare
-            ("INSERT INTO area9
-            VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
-            $consultaArea9 -> execute();
+                $consultaArea9 =  $baseDeDatos -> prepare
+                ("INSERT INTO area9
+                VALUES ('$dni', '0', '0','0', '0', '0','0','0','0', '0', '0')");
+                $consultaArea9 -> execute();
 
-            $usuarioCreado="Se ha creado exitosamente el siguiente usuario:  $nombre - $apellido - dni: $dni - clave: $password";
-        }else{
-        $errorDni="El dni ya está registrado";
+                $mensajeUsuarios="Se ha creado exitosamente el siguiente usuario:  $nombre $apellido - dni: $dni - clave: $password";
+                $colorMensaje="green";
+            }else{
+            $mensajeUsuarios="El dni ya está registrado";
+            $colorMensaje="red";
+        }
     }
 }
-}
+
+//Modificar Usuario
+$visibilidadCajaModificarUsuario="ocultar";
+//Eliminar Usuario
+$visibilidadCajaEliminarUsuario="ocultar";
 
 
 
-// caja password
-$errorDniConsulta="";
-$errorDniReset="";
+// CAJA PASSWORD
+$mensajeConsultaPassword="";
 $dni = "";
 $password="";
-$consulta="";
-$reset="";
+
+
 $errorPassword="";
 $errorConfirmPassword="";
 $errorDigitosPassword= "";
 $cambioPasswordExitoso ="";
+$mostrarCajaConsultaPassword="";
 
+
+//Consultar Password
+$visibilidadCajaConsultarPassword="ocultar";
+$visibilidadBotonMasConsultarPassword="mostrar";
+$visibilidadBotonMenosConsultarPassword="ocultar";
 if(isset($_POST["consulta"])){
-                $dni = $_POST["dniConsulta"];   
-        
-                $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
-                $consulta1->execute();
-                $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
-                $zIndexPassword = 2;
-                if(empty($dniExiste)){
-                    $errorDniConsulta= "El dni ingresado no está registrado";
-                } else{        
-                    if(($dniExiste[0]["rol"])!="postulante"){
-                        $errorDniConsulta = "Solo puede consultar la contraseña a usuarios con rol 'postulante'";
-                    }else{
-                    $password = $dniExiste[0]["password"]; 
-                    $consulta="La contraseña para el dni $dni es: $password";
-                    }
-                }            
+    $dni = $_POST["dniConsulta"]; 
+    $visibilidadCajaConsultarPassword="mostrar";
+    $visibilidadBotonMasConsultarPassword="ocultar";
+    $visibilidadBotonMenosConsultarPassword="mostrar";        
+    
+    $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
+    $consulta1->execute();
+    $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
+    $zIndexPassword = 2;
+    if(empty($dniExiste)){
+        $mensajeConsultaPassword= "El dni ingresado no está registrado";
+        $colorMensaje="red";
+    }else{        
+        if(($dniExiste[0]["rol"])!="postulante"){
+            $mensajeConsultaPassword = "Solo puede consultar la contraseña a usuarios con rol 'postulante'";
+            $colorMensaje="red";
+        }else{
+            $password = $dniExiste[0]["password"]; 
+            $mensajeConsultaPassword="La contraseña para el dni $dni es: $password";
+            $colorMensaje="green";
+        }
+    }            
 }
 
+//Reset Password
+$mensajeResetPassword="";
+$visibilidadCajaResetPassword="ocultar";
+$visibilidadBotonMasResetPassword="mostrar";
+$visibilidadBotonMenosResetPassword="ocultar";
 if(isset($_POST["reset"])){    
+    $dni = $_POST["dniReset"];   
+    $visibilidadCajaResetPassword="mostrar";
+    $visibilidadBotonMasResetPassword="ocultar";
+    $visibilidadBotonMenosResetPassword="mostrar"; 
 
-                $dni = $_POST["dniReset"];   
-                $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
-                $consulta1->execute();
-                $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
-                $zIndexPassword = 2;
+    $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
+    $consulta1->execute();
+    $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
+    $zIndexPassword = 2;
 
                   
-                if(empty($dniExiste)){
-                    $errorDniReset= "El dni ingresado no está registrado";
-                } else{   
-                    if(($dniExiste[0]["rol"])!="postulante"){
-                        $errorDniReset = "Solo puede resetearle la contraseña a usuarios con rol 'postulante'";
-                    }else{
-                        $password = rand(111111, 999999);
-                        $consulta2 = $baseDeDatos ->
-                            prepare("UPDATE usuarios SET password = '$password' WHERE dni = '$dni'");
-                        $consulta2->execute();
+    if(empty($dniExiste)){
+        $mensajeResetPassword= "El dni ingresado no está registrado";
+        $colorMensaje="red";
+    } else{   
+        if(($dniExiste[0]["rol"])!="postulante"){
+            $mensajeResetpassword = "Solo puede resetearle la contraseña a usuarios con rol 'postulante'";
+            $colorMensaje="red";
+        }else{
+            $password = rand(111111, 999999);
+            $consulta2 = $baseDeDatos ->
+                prepare("UPDATE usuarios SET password = '$password' WHERE dni = '$dni'");
+            $consulta2->execute();
                             
-                        $reset="Cambio Exitoso. La nueva contraseña para el usuario $dni es $password";
-                    }    
-                }
+            $mensajeResetPassword="Cambio Exitoso. La nueva contraseña para el usuario $dni es $password";
+            $colorMensaje="green";
+        }    
+    }
 }
-    
+
+//Cambiar Password
+$visibilidadCajaCambiarPassword="ocultar";
+$visibilidadBotonMasCambiarPassword="mostrar";
+$visibilidadBotonMenosCambiarPassword="ocultar";
 if(isset($_POST["cambiarPassword"])){
     $dni=$_SESSION["dni"];
+    $visibilidadCajaCambiarPassword="mostrar";
+    $visibilidadBotonMasCambiarPassword="ocultar";
+    $visibilidadBotonMenosCambiarPassword="mostrar"; 
+
     $consulta2 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
     $consulta2->execute();
     $datosUsuarios =$consulta2 -> fetchAll(PDO::FETCH_ASSOC);
@@ -170,13 +213,16 @@ if(isset($_POST["cambiarPassword"])){
     
     
     if(($_POST["oldPassword"])!= ($datosUsuarios[0]["password"])){
-        $errorPassword="La contraseña actual ingresada no es la correcta";
+        $mensajeCambiarPassword="La contraseña actual ingresada no es la correcta";
+        $colorMensaje="red";
     } 
     if(($_POST["newPassword"]) != ($_POST["confirmPassword"])){
-        $errorConfirmPassword = "Las contraseñas ingresadas no coinciden";
+        $mensajeCambiarPassword = "Las contraseñas ingresadas no coinciden";
+        $colorMensaje="red";
     }
     if(strlen($_POST["newPassword"])!=6){
-        $errorDigitosPassword = "La nueva contraseña debe poseer 6 digitos";
+        $mensajeCambiarPassword = "La nueva contraseña debe poseer 6 digitos";
+        $colorMensaje="red";
     }
     if ((($_POST["oldPassword"])== ($datosUsuarios[0]["password"])) 
         && (($_POST["newPassword"]) == ($_POST["confirmPassword"]))
@@ -187,15 +233,14 @@ if(isset($_POST["cambiarPassword"])){
             ("UPDATE usuarios SET password = '$newPassword' WHERE dni = '$dni'"); 
             $consultaCambiarPassword -> execute();
 
-            $cambioPasswordExitoso ="El cambio de contraseña se realizó exitosamente";
-        }
+            $mensajeCambiarPassword ="El cambio de contraseña se realizó exitosamente";
+            $colorMensaje="green";
+    }
 }
 
 
-// CAJA TEST  //
-//habilitar test
 
-
+// CAJA TEST  
 $errorDniCajaHabilitarTest = "";
 $errorTestCajaHabilitarTest = "";
 $testHabilitado= "";
@@ -203,17 +248,22 @@ $errorDniCajaBloquearTest="";
 $errorTestCajaBloquearTest = "";
 $testBloqueado = "";
 $errorDniCajaAvanceTest = "";
-
+$visibilidadCajaHabilitarTest = "ocultar";
+$visibilidadBotonMasHabilitarTest="mostrar";
+$visibilidadBotonMenosHabilitarTest="ocultar";
 
 
 //habilitar Test
 if(isset($_POST["habilitarTest"])){
-    $zIndexTest = 2;   
+    
+    $visibilidadCajaHabilitarTest="block"; 
+    $visibilidadBotonMasHabilitarTest="ocultar";
+    $visibilidadBotonMenosHabilitarTest="mostrar"; 
+    $zIndexTest = 2; 
     if($_POST["testAHabilitar"]=="none"){
         $errorTestCajaHabilitarTest = "Debe seleccionar el test que desea habilitar";
     }else{
         if(empty($_POST["dniAHabilitar"])){
-
                 $errorDniCajaHabilitarTest="Debe ingresar un DNI";
         }else{
                 $dni = $_POST["dniAHabilitar"];   
@@ -226,7 +276,7 @@ if(isset($_POST["habilitarTest"])){
                     $errorDniCajaHabilitarTest= "El dni ingresado no está registrado";
                 }else{
                     $testAHabilitar = $_POST["testAHabilitar"];
-
+                    
                     if($testAHabilitar=="test1"){
                         if(empty($_POST["tiempoParaTest"])){
                             $tiempoDisponible=2700;
@@ -238,9 +288,8 @@ if(isset($_POST["habilitarTest"])){
                             tiempoRaven =$tiempoDisponible WHERE dni = '$dni'");
                         $consulta->execute();
                         $testHabilitado="Se habilitó '$testAHabilitar' exitosamente para el usuario '$dni'";
-
+                        
                     }else{
-                        $zIndexTest = 2;
                         $consulta = $baseDeDatos-> prepare
                             ("UPDATE usuarios SET $testAHabilitar = -2 WHERE dni = '$dni'");
                         $consulta->execute();
@@ -252,9 +301,15 @@ if(isset($_POST["habilitarTest"])){
 }  
 
 //bloquear test
+$visibilidadCajaBloquearTest = "ocultar";
+$visibilidadBotonMasBloquearTest="mostrar";
+$visibilidadBotonMenosBloquearTest="ocultar";
 if(isset($_POST["bloquearTest"])){
-    var_dump($_POST);
-    $zIndexTest = 2;  
+    $visibilidadCajaBloquearTest="block"; 
+    $visibilidadBotonMasBloquearTest="ocultar";
+    $visibilidadBotonMenosBloquearTest="mostrar"; 
+    $zIndexTest = 2; 
+
     if($_POST["testABloquear"]=="none"){
         $errorTestCajaBloquearTest = "Debe seleccionar el test que desea bloquear";
     }else{
@@ -290,8 +345,15 @@ $avanceArea6="";
 $avanceArea8="";
 $avanceArea9="";
 
+$visibilidadCajaConsultarAvance = "ocultar";
+$visibilidadBotonMasConsultarAvance="mostrar";
+$visibilidadBotonMenosConsultarAvance="ocultar";
+
 if(isset($_POST["avance"])){
-    $zIndexTest = 2;
+    $visibilidadCajaConsultarAvance="block"; 
+    $visibilidadBotonMasConsultarAvance="ocultar";
+    $visibilidadBotonMenosConsultarAvance="mostrar"; 
+    $zIndexTest = 2; 
     if(empty($_POST["dniConsultaAvance"])){
            $errorDniCajaAvanceTest="Debe ingresar un DNI";
     }else{
@@ -362,6 +424,8 @@ if(isset($_POST["avance"])){
             }
     }
 }     
+
+
 
 
 // consulta de resultados  //

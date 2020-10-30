@@ -9,19 +9,28 @@ $zIndexResultados = 0;
 $zIndexEstadisticas = 0;
 $zIndexAyuda = 0;
 
+$bgUsuarios ="";
+$bgPassword="";
+$bgTest="";
+$bgResultados="";
+
 //visibilidad de caja seleccionada según boton del menu lateral
 if($_GET){
     if(isset($_GET["usuarios"])){
         $zIndexUsuarios=2;
+        $bgUsuarios =  "bgLightPurple";
     }
     if(isset($_GET["password"])){
         $zIndexPassword=2;
+        $bgPassword =  "bgLightPurple";
     }
     if(isset($_GET["test"])){
         $zIndexTest=2;
+        $bgTest=  "bgLightPurple";
     }
     if(isset($_GET["resultados"])){
         $zIndexResultados=2;
+        $bgResultados =  "bgLightPurple";
     }
 }
 

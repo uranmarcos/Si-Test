@@ -203,3 +203,8 @@ a:hover{
 .mostrar{
     display: block;
 }
+
+.bgLightPurple{
+    background-color:purple;
+    color:white;
+}

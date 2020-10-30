@@ -19,7 +19,7 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
     <link href="https://fonts.googleapis.com/css2?family=Gruppo&family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link href="css/adminStyles1.css" rel="stylesheet">
+    <link href="css/adminStyles.css" rel="stylesheet">
     
   </head>
   <body class="container">
@@ -51,16 +51,16 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                                     </div>
                                                                  
                                     <div class="botonMenuAdmin">
-                                        <input class="cajaBoton" name="usuarios" id="botonUsuarios" type="submit" value="Usuarios">
+                                        <input class="cajaBoton <?php echo $bgUsuarios?>" type="submit" name="usuarios" value="Usuarios">
                                     </div> 
                                     <div class="botonMenuAdmin">
-                                        <input class="cajaBoton" name="password" id = "botonPassword" type="submit" value="Contraseñas">                           
+                                        <input class="cajaBoton <?php echo $bgPassword?>" type="submit" name="password" value="Contraseñas">                           
                                     </div>    
                                     <div class="botonMenuAdmin">
-                                        <input class="cajaBoton" name="test" type="submit" value="Test">         
+                                        <input class="cajaBoton <?php echo $bgTest?>" type="submit" name="test" value="Test">         
                                     </div> 
                                     <div class="botonMenuAdmin">
-                                        <input class="cajaBoton"  name="resultados" type="submit" value="Resultados">           
+                                        <input class="cajaBoton <?php echo $bgResultados?>" type="submit" name="resultados" value="Resultados">           
                                     </div> 
                                     <div class="botonMenuAdmin" type="submit">
                                         <buton class="cajaBoton">Estadísticas
@@ -143,8 +143,7 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                             <div class="<?php echo $visibilidadCajaModificarUsuario?>" id="cajaModificarUsuario">    
                                 <div class="row respuestaAConsulta">
                                     <p>   
-
-                                        Modificar Usuario
+                                        Opción no disponible aún.
                                     </p>
                                 </div>
                             </div>
@@ -159,8 +158,7 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                             <div class="<?php echo $visibilidadCajaEliminarUsuario?>" id="cajaEliminarUsuario">    
                                 <div class="row respuestaAConsulta">
                                     <p>   
-
-                                        Eliminar Usuario
+                                        Opción no disponible aún.
                                     </p>
                                 </div>
                             </div>
@@ -501,6 +499,6 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
     <script src="js/jquery-3.5.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/admin.js"></script>
+    <script src="js/app1.js"></script>
   </body>
 </html>

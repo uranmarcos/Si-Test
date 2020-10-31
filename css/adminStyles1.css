@@ -208,3 +208,9 @@ a:hover{
     background-color:purple;
     color:white;
 }
+
+#mensajeCrearUsuario{
+    color: red;
+    padding-left:20px;
+    font-size:12px;
+}

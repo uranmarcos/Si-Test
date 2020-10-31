@@ -19,7 +19,7 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
     <link href="https://fonts.googleapis.com/css2?family=Gruppo&family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link href="css/adminStyles.css" rel="stylesheet">
+    <link href="css/adminStyles1.css" rel="stylesheet">
     
   </head>
   <body class="container">
@@ -102,14 +102,15 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                                 <form class="formulario" action="admin.php" method="POST">
                                     <div class="row  respuestaAConsulta justify-content-between" >
                                         <label class="col-2 fwb">Nombre:</label>  
-                                        <input class="col-3" type="text" required name="name" autocomplete="off" value="">    
+                                        <input class="col-3 campoCrearUsuario" type="text" required name="name" id="nameCrearUsuario" autocomplete="off" value="">    
                                         <div class="offset-2"></div>
                                         <label class="col-2 fwb">Apellido:</label>    
-                                        <input class="col-3" type="text" required autocomplete="off" name="lastName" value="">
-                                    </div>    
+                                        <input class="col-3 campoCrearUsuario" type="text" required autocomplete="off" name="lastName" value="">
+                                    </div>  
+                                    
                                     <div class="row  respuestaAConsulta justify-content-between" >
                                         <label class="col-2 fwb">DNI:</label>
-                                        <input class="col-3" type="int" required autocomplete="off" name="dni" value=""> 
+                                        <input class="col-3 campoCrearUsuario" type="int" required autocomplete="off" name="dni" value=""> 
                                         <div class="offset-2"></div>    
                                         <label class="col-2 fwb">Rol</label>    
                                         <select class="col-3" name="rol">Rol:
@@ -119,12 +120,12 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                                     </div>  
                                     <div class="row  respuestaAConsulta justify-content-between" >
                                         <label class="col-2 fwb">Email:</label>
-                                        <input class="col-3" type="text" autocomplete="off" name="email" placeholder="Solo rol voluntario" value=""> 
+                                        <input class="col-3 campoCrearUsuario" type="email" autocomplete="off" name="email" placeholder="Solo rol voluntario" value=""> 
                                         <div class="offset-2"></div>
                                         <div class="offset-2"></div> 
                                         <input  type="submit" class="col-3 botonInput" name="crearUsuario" value="crear">
                                     </div>
-
+                                    <p class="respuestaAConsulta" id="mensajeCrearUsuario"></p>
                                     <div class="respuestaAConsulta fwb <?php echo $colorMensaje?>">
                                             <?php echo $mensajeUsuarios?> 
                                     </div> 

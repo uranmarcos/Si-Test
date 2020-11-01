@@ -36,10 +36,6 @@ function validarDni(dni, campoMensaje){
         campoMensaje.innerHTML=  "";
     }
 }
-
-
-
-
 function validarEmail(email, campoMensaje){
     if( (!email.includes("@"))|| (!email.includes(".") )){
         campoMensaje.innerHTML= "El email ingresado debe ser del tipo ejemplo@ejemplo.com";
@@ -47,22 +43,22 @@ function validarEmail(email, campoMensaje){
         campoMensaje.innerHTML = "";    
     }
 }
-
-function validarPassword(password){
+function validarPassword(password, campoMensaje){
     if(tieneN(password, 6) != true){
-        console.log("La contraseña debe poseer 6 dígitos");
+        campoMensaje.innerHTML = "La contraseña debe poseer 6 dígitos";
     }else{
-        console.log("bien!");
+        campoMensaje.innerHTML ="";
+    }
+}
+function compararPassword(password1, password2, campoMensaje){
+    if(password1 != password2){
+        campoMensaje.innerHTML ="las contraseñas no coinciden";
+    }else{
+        campoMensaje.innerHTML ="";
     }
 }
 
-function compararPassword(password1, password2){
-    if(password1 != password2){
-        console.log("las contraseñas no coinciden");
-    }else{
-        console.log("bien ahi");
-    }
-}
+
 
 function validarMinutos(minutos){
     if ( (minutos<1) || (minutos<45) ){
@@ -72,8 +68,9 @@ function validarMinutos(minutos){
     }
 }
 
-let input = document.querySelectorAll(".input");
 
+//validación campos de formulario de las secciones
+let input = document.querySelectorAll(".input");
 input.forEach(function(valor){
     valor.addEventListener('focus', function(){
         valor.addEventListener('keyup', function(){
@@ -93,6 +90,13 @@ input.forEach(function(valor){
             }
             if (inputName == "email"){
                 validarEmail(datoIngresado, campoMensaje);   
+            }
+            if (inputName == "password"){
+                validarPassword(datoIngresado, campoMensaje);   
+            }
+            if (inputName == "confirmPassword"){
+                let pass = valor.parentNode.previousElementSibling.lastElementChild.previousElementSibling.value;
+                compararPassword(datoIngresado, pass,  campoMensaje);   
             }
 
     })

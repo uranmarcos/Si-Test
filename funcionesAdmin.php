@@ -1,38 +1,34 @@
 <?php
-
-//variables para mostrar caja según opción del menu lateral.
-$zIndexLogo = 1;
-$zIndexUsuarios = 0;
-$zIndexContraseñas = 0;
-$zIndexTest = 0;
-$zIndexResultados = 0;
-$zIndexEstadisticas = 0;
-$zIndexAyuda = 0;
-
+//variables para remarcar el boton del aside seleccionado
 $bgUsuarios ="";
 $bgPassword="";
 $bgTest="";
 $bgResultados="";
 
+//variable para indicar la opcion seleccionada y cargar la caja correspondiente
+$seccion="secciones/logo.php";
+
+
 //visibilidad de caja seleccionada según boton del menu lateral
 if($_GET){
     if(isset($_GET["usuarios"])){
-        $zIndexUsuarios=2;
+        $seccion="secciones/usuarios.php";
         $bgUsuarios =  "bgLightPurple";
     }
     if(isset($_GET["password"])){
-        $zIndexPassword=2;
+        $seccion="secciones/password.php";
         $bgPassword =  "bgLightPurple";
     }
     if(isset($_GET["test"])){
-        $zIndexTest=2;
+        $seccion="secciones/test.php";
         $bgTest=  "bgLightPurple";
     }
     if(isset($_GET["resultados"])){
-        $zIndexResultados=2;
+        $seccion="secciones/resultados.php";
         $bgResultados =  "bgLightPurple";
     }
 }
+
 
 //Variables generales
 $colorMensaje="";
@@ -50,7 +46,7 @@ if(isset($_POST["crearUsuario"])){
     $apellido = $_POST["lastName"];
     $dni = $_POST["dni"];
     $rol = $_POST["rol"];
-    $zIndexUsuarios=2;
+    $seccion="secciones/usuarios.php";
     $visibilidadCajaCrearUsuario="mostrar";
     $visibilidadBotonMasCrearUsuario="ocultar";
     $visibilidadBotonMenosCrearUsuario="mostrar";
@@ -153,7 +149,7 @@ if(isset($_POST["consulta"])){
     $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
     $consulta1->execute();
     $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
-    $zIndexPassword = 2;
+    $seccion="secciones/password.php";
     if(empty($dniExiste)){
         $mensajeConsultaPassword= "El dni ingresado no está registrado";
         $colorMensaje="red";
@@ -183,7 +179,7 @@ if(isset($_POST["reset"])){
     $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
     $consulta1->execute();
     $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
-    $zIndexPassword = 2;
+    $seccion="secciones/password.php";
 
                   
     if(empty($dniExiste)){
@@ -191,7 +187,7 @@ if(isset($_POST["reset"])){
         $colorMensaje="red";
     } else{   
         if(($dniExiste[0]["rol"])!="postulante"){
-            $mensajeResetpassword = "Solo puede resetearle la contraseña a usuarios con rol 'postulante'";
+            $mensajeResetPassword = "Solo puede resetearle la contraseña a usuarios con rol 'postulante'";
             $colorMensaje="red";
         }else{
             $password = rand(111111, 999999);
@@ -209,6 +205,7 @@ if(isset($_POST["reset"])){
 $visibilidadCajaCambiarPassword="ocultar";
 $visibilidadBotonMasCambiarPassword="mostrar";
 $visibilidadBotonMenosCambiarPassword="ocultar";
+$mensajeCambiarPassword="";
 if(isset($_POST["cambiarPassword"])){
     $dni=$_SESSION["dni"];
     $visibilidadCajaCambiarPassword="mostrar";
@@ -218,7 +215,7 @@ if(isset($_POST["cambiarPassword"])){
     $consulta2 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dni'");
     $consulta2->execute();
     $datosUsuarios =$consulta2 -> fetchAll(PDO::FETCH_ASSOC);
-    $zIndexPassword = 2;
+    $seccion="secciones/password.php";
     
     
     if(($_POST["oldPassword"])!= ($datosUsuarios[0]["password"])){
@@ -268,7 +265,7 @@ if(isset($_POST["habilitarTest"])){
     $visibilidadCajaHabilitarTest="block"; 
     $visibilidadBotonMasHabilitarTest="ocultar";
     $visibilidadBotonMenosHabilitarTest="mostrar"; 
-    $zIndexTest = 2; 
+    $seccion="secciones/test.php";
     if($_POST["testAHabilitar"]=="none"){
         $errorTestCajaHabilitarTest = "Debe seleccionar el test que desea habilitar";
     }else{
@@ -317,7 +314,7 @@ if(isset($_POST["bloquearTest"])){
     $visibilidadCajaBloquearTest="block"; 
     $visibilidadBotonMasBloquearTest="ocultar";
     $visibilidadBotonMenosBloquearTest="mostrar"; 
-    $zIndexTest = 2; 
+    $seccion="secciones/test.php";
 
     if($_POST["testABloquear"]=="none"){
         $errorTestCajaBloquearTest = "Debe seleccionar el test que desea bloquear";
@@ -362,7 +359,7 @@ if(isset($_POST["avance"])){
     $visibilidadCajaConsultarAvance="block"; 
     $visibilidadBotonMasConsultarAvance="ocultar";
     $visibilidadBotonMenosConsultarAvance="mostrar"; 
-    $zIndexTest = 2; 
+    $seccion="secciones/test.php"; 
     if(empty($_POST["dniConsultaAvance"])){
            $errorDniCajaAvanceTest="Debe ingresar un DNI";
     }else{

@@ -1,7 +1,7 @@
 <?php
 session_start();
-require("pdo.php");
-require("respuestasCorrectas.php");
+require("../pdo.php");
+require("../respuestasCorrectas.php");
 
 
 $dni=$_SESSION["dni"];
@@ -194,8 +194,8 @@ if($_POST){
     <meta name="viewport" content="width=device-width, initial-scale=1.8">
     <link href="https://fonts.googleapis.com/css2?family=Gruppo&family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link href="css/areas.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link href="../css/areas.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gruppo&family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
   </head>
@@ -416,9 +416,9 @@ if($_POST){
         </main>
     </div>
 
-    <script src="js/jquery-3.5.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.5.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
   </body>
 </html>

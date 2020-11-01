@@ -25,7 +25,6 @@ header{
     background-color:purple;
     color:white;
 }
-
 .header a{
     color:white;
     font-size:20px;
@@ -74,10 +73,42 @@ main{
     background-position:center;
     background-size: 60%;
 }
+
+
+
+/* ----  ARTICLE   ---- */
 article{
     margin-top:5px;
-    margin-bottom:20px; 
+    margin-bottom:20px;    
 }
+nav{
+    height:30px;
+    width:95%;
+    display: flex;
+    border-bottom: solid 2px purple;
+    padding-bottom:10px;
+    margin:0 auto 10px auto;
+}
+.rowForm{
+    width: 100%;
+    margin-left:10px;
+    margin-bottom:20px;
+}
+.nameArticle{
+    width:300px;
+    height:30px;
+    font-weight: bolder;
+    color: purple;
+}
+p{
+    padding-left:20px;
+}
+/* desde article hasta acá siiiiiii*/
+
+
+
+
+
 .logo{
     color:purple;
 }
@@ -93,13 +124,6 @@ article{
 /* header article */
 
 
-.headerArticle{
-    height:30px;
-    margin-left:20px;
-    margin-bottom:20px;
-    border-bottom: solid 1px purple;
-    padding-bottom:10px;
-}
 button{
     border: none;
     background-color:lightgrey;
@@ -209,7 +233,7 @@ a:hover{
     color:white;
 }
 
-#mensajeCrearUsuario{
+.validacionJs{
     color: red;
     padding-left:20px;
     font-size:12px;

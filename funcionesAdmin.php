@@ -247,13 +247,11 @@ if(isset($_POST["cambiarPassword"])){
 
 
 // CAJA TEST  
-$errorDniCajaHabilitarTest = "";
-$errorTestCajaHabilitarTest = "";
-$testHabilitado= "";
-$errorDniCajaBloquearTest="";
-$errorTestCajaBloquearTest = "";
-$testBloqueado = "";
-$errorDniCajaAvanceTest = "";
+
+$mensajeHabilitarTest="";
+$mensajeBloquearTest="";
+$mensajeConsultarAvance="";
+
 $visibilidadCajaHabilitarTest = "ocultar";
 $visibilidadBotonMasHabilitarTest="mostrar";
 $visibilidadBotonMenosHabilitarTest="ocultar";
@@ -267,10 +265,10 @@ if(isset($_POST["habilitarTest"])){
     $visibilidadBotonMenosHabilitarTest="mostrar"; 
     $seccion="secciones/test.php";
     if($_POST["testAHabilitar"]=="none"){
-        $errorTestCajaHabilitarTest = "Debe seleccionar el test que desea habilitar";
+        $mensajeHabilitarTest = "Debe seleccionar el test que desea habilitar";
     }else{
         if(empty($_POST["dniAHabilitar"])){
-                $errorDniCajaHabilitarTest="Debe ingresar un DNI";
+            $mensajeHabilitarTest="Debe ingresar un DNI";
         }else{
                 $dni = $_POST["dniAHabilitar"];   
 
@@ -279,7 +277,7 @@ if(isset($_POST["habilitarTest"])){
                 $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
 
                 if(empty($dniExiste)){
-                    $errorDniCajaHabilitarTest= "El dni ingresado no está registrado";
+                    $mensajeHabilitarTest= "El dni ingresado no está registrado";
                 }else{
                     $testAHabilitar = $_POST["testAHabilitar"];
                     
@@ -293,13 +291,13 @@ if(isset($_POST["habilitarTest"])){
                             ("UPDATE usuarios SET $testAHabilitar = -2, nivelRaven=1, horaRaven='s/d',
                             tiempoRaven =$tiempoDisponible WHERE dni = '$dni'");
                         $consulta->execute();
-                        $testHabilitado="Se habilitó '$testAHabilitar' exitosamente para el usuario '$dni'";
+                        $mensajeHabilitarTest="Se habilitó '$testAHabilitar' exitosamente para el usuario '$dni'";
                         
                     }else{
                         $consulta = $baseDeDatos-> prepare
                             ("UPDATE usuarios SET $testAHabilitar = -2 WHERE dni = '$dni'");
                         $consulta->execute();
-                        $testHabilitado="Se habilitó '$testAHabilitar' exitosamente para el usuario '$dni'";
+                        $mensajeHabilitarTest="Se habilitó '$testAHabilitar' exitosamente para el usuario '$dni'";
                     } 
                 }    
         }        
@@ -317,10 +315,10 @@ if(isset($_POST["bloquearTest"])){
     $seccion="secciones/test.php";
 
     if($_POST["testABloquear"]=="none"){
-        $errorTestCajaBloquearTest = "Debe seleccionar el test que desea bloquear";
+        $mensajeBloquearTest = "Debe seleccionar el test que desea bloquear";
     }else{
         if(empty($_POST["dniABloquear"])){
-                $errorDniCajaBloquearTest="Debe ingresar un DNI";
+            $mensajeBloquearTest="Debe ingresar un DNI";
         }else{
                 $dni = $_POST["dniABloquear"];   
 
@@ -329,13 +327,13 @@ if(isset($_POST["bloquearTest"])){
                 $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
 
                 if(empty($dniExiste)){
-                    $errorDniBloquear= "El dni ingresado no está registrado";
+                    $mensajeBloquearTest= "El dni ingresado no está registrado";
                 }else{
                     $testABloquear = $_POST["testABloquear"];
                     $consulta2 = $baseDeDatos ->
                             prepare("UPDATE usuarios SET $testABloquear = -1 WHERE dni = '$dni'");
                     $consulta2->execute();
-                    $testBloqueado="Se ha bloqueado exitosamente $testABloquear para el usuario $dni";
+                    $mensajeBloquearTest="Se ha bloqueado exitosamente $testABloquear para el usuario $dni";
                 } 
         }        
     }        
@@ -361,7 +359,7 @@ if(isset($_POST["avance"])){
     $visibilidadBotonMenosConsultarAvance="mostrar"; 
     $seccion="secciones/test.php"; 
     if(empty($_POST["dniConsultaAvance"])){
-           $errorDniCajaAvanceTest="Debe ingresar un DNI";
+        $mensajeConsultarAvance="Debe ingresar un DNI";
     }else{
 
             $dniConsultaAvance = $_POST["dniConsultaAvance"]; 
@@ -371,7 +369,7 @@ if(isset($_POST["avance"])){
             
             
             if(empty($dniExiste)){
-                $errorDniAvance= "El dni ingresado no está registrado";
+                $mensajeConsultarAvance= "El dni ingresado no está registrado";
             }else{
                 $mostrarAvance ="block";
                 $raven =$dniExiste[0]["test1"];

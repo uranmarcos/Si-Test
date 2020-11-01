@@ -14,10 +14,10 @@
                     se le asignarán 45 minutos para la realización del test.
                 </p>                        
             </div>  
-            <form class="formulario" action="admin.php" method="POST">
+            <form class="formulario" action="admin.php" id="HabilitarTest" method="POST">
                 <div class="row rowForm" >    
                     <label class="col-2 fwb">DNI:</label> 
-                    <input class="col-3" type="text" name="dniAHabilitar" autocomplete="off" value=""> 
+                    <input class="col-3 input" type="text" name="dni" autocomplete="off" value=""> 
                     <div class="offset-1"></div>
                     <label class="col-2 fwb">Test:</label> 
                     <select class="col-3" name="testAHabilitar">Test
@@ -33,12 +33,12 @@
                 </div>        
                 <div class="row  rowForm" >   
                     <label class="col-2 fwb">Minutos:</label>  
-                    <input class="col-3" type="number" name="tiempoParaTest" autocomplete="off" value="minutos Raven">  
+                    <input class="col-3 input" type="number" name="minutos" autocomplete="off" value="minutos Raven">  
                     <div class="offset-1"></div>
                     <div class="offset-2"></div>
                     <input class="col-3 botonInput" type="submit" name="habilitarTest" value="Habilitar">
                 </div>
-                <div class="row rowForm <?php echo $colorMensaje?>" id="habilitarTest">  
+                <div class="red rowForm <?php echo $colorMensaje?>" id="mensajeHabilitarTest">  
                     <?php echo $mensajeHabilitarTest?>
                 </div>   
             </form>
@@ -57,10 +57,10 @@
                     Al hacerlo, se le inhabilitará el botón del mismo al usuario seleccionado.
                 </p>                          
             </div>
-            <form class="formulario" action="admin.php" method="POST">
+            <form class="formulario" action="admin.php" method="POST" id="BloquearTest">
                 <div class="row rowForm">        
                     <label class="col-2 fwb">DNI:</label>
-                    <input class="col-3" type="text"  name="dniABloquear" autocomplete="off" value="">    
+                    <input class="col-3 input" type="text"  name="dni" autocomplete="off" value="">    
                     <div class="offset-1"></div>
                     <label class="col-2 fwb">Test:</label>
                     <select class="col-3" name="testABloquear">Test
@@ -81,7 +81,7 @@
                     <div class="offset-2"></div>    
                     <input class="col-3 botonInput" type="submit" name="bloquearTest" value="Bloquear">
                 </div>
-                <div class="row rowForm <?php echo $colorMensaje?>" id="habilitarTest"> 
+                <div class="red rowForm <?php echo $colorMensaje?>" id="mensajeBloquearTest"> 
                     <?php echo $mensajeBloquearTest ?>
                 </div>    
             </form>
@@ -90,20 +90,20 @@
 <!-- consultar avance por usuario-->
     <article>
         <nav class="justify-content-between">
-            <h6 class="nameArticle">Consultar avance por usuario</h6>
+            <h6 class="nameArticle">Consultar avance</h6>
             <button class="verMas <?php echo $visibilidadBotonMasConsultarAvance?>" name="ConsultarAvance" id="verMasConsultarAvance"> Ver +</button>
             <button class="verMenos <?php echo $visibilidadBotonMenosConsultarAvance?>" name="ConsultarAvance" id="verMenosConsultarAvance"> Ver -</button>
         </nav> 
         <div  class="<?php echo $visibilidadCajaConsultarAvance?>" id="cajaConsultarAvance">
-            <form class="formulario" action="admin.php" method="POST">     
+            <form class="formulario" action="admin.php" method="POST" id="ConsultarAvance">     
                 <div class="row rowForm">        
                     <label class="col-2 fwb">DNI:</label>
-                    <input class="col-3" type="text"  name="dniConsultaAvance" autocomplete="off" value="">
+                    <input class="col-3 input" type="text"  name="dni" autocomplete="off" value="">
                     <div class="offset-1"> </div>
                     <div class="offset-2"> </div>    
                     <input class="col-3 botonInput" type="submit" name="avance" value="Consultar">
                 </div>  
-                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeConsultarAvance">
+                <div class="red rowForm <?php echo $colorMensaje?>" id="mensajeConsultarAvance">
                     <?php echo $mensajeConsultarAvance?>
                 </div>  
                 <!-- resultados sobre la consulta del avance del postulante -->

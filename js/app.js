@@ -60,11 +60,11 @@ function compararPassword(password1, password2, campoMensaje){
 
 
 
-function validarMinutos(minutos){
-    if ( (minutos<1) || (minutos<45) ){
-        console.log("Solo puede asignar entre 1 y 45 minutos")
+function validarMinutos(minutos, campoMensaje){
+    if ( (minutos<1) || (minutos>45) ){
+        campoMensaje.innerHTML = "Solo puede asignar entre 1 y 45 minutos";
     }else{
-        console.log("bien ehhh");
+        campoMensaje.innerHTML= "";
     }
 }
 
@@ -97,6 +97,9 @@ input.forEach(function(valor){
             if (inputName == "confirmPassword"){
                 let pass = valor.parentNode.previousElementSibling.lastElementChild.previousElementSibling.value;
                 compararPassword(datoIngresado, pass,  campoMensaje);   
+            }
+            if (inputName == "minutos"){
+                validarMinutos(datoIngresado, campoMensaje);   
             }
 
     })

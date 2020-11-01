@@ -6,16 +6,16 @@
             <button class="verMas <?php echo  $visibilidadBotonMasConsultarResultados?>" name="ConsultarResultados" id="verMasConsultarResultados"> Ver +</button>
             <button class="verMenos <?php echo  $visibilidadBotonMenosConsultarResultados?>" name="ConsultarResultados" id="verMenosConsultarResultados"> Ver -</button>                  
         </nav> 
-        <div class="<?php echo $visibilidadCajaConsultarResultados?>" id="cajaConsultarresultados">    
-            <form class="formulario" action="admin.php" method="POST">   
+        <div class="<?php echo $visibilidadCajaConsultarResultados?>" id="cajaConsultarResultados">    
+            <form class="formulario" action="admin.php" method="POST" id="ConsultarResultados">   
                 <div class="row rowForm">    
                     <label class="col-2 fwb">DNI</label>      
-                    <input class="col-3" type="integer" autocomplete="off" name="dni" value="">   
+                    <input class="col-3 input" type="integer" autocomplete="off" name="dni" value="">   
                     <div class="offset-1"></div>
                     <div class="offset-2"></div>
                     <input class="col-3 botonInput" type="submit" name="consultarDni" value="Consultar"> 
                 </div> 
-                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeConsultarResultados"> 
+                <div class="rowForm red <?php echo $colorMensaje?>" id="mensajeConsultarResultados"> 
                      <?php echo $mensajeConsultarResultados?> 
                 </div>    
                 <div style="display:<?php echo $mostrarConsultaResultados?>">

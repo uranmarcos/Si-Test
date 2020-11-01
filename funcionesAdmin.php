@@ -435,11 +435,14 @@ if(isset($_POST["avance"])){
 // consulta de resultados  //
 
 $mostrarResultados="none";
-$errorDniCajaResultados="";
+$mensajeConsultarResultados="";
 $ocultar="block";
 $correctasTest1="s/d";
 $totalAreas="s/d";
 $mostrarConsultaResultados="none";
+$visibilidadCajaConsultarResultados="ocultar";
+$visibilidadBotonMasConsultarResultados="mostrar";
+$visibilidadBotonMenosConsultarResultados="ocultar";
 
   
 
@@ -448,7 +451,7 @@ if(isset($_POST["consultarDni"])){
             $zIndexResultados=2;
             $dniConsultaResultados = $_POST["dni"];
             if((is_numeric($dniConsultaResultados))!=true){
-                $errorDniCajaResultados = "El valor ingresado debe ser numérico";
+                $mensajeConsultarResultados = "El valor ingresado debe ser numérico";
             }else{
                 //verifico que el dni este registrado como usuario
                 $consultaDni = $baseDeDatos-> prepare  ("SELECT * from usuarios WHERE dni ='$dniConsultaResultados'");
@@ -457,7 +460,7 @@ if(isset($_POST["consultarDni"])){
                 
                 //si el dni ingresado no esta en bdd asigno error
                 if(empty($datosDni)){
-                    $errorDniCajaResultados ="El dni ingresado no está registrado como usuario";
+                    $mensajeConsultarResultados ="El dni ingresado no está registrado como usuario";
                 }
                 //si el dni ingresado esta en bdd brindo los resultados
                 else{

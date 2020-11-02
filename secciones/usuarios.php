@@ -41,8 +41,10 @@
                     <div class="offset-2"></div> 
                     <input  type="submit" class="col-3 botonInput" name="crearUsuario" value="crear">
                 </div>
-                <div class="rowForm red <?php echo $colorMensaje?>" id="mensajeCrearUsuario">
-                    <?php echo $mensajeUsuarios?> 
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeCrearUsuario">
+             
+                        <?php echo $mensajeUsuarios?> 
+
                 </div> 
             </form> 
         </div>

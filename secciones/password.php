@@ -16,7 +16,7 @@
                     <div class="offset-2"></div>
                     <input class="col-3 botonInput" type="submit" name="consulta" value="Consultar">
                 </div>
-                <div class="rowForm red <?php echo $colorMensaje?>" id="mensajeConsultarPassword">
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeConsultarPassword">
                     <?php echo $mensajeConsultaPassword ?>
                 </div>      
             </form>
@@ -45,7 +45,7 @@
                     <div class="offset-2"></div>
                     <input class="col-3 botonInput" type="submit" name="reset" value="Resetear"> 
                 </div>
-                <div class="rowForm red <?php echo $colorMensaje?>" id="mensajeResetPassword">
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeResetPassword">
                     <?php echo $mensajeResetPassword ?>
                 </div>    
             </form>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="row rowForm"> 
                     <label class="col-4 fwb leftTexto">Nueva Contraseña</label>
-                    <input class="col-4 input" type="text" name="password" autocomplete="off" value="">
+                    <input class="col-4 input" type="text" name="newPassword" autocomplete="off" value="">
                     <div class="offset-2"></div>
                 </div>
                 <div class="row rowForm">     
@@ -89,7 +89,7 @@
                     <div class="offset-2"></div>
                     <input class="col-3 botonInput" type="submit" name="cambiarPassword" value="Cambiar"> 
                 </div>
-                <div class="rowForm red <?php echo $colorMensaje?>" id="mensajeCambiarPassword">
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeCambiarPassword">
                     <?php echo $mensajeCambiarPassword ?>
                 </div>    
             </form>

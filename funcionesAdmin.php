@@ -141,7 +141,7 @@ $visibilidadCajaConsultarPassword="ocultar";
 $visibilidadBotonMasConsultarPassword="mostrar";
 $visibilidadBotonMenosConsultarPassword="ocultar";
 if(isset($_POST["consulta"])){
-    $dni = $_POST["dniConsulta"]; 
+    $dni = $_POST["dni"]; 
     $visibilidadCajaConsultarPassword="mostrar";
     $visibilidadBotonMasConsultarPassword="ocultar";
     $visibilidadBotonMenosConsultarPassword="mostrar";        
@@ -171,7 +171,7 @@ $visibilidadCajaResetPassword="ocultar";
 $visibilidadBotonMasResetPassword="mostrar";
 $visibilidadBotonMenosResetPassword="ocultar";
 if(isset($_POST["reset"])){    
-    $dni = $_POST["dniReset"];   
+    $dni = $_POST["dni"];   
     $visibilidadCajaResetPassword="mostrar";
     $visibilidadBotonMasResetPassword="ocultar";
     $visibilidadBotonMenosResetPassword="mostrar"; 
@@ -218,7 +218,7 @@ if(isset($_POST["cambiarPassword"])){
     $seccion="secciones/password.php";
     
     
-    if(($_POST["oldPassword"])!= ($datosUsuarios[0]["password"])){
+    if(($_POST["password"])!= ($datosUsuarios[0]["password"])){
         $mensajeCambiarPassword="La contraseña actual ingresada no es la correcta";
         $colorMensaje="red";
     } 
@@ -230,7 +230,7 @@ if(isset($_POST["cambiarPassword"])){
         $mensajeCambiarPassword = "La nueva contraseña debe poseer 6 digitos";
         $colorMensaje="red";
     }
-    if ((($_POST["oldPassword"])== ($datosUsuarios[0]["password"])) 
+    if ((($_POST["password"])== ($datosUsuarios[0]["password"])) 
         && (($_POST["newPassword"]) == ($_POST["confirmPassword"]))
         && (strlen($_POST["newPassword"])==6)){
             $dni = $_SESSION["dni"];
@@ -266,11 +266,13 @@ if(isset($_POST["habilitarTest"])){
     $seccion="secciones/test.php";
     if($_POST["testAHabilitar"]=="none"){
         $mensajeHabilitarTest = "Debe seleccionar el test que desea habilitar";
+        $colorMensaje="red";
     }else{
-        if(empty($_POST["dniAHabilitar"])){
+        if(empty($_POST["dni"])){
             $mensajeHabilitarTest="Debe ingresar un DNI";
+            $colorMensaje="red";
         }else{
-                $dni = $_POST["dniAHabilitar"];   
+                $dni = $_POST["dni"];   
 
                 $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = $dni");
                 $consulta1->execute();
@@ -278,6 +280,7 @@ if(isset($_POST["habilitarTest"])){
 
                 if(empty($dniExiste)){
                     $mensajeHabilitarTest= "El dni ingresado no está registrado";
+                    $colorMensaje="red";
                 }else{
                     $testAHabilitar = $_POST["testAHabilitar"];
                     
@@ -291,13 +294,14 @@ if(isset($_POST["habilitarTest"])){
                             ("UPDATE usuarios SET $testAHabilitar = -2, nivelRaven=1, horaRaven='s/d',
                             tiempoRaven =$tiempoDisponible WHERE dni = '$dni'");
                         $consulta->execute();
-                        $mensajeHabilitarTest="Se habilitó '$testAHabilitar' exitosamente para el usuario '$dni'";
-                        
+                        $mensajeHabilitarTest="Se habilitó Raven exitosamente para el usuario '$dni'";
+                        $colorMensaje="green";
                     }else{
                         $consulta = $baseDeDatos-> prepare
                             ("UPDATE usuarios SET $testAHabilitar = -2 WHERE dni = '$dni'");
                         $consulta->execute();
                         $mensajeHabilitarTest="Se habilitó '$testAHabilitar' exitosamente para el usuario '$dni'";
+                        $colorMensaje="green";
                     } 
                 }    
         }        
@@ -316,11 +320,13 @@ if(isset($_POST["bloquearTest"])){
 
     if($_POST["testABloquear"]=="none"){
         $mensajeBloquearTest = "Debe seleccionar el test que desea bloquear";
+        $colorMensaje="red";
     }else{
-        if(empty($_POST["dniABloquear"])){
+        if(empty($_POST["dni"])){
             $mensajeBloquearTest="Debe ingresar un DNI";
+            $colorMensaje="red";
         }else{
-                $dni = $_POST["dniABloquear"];   
+                $dni = $_POST["dni"];   
 
                 $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = $dni");
                 $consulta1->execute();
@@ -328,12 +334,18 @@ if(isset($_POST["bloquearTest"])){
 
                 if(empty($dniExiste)){
                     $mensajeBloquearTest= "El dni ingresado no está registrado";
+                    $colorMensaje="red";
                 }else{
                     $testABloquear = $_POST["testABloquear"];
                     $consulta2 = $baseDeDatos ->
                             prepare("UPDATE usuarios SET $testABloquear = -1 WHERE dni = '$dni'");
                     $consulta2->execute();
-                    $mensajeBloquearTest="Se ha bloqueado exitosamente $testABloquear para el usuario $dni";
+                    if($testABloquear == "test1"){
+                        $mensajeBloquearTest="Se ha bloqueado exitosamente Raven para el usuario $dni";    
+                    }else{
+                        $mensajeBloquearTest="Se ha bloqueado exitosamente $testABloquear para el usuario $dni";
+                    }
+                    $colorMensaje="green";
                 } 
         }        
     }        
@@ -358,73 +370,72 @@ if(isset($_POST["avance"])){
     $visibilidadBotonMasConsultarAvance="ocultar";
     $visibilidadBotonMenosConsultarAvance="mostrar"; 
     $seccion="secciones/test.php"; 
-    if(empty($_POST["dniConsultaAvance"])){
+    if(empty($_POST["dni"])){
         $mensajeConsultarAvance="Debe ingresar un DNI";
+        $colorMensaje="red";
     }else{
-
-            $dniConsultaAvance = $_POST["dniConsultaAvance"]; 
-            $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dniConsultaAvance'");
-            $consulta1->execute();
-            $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
-            
-            
-            if(empty($dniExiste)){
-                $mensajeConsultarAvance= "El dni ingresado no está registrado";
-            }else{
-                $mostrarAvance ="block";
-                $raven =$dniExiste[0]["test1"];
-                    if($raven == -2 ){
-                        $avanceRaven = "Test Liberado";
-                    }elseif($raven==-1){
-                        $avanceRaven="Test Bloqueado";
-                    }else{
-                        $avanceRaven = "Test Realizado";
-                    }
+        $dniConsultaAvance = $_POST["dni"]; 
+        $consulta1 = $baseDeDatos ->prepare("SELECT * FROM usuarios WHERE dni = '$dniConsultaAvance'");
+        $consulta1->execute();
+        $dniExiste =$consulta1 -> fetchAll(PDO::FETCH_ASSOC);
+        if(empty($dniExiste)){
+            $mensajeConsultarAvance= "El dni ingresado no está registrado";
+            $colorMensaje="red";
+        }else{
+            $mostrarAvance ="block";
+            $raven =$dniExiste[0]["test1"];
+            if($raven == -2 ){
+                    $avanceRaven = "Test Liberado";
+                }elseif($raven==-1){
+                    $avanceRaven="Test Bloqueado";
+                }else{
+                    $avanceRaven = "Test Realizado";
+            }
                                                            
-                $area2 =$dniExiste[0]["area2"];
-                    if($area2 == -2){
-                        $avanceArea2 = "Test Liberado";
-                    }elseif($area2 == -1){
-                        $avanceArea2 = "Test Bloqueado";
-                    }
-                    else{
-                        $avanceArea2="Test Realizado";
-                    }
+            $area2 =$dniExiste[0]["area2"];
+            if($area2 == -2){
+                    $avanceArea2 = "Test Liberado";
+                }elseif($area2 == -1){
+                    $avanceArea2 = "Test Bloqueado";
+                }else{
+                    $avanceArea2="Test Realizado";
+            }
 
-                $area3 =$dniExiste[0]["area3"];
-                    if($area3 == -2){
-                        $avanceArea3 = "Test Liberado";
-                    }elseif($area3 == -1){
-                        $avanceArea3 = "Test Bloqueado";
-                    }else{
-                        $avanceArea3="Test Realizado";
-                    } 
-                $area6 =$dniExiste[0]["area6"];
-                    if($area6 == -2){
-                        $avanceArea6 = "Test Liberado";
-                    }elseif($area6 == -1){
-                        $avanceArea6 = "Test Bloqueado";
-                    }else{
-                        $avanceArea6="Test Realizado";
-                    }   
+            $area3 =$dniExiste[0]["area3"];
+            if($area3 == -2){
+                    $avanceArea3 = "Test Liberado";
+                }elseif($area3 == -1){
+                    $avanceArea3 = "Test Bloqueado";
+                }else{
+                    $avanceArea3="Test Realizado";
+            } 
+            
+            $area6 =$dniExiste[0]["area6"];
+            if($area6 == -2){
+                    $avanceArea6 = "Test Liberado";
+                }elseif($area6 == -1){
+                    $avanceArea6 = "Test Bloqueado";
+                }else{
+                    $avanceArea6="Test Realizado";
+            }   
 
-                $area8 =$dniExiste[0]["area8"];
-                    if($area8 == -2){
-                        $avanceArea8 = "Test Liberado";
-                    }elseif($area8 == -1){
-                        $avanceArea8 = "Test Bloqueado";
-                    }else{    
-                        $avanceArea8="Test Realizado";
-                    }   
+            $area8 =$dniExiste[0]["area8"];
+            if($area8 == -2){
+                    $avanceArea8 = "Test Liberado";
+                }elseif($area8 == -1){
+                    $avanceArea8 = "Test Bloqueado";
+                }else{    
+                    $avanceArea8="Test Realizado";
+            }   
 
-                $area9 =$dniExiste[0]["area9"];
-                    if($area9== -2){
-                        $avanceArea9 = "Test Liberado";
-                    }elseif($area9 == -1){
-                        $avanceArea9 = "Test bloqueado";
-                    }else{    
-                        $avanceArea9="Test realizado";
-                    }      
+            $area9 =$dniExiste[0]["area9"];
+            if($area9== -2){zzzzz
+                    $avanceArea9 = "Test Liberado";
+                }elseif($area9 == -1){
+                    $avanceArea9 = "Test bloqueado";
+                }else{    
+                    $avanceArea9="Test realizado";
+                }      
             }
     }
 }     
@@ -447,121 +458,122 @@ $visibilidadBotonMenosConsultarResultados="ocultar";
   
 
 if(isset($_POST["consultarDni"])){
-            require("respuestasCorrectas.php");
-            $zIndexResultados=2;
-            $dniConsultaResultados = $_POST["dni"];
-            if((is_numeric($dniConsultaResultados))!=true){
-                $mensajeConsultarResultados = "El valor ingresado debe ser numérico";
+    require("respuestasCorrectas.php");
+    $seccion="secciones/resultados.php";
+    $visibilidadCajaConsultarResultados="block"; 
+    $visibilidadBotonMasConsultarResultados="ocultar";
+    $visibilidadBotonMenosConsultarResultados="mostrar";
+    $dniConsultaResultados = $_POST["dni"];
+    if((is_numeric($dniConsultaResultados))!=true){
+        $mensajeConsultarResultados = "El valor ingresado debe ser numérico";
+        $colorMensaje="red";
+    }else{
+        //verifico que el dni este registrado como usuario
+        $consultaDni = $baseDeDatos-> prepare  ("SELECT * from usuarios WHERE dni ='$dniConsultaResultados'");
+        $consultaDni->execute();
+        $datosDni =$consultaDni -> fetchAll(PDO::FETCH_ASSOC);
+        //si el dni ingresado no esta en bdd asigno error
+        if(empty($datosDni)){
+            $mensajeConsultarResultados ="El dni ingresado no está registrado como usuario";
+            $colorMensaje="red";
+        }
+        //si el dni ingresado esta en bdd brindo los resultados
+        else{
+            $mostrarConsultaResultados="block";
+            $nombre=$datosDni[0]["nombre"];
+            $apellido = $datosDni[0]["apellido"];
+            $dni2=$datosDni[0]["dni"];
+            $hizoTest1=$datosDni[0]["test1"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
+            $hizoArea2=$datosDni[0]["area2"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
+            $hizoArea3=$datosDni[0]["area3"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
+            $hizoArea6=$datosDni[0]["area6"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
+            $hizoArea8=$datosDni[0]["area8"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
+            $hizoArea9=$datosDni[0]["area9"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
+            //si no termino raven asigno valor sin datos, si lo termino calculo resultados
+            if($hizoTest1 == -2){
+                $correctasTest1="s/d";
+            }elseif($hizoTest1 == -1){
+                $correctasTest1 = "s/t";
             }else{
-                //verifico que el dni este registrado como usuario
-                $consultaDni = $baseDeDatos-> prepare  ("SELECT * from usuarios WHERE dni ='$dniConsultaResultados'");
-                $consultaDni->execute();
-                $datosDni =$consultaDni -> fetchAll(PDO::FETCH_ASSOC);
-                
-                //si el dni ingresado no esta en bdd asigno error
-                if(empty($datosDni)){
-                    $mensajeConsultarResultados ="El dni ingresado no está registrado como usuario";
-                }
-                //si el dni ingresado esta en bdd brindo los resultados
-                else{
-                    $mostrarConsultaResultados="block";
-                    $nombre=$datosDni[0]["nombre"];
-                    $apellido = $datosDni[0]["apellido"];
-                    $dni2=$datosDni[0]["dni"];
-                    $hizoTest1=$datosDni[0]["test1"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
-                    $hizoArea2=$datosDni[0]["area2"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
-                    $hizoArea3=$datosDni[0]["area3"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
-                    $hizoArea6=$datosDni[0]["area6"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
-                    $hizoArea8=$datosDni[0]["area8"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
-                    $hizoArea9=$datosDni[0]["area9"];   //(-2 no lo hizo, -1 entro y no termino, 0 termino el test)
-                    
-                    //si no termino raven asigno valor sin datos, si lo termino calculo resultados
-                    if($hizoTest1 == -2){
-                            $correctasTest1="s/d";
-                    }elseif($hizoTest1 == -1){
-                            $correctasTest1 = "s/t";
-                    }else{
-                            //consulto resultados raven y calculo cantidad de respuestas correctas                     
-                            $consultaTest1 = $baseDeDatos-> prepare  ("SELECT uno, dos, tres, cuatro, cinco, seis, 
-                                    siete, ocho, nueve, diez, once, doce, trece, catorce, quince, dieciseis, diecisiete, dieciocho,
-                                    diecinueve, veinte, veintiuno, veintidos, veintitres, veinticuatro, veinticinco, veintiseis,
-                                    veintisiete, veintiocho, veintinueve, treinta, treintayuno, treintaydos, treintaytres, treintaycuatro,
-                                    treintaycinco, treintayseis, treintaysiete, treintayocho, treintaynueve, cuarenta, cuarentayuno, cuarentaydos,
-                                    cuarentaytres, cuarentaycuatro, cuarentaycinco, cuarentayseis, cuarentaysiete, cuarentayocho, cuarentaynueve, cincuenta,
-                                    cincuentayuno, cincuentaydos, cincuentaytres, cincuentaycuatro, cincuentaycinco, cincuentayseis, cincuentaysiete,
-                                    cincuentayocho, cincuentaynueve, sesenta
-                                    from test1 WHERE dni = '$dniConsultaResultados'");
-                            $consultaTest1->execute();
-                            $datosTest1 =$consultaTest1 -> fetchAll(PDO::FETCH_ASSOC);
+                //consulto resultados raven y calculo cantidad de respuestas correctas                     
+                $consultaTest1 = $baseDeDatos-> prepare  ("SELECT uno, dos, tres, cuatro, cinco, seis, 
+                                siete, ocho, nueve, diez, once, doce, trece, catorce, quince, dieciseis, diecisiete, dieciocho,
+                                diecinueve, veinte, veintiuno, veintidos, veintitres, veinticuatro, veinticinco, veintiseis,
+                                veintisiete, veintiocho, veintinueve, treinta, treintayuno, treintaydos, treintaytres, treintaycuatro,
+                                treintaycinco, treintayseis, treintaysiete, treintayocho, treintaynueve, cuarenta, cuarentayuno, cuarentaydos,
+                                cuarentaytres, cuarentaycuatro, cuarentaycinco, cuarentayseis, cuarentaysiete, cuarentayocho, cuarentaynueve, cincuenta,
+                                cincuentayuno, cincuentaydos, cincuentaytres, cincuentaycuatro, cincuentaycinco, cincuentayseis, cincuentaysiete,
+                                cincuentayocho, cincuentaynueve, sesenta
+                                from test1 WHERE dni = '$dniConsultaResultados'");
+                $consultaTest1->execute();
+                $datosTest1 =$consultaTest1 -> fetchAll(PDO::FETCH_ASSOC);
                             
-                            $comparacionTest1 = array_intersect_assoc($test1, $datosTest1[0]);
-                            $correctasTest1 = count($comparacionTest1);
-                    }
+                $comparacionTest1 = array_intersect_assoc($test1, $datosTest1[0]);
+                $correctasTest1 = count($comparacionTest1);
+            }
 
-                    //si no termino alguna de las areas asigno sin datos, si termino todas las raeas calculo resultados    
-                    if(($hizoArea2 ==-2 )&&($hizoArea3 ==-2)||($hizoArea6==-2)||($hizoArea8==-2)||($hizoArea9==-2)){
-                            $totalAreas = "s/d";
-                    }elseif(($hizoArea2 ==-1 )||($hizoArea3 ==-1)||($hizoArea6==-1)||($hizoArea8==-1)||($hizoArea9==-1)){
-                        $totalAreas = "s/t";
-                    }else{
+            //si no termino alguna de las areas asigno sin datos, si termino todas las raeas calculo resultados    
+            if(($hizoArea2 ==-2 )&&($hizoArea3 ==-2)||($hizoArea6==-2)||($hizoArea8==-2)||($hizoArea9==-2)){
+                $totalAreas = "s/d";
+            }elseif(($hizoArea2 ==-1 )||($hizoArea3 ==-1)||($hizoArea6==-1)||($hizoArea8==-1)||($hizoArea9==-1)){
+                $totalAreas = "s/t";
+            }else{
+                //calculo la cantidad de respuestas correctas area2
+                $consultaArea2 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
+                    pregunta4, pregunta5, pregunta6, pregunta7, pregunta8 from area2 WHERE dni = '$dniConsultaResultados'");
+                $consultaArea2->execute();
+                $datosArea2 =$consultaArea2 -> fetchAll(PDO::FETCH_ASSOC);
+                $comparacionArea2 = array_intersect_assoc($area2, $datosArea2[0]);
+                $correctasArea2 = count($comparacionArea2);
+
+                //calculo cantidad de respuestas correctas area3
+                $consultaArea3 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
+                pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
+                from area3 WHERE dni = '$dniConsultaResultados'");
+                $consultaArea3->execute();
+                $datosArea3 =$consultaArea3 -> fetchAll(PDO::FETCH_ASSOC);
+
+                $comparacionArea3 = array_intersect_assoc($area3, $datosArea3[0]);
+                $correctasArea3 = count($comparacionArea3);
+
+                //calculo cantidad de respuestas correctas area6
+                $consultaArea6 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
+                    pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
+                    from area6 WHERE dni = '$dniConsultaResultados'");
+                $consultaArea6->execute();
+                $datosArea6 =$consultaArea6 -> fetchAll(PDO::FETCH_ASSOC);
+
+                $comparacionArea6 = array_intersect_assoc($area6, $datosArea6[0]);
+                $correctasArea6 = count($comparacionArea6);
                             
-                            //calculo la cantidad de respuestas correctas area2
-                            $consultaArea2 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
-                                pregunta4, pregunta5, pregunta6, pregunta7, pregunta8 from area2 WHERE dni = '$dniConsultaResultados'");
-                            $consultaArea2->execute();
-                            $datosArea2 =$consultaArea2 -> fetchAll(PDO::FETCH_ASSOC);
+                //calculo cantidad de respuestas correctas area8
+                $consultaArea8 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
+                    pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
+                    from area8 WHERE dni = '$dniConsultaResultados'");
+                $consultaArea8->execute();
+                $datosArea8 =$consultaArea8 -> fetchAll(PDO::FETCH_ASSOC);
 
-                            $comparacionArea2 = array_intersect_assoc($area2, $datosArea2[0]);
-                            $correctasArea2 = count($comparacionArea2);
-
-                            //calculo cantidad de respuestas correctas area3
-                            $consultaArea3 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
-                            pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
-                            from area3 WHERE dni = '$dniConsultaResultados'");
-                            $consultaArea3->execute();
-                            $datosArea3 =$consultaArea3 -> fetchAll(PDO::FETCH_ASSOC);
-
-                            $comparacionArea3 = array_intersect_assoc($area3, $datosArea3[0]);
-                            $correctasArea3 = count($comparacionArea3);
-
-                            //calculo cantidad de respuestas correctas area6
-                            $consultaArea6 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
-                            pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
-                            from area6 WHERE dni = '$dniConsultaResultados'");
-                            $consultaArea6->execute();
-                            $datosArea6 =$consultaArea6 -> fetchAll(PDO::FETCH_ASSOC);
-
-                            $comparacionArea6 = array_intersect_assoc($area6, $datosArea6[0]);
-                            $correctasArea6 = count($comparacionArea6);
-                            
-                            //calculo cantidad de respuestas correctas area8
-                            $consultaArea8 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
-                            pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
-                            from area8 WHERE dni = '$dniConsultaResultados'");
-                            $consultaArea8->execute();
-                            $datosArea8 =$consultaArea8 -> fetchAll(PDO::FETCH_ASSOC);
-
-                            $comparacionArea8 = array_intersect_assoc($area8, $datosArea8[0]);
-                            $correctasArea8 = count($comparacionArea8);
+                $comparacionArea8 = array_intersect_assoc($area8, $datosArea8[0]);
+                $correctasArea8 = count($comparacionArea8);
                             
 
-                            //calculo cantidad de respuestas correctas area9
-                            $consultaArea9 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
-                            pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
-                            from area9 WHERE dni = '$dniConsultaResultados'");
-                            $consultaArea9->execute();
-                            $datosArea9 =$consultaArea9 -> fetchAll(PDO::FETCH_ASSOC);
+                //calculo cantidad de respuestas correctas area9
+                $consultaArea9 = $baseDeDatos-> prepare  ("SELECT pregunta1, pregunta2, pregunta3,
+                    pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10 
+                    from area9 WHERE dni = '$dniConsultaResultados'");
+                $consultaArea9->execute();
+                $datosArea9 =$consultaArea9 -> fetchAll(PDO::FETCH_ASSOC);
 
-                            $comparacionArea9 = array_intersect_assoc($area9, $datosArea9[0]);
-                            $correctasArea9 = count($comparacionArea9);
+                $comparacionArea9 = array_intersect_assoc($area9, $datosArea9[0]);
+                $correctasArea9 = count($comparacionArea9);
                             
-                            $totalAreas = ($correctasArea2 + $correctasArea3 + $correctasArea6 + $correctasArea8 
-                            + $correctasArea9)/4.8;
-                    }        
-                    
-                }   
-            }     
-    }
+                $totalAreas = ($correctasArea2 + $correctasArea3 + $correctasArea6 + $correctasArea8 
+                    + $correctasArea9)/4.8;
+            }        
+                   
+        }   
+    }     
+}
 
 
 

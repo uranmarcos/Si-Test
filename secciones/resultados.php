@@ -15,7 +15,7 @@
                     <div class="offset-2"></div>
                     <input class="col-3 botonInput" type="submit" name="consultarDni" value="Consultar"> 
                 </div> 
-                <div class="rowForm red <?php echo $colorMensaje?>" id="mensajeConsultarResultados"> 
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeConsultarResultados"> 
                      <?php echo $mensajeConsultarResultados?> 
                 </div>    
                 <div style="display:<?php echo $mostrarConsultaResultados?>">

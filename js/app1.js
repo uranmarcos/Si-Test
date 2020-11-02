@@ -20,8 +20,10 @@ function incluyeNumeros(valor){
 function validarNombre(nombre, campoMensaje){
     if (nombre.length <3){
         campoMensaje.innerHTML = "Debe ingresar 3 o mas caracteres";
+        campoMensaje.className="red";
     } else if (incluyeNumeros(nombre)==true){
         campoMensaje.innerHTML = "No puede incluir números";
+        campoMensaje.className="red";
     }else{
         campoMensaje.innerHTML = "";
     }
@@ -29,9 +31,11 @@ function validarNombre(nombre, campoMensaje){
 function validarDni(dni, campoMensaje){
     if(tieneN(dni, 8)!=true){
         campoMensaje.innerHTML = "El dni ingresado debe poseer 8 dígitos";
+        campoMensaje.className="red";
     }
     else if(isNaN(dni)==true){
         campoMensaje.innerHTML = "El dni ingresado debe ser numérico";
+        campoMensaje.className="red";
     }else{
         campoMensaje.innerHTML=  "";
     }
@@ -39,6 +43,7 @@ function validarDni(dni, campoMensaje){
 function validarEmail(email, campoMensaje){
     if( (!email.includes("@"))|| (!email.includes(".") )){
         campoMensaje.innerHTML= "El email ingresado debe ser del tipo ejemplo@ejemplo.com";
+        campoMensaje.className="red";
     }else{
         campoMensaje.innerHTML = "";    
     }
@@ -46,6 +51,7 @@ function validarEmail(email, campoMensaje){
 function validarPassword(password, campoMensaje){
     if(tieneN(password, 6) != true){
         campoMensaje.innerHTML = "La contraseña debe poseer 6 dígitos";
+        campoMensaje.className="red";
     }else{
         campoMensaje.innerHTML ="";
     }
@@ -53,6 +59,7 @@ function validarPassword(password, campoMensaje){
 function compararPassword(password1, password2, campoMensaje){
     if(password1 != password2){
         campoMensaje.innerHTML ="las contraseñas no coinciden";
+        campoMensaje.className="red";
     }else{
         campoMensaje.innerHTML ="";
     }
@@ -63,6 +70,7 @@ function compararPassword(password1, password2, campoMensaje){
 function validarMinutos(minutos, campoMensaje){
     if ( (minutos<1) || (minutos>45) ){
         campoMensaje.innerHTML = "Solo puede asignar entre 1 y 45 minutos";
+        campoMensaje.className="red";
     }else{
         campoMensaje.innerHTML= "";
     }
@@ -91,7 +99,7 @@ input.forEach(function(valor){
             if (inputName == "email"){
                 validarEmail(datoIngresado, campoMensaje);   
             }
-            if (inputName == "password"){
+            if ((inputName == "password") || (inputName == "newPassword")){
                 validarPassword(datoIngresado, campoMensaje);   
             }
             if (inputName == "confirmPassword"){

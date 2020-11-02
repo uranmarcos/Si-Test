@@ -38,7 +38,7 @@
                     <div class="offset-2"></div>
                     <input class="col-3 botonInput" type="submit" name="habilitarTest" value="Habilitar">
                 </div>
-                <div class="red rowForm <?php echo $colorMensaje?>" id="mensajeHabilitarTest">  
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeHabilitarTest">  
                     <?php echo $mensajeHabilitarTest?>
                 </div>   
             </form>
@@ -81,7 +81,7 @@
                     <div class="offset-2"></div>    
                     <input class="col-3 botonInput" type="submit" name="bloquearTest" value="Bloquear">
                 </div>
-                <div class="red rowForm <?php echo $colorMensaje?>" id="mensajeBloquearTest"> 
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeBloquearTest"> 
                     <?php echo $mensajeBloquearTest ?>
                 </div>    
             </form>
@@ -103,7 +103,7 @@
                     <div class="offset-2"> </div>    
                     <input class="col-3 botonInput" type="submit" name="avance" value="Consultar">
                 </div>  
-                <div class="red rowForm <?php echo $colorMensaje?>" id="mensajeConsultarAvance">
+                <div class="rowForm <?php echo $colorMensaje?>" id="mensajeConsultarAvance">
                     <?php echo $mensajeConsultarAvance?>
                 </div>  
                 <!-- resultados sobre la consulta del avance del postulante -->

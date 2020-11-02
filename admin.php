@@ -20,7 +20,7 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link href="css/normalize.css" rel="stylesheet">
-        <link href="css/adminStyles1.css" rel="stylesheet">
+        <link href="css/adminStyles.css" rel="stylesheet">
     </head>
     <body class="container">
         <header class="row fwb  header justify-content-between align-items-center">
@@ -80,6 +80,6 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
         <script src="js/jquery-3.5.1.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <script src="js/app.js"></script>
+        <script src="js/app1.js"></script>
   </body>
 </html>

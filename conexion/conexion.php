@@ -39,10 +39,10 @@ class ApptivaDB {
     public function consultarUsuarios($filtro, $buscador,  $inicio) {
         try {
             if ($filtro == "voluntarios") {
-                $resultado = $this->conexion->query("SELECT id, nombre, apellido, dni, habilitado FROM usuariosnuevos WHERE rol != 'postulante' ORDER BY apellido limit 10 offset $inicio") or die();
+                $resultado = $this->conexion->query("SELECT id, nombre, apellido, dni, mail, habilitado, rol FROM usuariosnuevos WHERE rol != 'postulante' ORDER BY apellido limit 10 offset $inicio") or die();
             } else {
                 $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.pass, U.raven, U.ct, U.habilitado, U.asignado idAsignado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
-                INNER JOIN usuariosnuevos B ON U.asignado = B.id  WHERE U.anio = '$filtro' ORDER BY apellido limit 10 offset $inicio") or die();
+                INNER JOIN usuariosnuevos B ON U.asignado = B.id  WHERE U.anio = '$filtro' AND U.rol = 'postulante' ORDER BY apellido limit 10 offset $inicio") or die();
             }
             // if ($buscador != "") {
             //     // $busqueda = '%' . $buscador . '%';
@@ -103,6 +103,17 @@ class ApptivaDB {
             return false;
         }
     }
+
+    public function editarUsuario($data, $idUsuario) {
+        try {
+            $resultado = $this->conexion->query("UPDATE usuariosnuevos SET $data WHERE id = '$idUsuario'") or die();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+
 
 
 

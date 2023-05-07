@@ -140,6 +140,31 @@
 
         break;
 
+        case 'editarUsuario':
+            $null = null;
+            $id = $_POST['id'];
+            $rol = $_POST["rol"];
+            $nombre = $_POST["nombre"];
+            $apellido = $_POST["apellido"];
+            $mail = $_POST['mail'];
+            $provincia = $_POST["provincia"];
+            $telefono = $_POST["telefono"];
+
+            $data = "rol = '" . $rol . "', nombre = '" . $nombre . "', apellido = '" . $apellido . "', mail = '" . $mail . "', telefono = '" . $telefono . "', provincia = '" . $provincia . "'";;
+            $u = $user -> editarUsuario($data, $id);  
+        
+            if ($u) {
+                $res["error"] = false;
+                $res["mensaje"] = "El usuario se editó correctamente.";
+               
+            } else {
+                $res["mensaje"] = "No se pudo editar el usuario. Intente nuevamente";
+                // $res["mensaje"] = $data;
+                $res["error"] = true;
+            } 
+
+        break;
+
         case 'eliminarUsuario':
             $idUsuario = $_POST["idUsuario"];
 

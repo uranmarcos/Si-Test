@@ -74,32 +74,32 @@
                 <table class="table" v-if="usuarios.length != 0">
                     <thead>
                         <tr>
-                            <th scope="col">Provincia</th>
+                            <th scope="col" v-if="filtro != 'voluntarios'">Provincia</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
                             <th scope="col">Dni</th>
-                            <th scope="col">Teléfono</th>
-                            <th scope="col">Contraseña</th>
-                            <th scope="col">Raven</th>
-                            <th scope="col">CT</th>
+                            <th scope="col" v-if="filtro != 'voluntarios'">Teléfono</th>
+                            <th scope="col" v-if="filtro != 'voluntarios'">Contraseña</th>
+                            <th scope="col" v-if="filtro != 'voluntarios'">Raven</th>
+                            <th scope="col" v-if="filtro != 'voluntarios'">CT</th>
                             <th scope="col">Habilitado</th>
-                            <th scope="col">Asignado</th>
+                            <th scope="col" v-if="filtro != 'voluntarios'">Asignado</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <div  v-if="this.usuarios.length != 0">
                             <tr v-for="usuario in usuarios">
-                                <td>{{usuario.provincia}}</td>
+                                <td v-if="filtro != 'voluntarios'">{{usuario.provincia}}</td>
                                 <td>{{usuario.nombre}}</td>
                                 <td>{{usuario.apellido}}</td>
                                 <td>{{usuario.dni}}</td>
-                                <td>{{usuario.telefono}}</td>
-                                <td>{{usuario.rol == "postulante" ? usuario.pass : "-"}}</td>
-                                <td>{{usuario.raven}}</td>
-                                <td>{{usuario.ct}}</td>
+                                <td v-if="filtro != 'voluntarios'">{{usuario.telefono}}</td>
+                                <td v-if="filtro != 'voluntarios'">{{usuario.rol == "postulante" ? usuario.pass : "-"}}</td>
+                                <td v-if="filtro != 'voluntarios'">{{usuario.raven}}</td>
+                                <td v-if="filtro != 'voluntarios'">{{usuario.ct}}</td>
                                 <td>{{usuario.habilitado == 1 ? "S" : "N"}}</td>
-                                <td>{{usuario.asignado}}</td>
+                                <td v-if="filtro != 'voluntarios'">{{usuario.asignado}}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="boton dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -110,7 +110,7 @@
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#">Eliminar</a></li>
                                             <li><a class="dropdown-item" href="carga.php">Resetear Contraseña</a></li>
-                                            <li><a class="dropdown-item" href="carga.php">Editar</a></li>
+                                            <li><a class="dropdown-item" @click="edit(usuario)" href="#">Editar</a></li>
                                             <li><a class="dropdown-item" @click="asignarUsuario(usuario)" href="#" v-if="filtro != 'voluntarios'">Asignar</a></li>
                                         </ul>
                                     </div>
@@ -134,7 +134,7 @@
 
             <!-- EMPIEZAN COMPONENTES MODAL Y NOTIFICACION -->
 
-            <!-- START MODAL NUEVO USUARIO -->
+            <!-- START MODAL CREAR USUARIO -->
             <div v-if="modalCrearUsuario">
                 <div id="myModal" class="modal">
                     <div class="modal-content px-0 py-0">
@@ -183,13 +183,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="!confirmandoUsuario">
+                        <div v-if="!creandoUsuario">
                             <div class="modal-footer d-flex justify-content-between" v-if="!pedirConfirmacion">
                                 <button type="button" class="botonCancelar" @click="cancelarCrearUsuario()">Cancelar</button>
                                 <button type="button" @click="crearUsuario"  class="boton">Crear</button>
                             </div>
                             <div class="modal-footer" v-if="pedirConfirmacion">
-                                <div class="row d-flex justify-content-center">
+                                <div class="row mb-2 d-flex justify-content-center">
                                     ¿Confirma la creación del usuario?
                                 </div>
                                 <div class="row d-flex justify-content-between">
@@ -199,7 +199,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="confirmandoUsuario">
+                        <div v-if="creandoUsuario">
                             <div class="modal-footer d-flex justify-content-between">
                                 <div class="contenedorLoadingModal">
                                     <div class="loading">
@@ -213,7 +213,7 @@
                     </div>
                 </div>   
             </div>   
-            <!-- END MODAL NUEVO USUARIO -->
+            <!-- END MODAL CREAR USUARIO -->
 
             <!-- START MODAL ELIMINAR USUARIO -->
             <div v-if="modalEliminarUsuario">
@@ -248,7 +248,7 @@
                                 <button type="button" @click="pedirConfirmacionEliminar= true"  class="boton">Eliminar</button>
                             </div>
                             <div class="modal-footer" v-if="pedirConfirmacionEliminar">
-                                <div class="row d-flex justify-content-center">
+                                <div class="row mb-2 d-flex justify-content-center">
                                     ¿Confirma la eliminación del usuario?
                                 </div>
                                 <div class="row d-flex justify-content-between">
@@ -312,7 +312,7 @@
                                 <button type="button" @click="pedirConfirmacionAsignar= true"  class="boton">Asignar</button>
                             </div>
                             <div class="modal-footer" v-if="pedirConfirmacionAsignar">
-                                <div class="row d-flex justify-content-center">
+                                <div class="row mb-2 d-flex justify-content-center">
                                     ¿Confirma la asignación del usuario?
                                 </div>
                                 <div class="row d-flex justify-content-between">
@@ -335,7 +335,88 @@
                     </div>
                 </div>    
             </div>    
-            <!-- END MODAL ELIMINAR USUARIO -->
+            <!-- END MODAL ASIGNAR USUARIO -->
+
+            <!-- START MODAL EDITAR USUARIO -->
+            <div v-if="modalEditarUsuario">
+                <div id="myModal" class="modal">
+                    <div class="modal-content px-0 py-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalNuevoUsuario">EDITAR USUARIO</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 mt-1">
+                                    <label for="ciudad">Rol (*) </label>
+                                    <select class="form-control" :disabled="pedirConfirmacionEditar" name="rol" v-model="usuarioEditable.rol">
+                                        <option value="postulante">Postulante</option>
+                                        <option value="voluntario">Voluntario</option>
+                                        <option value="general">General</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 col-md-6 mt-1">
+                                    <label for="ciudad">DNI (*) <span class="errorLabel" v-if="errorDni">{{errorDni}}</span></label>
+                                    <input disabled class="form-control" autocomplete="off" maxlength="8" id="dni" v-model="usuarioEditable.dni">
+                                </div>
+                                <div class="col-sm-12 mt-1">
+                                    <label for="ciudad">Nombre (*) <span class="errorLabel" v-if="errorNombre">{{errorNombre}}</span></label>
+                                    <input :disabled="pedirConfirmacionEditar" class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuarioEditable.nombre">
+                                </div>
+                                <div class="col-sm-12 mt-1">
+                                    <label for="ciudad">Apellido (*) <span class="errorLabel" v-if="errorApellido">{{errorApellido}}</span></label>
+                                    <input :disabled="pedirConfirmacionEditar" class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuarioEditable.apellido">
+                                </div>
+                                <div class="col-sm-12 col-md-6 mt-1"  v-if="usuarioEditable.rol == 'postulante'">
+                                    <label for="ciudad">Provincia</label>
+                                    <select class="form-control" :disabled="pedirConfirmacionEditar" name="provincia" id="provincia" v-model="usuarioEditable.provincia">
+                                        <option v-for="provincia in provincias" v-bind:value="provincia" >{{provincia}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 col-md-6 mt-1"  v-if="usuarioEditable.rol == 'postulante'">
+                                    <label for="ciudad">Telefono</label>
+                                    <input :disabled="pedirConfirmacionEditar" class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuarioEditable.telefono">
+                                </div>
+                                <div class="col-sm-12 mt-1" v-if="usuarioEditable.rol != 'postulante'">
+                                    <label for="ciudad">Mail (*) <span class="errorLabel" v-if="errorMail">{{errorMail}}</span></label>
+                                    <input :disabled="pedirConfirmacionEditar" class="form-control" autocomplete="off" maxlength="60" id="mail" v-model="usuarioEditable.mail">
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="!editandoUsuario">
+                            <div class="modal-footer d-flex justify-content-between" v-if="!pedirConfirmacionEditar">
+                                <button type="button" class="botonCancelar" @click="cancelarEditarUsuario()">Cancelar</button>
+                                <button type="button" @click="editarUsuario"  class="boton">Editar</button>
+                            </div>
+                            <div class="modal-footer" v-if="pedirConfirmacionEditar">
+                                <div class="row mb-2 d-flex justify-content-center">
+                                    ¿Confirma la edición del usuario?
+                                </div>
+                                <div class="row d-flex justify-content-between">
+                                    <button type="button" class="botonCancelar" @click="pedirConfirmacionEditar = false">Cancelar</button>
+                                    <button type="button" class="boton" @click="confirmarEditarUsuario()">Confirmar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="editandoUsuario">
+                            <div class="modal-footer d-flex justify-content-between">
+                                <div class="contenedorLoadingModal">
+                                    <div class="loading">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>   
+            <!-- END MODAL NUEVO USUARIO -->
 
             <!-- START NOTIFICACION -->
             <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
@@ -366,12 +447,22 @@
             components: {
             },
             data: {
-                modalEliminarUsuario: false,
                 modalCrearUsuario: false,
+                modalEliminarUsuario: false,
                 modalAsignarUsuario: false,
+                modalEditarUsuario: false,
                 usuarios: [],
                 voluntarios: [],
                 usuario:{
+                    provincia: null,
+                    nombre: null,
+                    apellido: null,
+                    dni: null,
+                    telefono: null,
+                    rol: null,
+                    mail: null
+                },
+                usuarioEditable:{
                     provincia: null,
                     nombre: null,
                     apellido: null,
@@ -433,17 +524,21 @@
                     "Tierra del Fuego",
                     "Tucumán"
                 ],
+                creandoUsuario: false,
+                editandoUsuario: false,
+                asignandoUsuario: false,
+                eliminandoUsuario: false,
                 pedirConfirmacion: false,
-                confirmandoUsuario: false,
+                pedirConfirmacionEliminar: false,
+                pedirConfirmacionAsignar: false,
+                pedirConfirmacionEditar: false,
                 tituloToast: null,
                 textoToast: null,
-                pedirConfirmacionEliminar: false,
-                eliminandoUsuario: false,
-                pedirConfirmacionAsignar: false,
-                asignandoUsuario: false
+                rol: null
             },
             mounted () {
-                this.consultarUsuarios()
+                this.consultarUsuarios();
+                this.rol = "admin";
             },
             methods:{
                 consultarUsuarios() {
@@ -457,15 +552,12 @@
                         formdata.append("inicio", ((app.page -1) * 10));
                     }
                     // this.consultarCantidad()
-
                     axios.post("funciones/acciones.php?accion=getUsuarios", formdata)
                     .then(function(response){    
                         app.buscandoUsuarios = false;
-                        console.log(response.data);
                         if (response.data.error) {
                             app.mostrarToast("Error", response.data.mensaje);
                         } else {
-                            // app.mostrarToast("Éxito", response.data.mensaje);
                             if (response.data.usuarios != false) {
                                 app.usuarios = response.data.usuarios;
                             } else {
@@ -484,7 +576,6 @@
                     axios.post("funciones/acciones.php?accion=getVoluntarios")
                     .then(function(response){    
                         app.buscandoVoluntarios = false;
-                        console.log(response.data);
                         if (response.data.error) {
                             app.mostrarToast("Error", response.data.mensaje);
                         } else {
@@ -503,92 +594,93 @@
 
 
                 //  FUNCIONES ASIGNAR USUARIO
-                asignarUsuario (usuario) {
-                    this.modalAsignarUsuario = true;
-                    this.usuarioAsignable.id = usuario.id;
-                    this.usuarioAsignable.nombre = usuario.nombre;
-                    this.usuarioAsignable.apellido = usuario.apellido;
-                    this.usuarioAsignable.dni = usuario.dni;
-                    this.usuarioAsignable.asignado = usuario.idAsignado;
+                    asignarUsuario (usuario) {
+                        this.modalAsignarUsuario = true;
+                        this.usuarioAsignable.id = usuario.id;
+                        this.usuarioAsignable.nombre = usuario.nombre;
+                        this.usuarioAsignable.apellido = usuario.apellido;
+                        this.usuarioAsignable.dni = usuario.dni;
+                        this.usuarioAsignable.asignado = usuario.idAsignado;
 
-                    if (this.voluntarios.length == 0) {
-                        this.consultarVoluntarios();
-                    }
-                },
-                cancelarAsignarUsuario () {
-                    this.modalAsignarUsuario = false;
-                    this.resetUsuarioAsignable();
-                },
-                resetUsuarioAsignable () {
-                    this.usuarioAsignable.id = null;
-                    this.usuarioAsignable.nombre = null;
-                    this.usuarioAsignable.apellido = null;
-                    this.usuarioAsignable.dni = null;
-                    this.usuarioAsignable.asignado = null
-                },
-                confirmarAsignacionUsuario () {
-                    this.asignandoUsuario = true;
-                    let formdata = new FormData();
-                   
-                    formdata.append("idUsuario", app.usuarioAsignable.id);
-                    formdata.append("idVoluntario", app.usuarioAsignable.asignado);
-                    axios.post("funciones/acciones.php?accion=asignarUsuario", formdata)
-                    .then(function(response){
-                        if (response.data.error) {
-                            app.mostrarToast("Error", response.data.mensaje);
-                        } else {
-                            app.pedirConfirmacionAsignar = false;
-                            app.modalAsignarUsuario = false;
-                            app.mostrarToast("Éxito", response.data.mensaje);
-                            app.consultarUsuarios();
-                            app.resetUsuarioAsignable();
+                        if (this.voluntarios.length == 0) {
+                            this.consultarVoluntarios();
                         }
-                        app.asignandoUsuario = false;
-                    }).catch( error => {
-                        app.asignandoUsuario = false;
-                        app.mostrarToast("Error", "No se pudo crear el usuario");
-                    })
-                },
-
-                //
+                    },
+                    cancelarAsignarUsuario () {
+                        this.modalAsignarUsuario = false;
+                        this.resetUsuarioAsignable();
+                    },
+                    resetUsuarioAsignable () {
+                        this.usuarioAsignable.id = null;
+                        this.usuarioAsignable.nombre = null;
+                        this.usuarioAsignable.apellido = null;
+                        this.usuarioAsignable.dni = null;
+                        this.usuarioAsignable.asignado = null
+                    },
+                    confirmarAsignacionUsuario () {
+                        this.asignandoUsuario = true;
+                        let formdata = new FormData();
+                    
+                        formdata.append("idUsuario", app.usuarioAsignable.id);
+                        formdata.append("idVoluntario", app.usuarioAsignable.asignado);
+                        axios.post("funciones/acciones.php?accion=asignarUsuario", formdata)
+                        .then(function(response){
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                app.pedirConfirmacionAsignar = false;
+                                app.modalAsignarUsuario = false;
+                                app.mostrarToast("Éxito", response.data.mensaje);
+                                app.consultarUsuarios();
+                                app.resetUsuarioAsignable();
+                            }
+                            app.asignandoUsuario = false;
+                        }).catch( error => {
+                            app.asignandoUsuario = false;
+                            app.mostrarToast("Error", "No se pudo crear el usuario");
+                        })
+                    },
+                // FUNCIONES ASIGNAR USUARIO
 
                 // FUNCIONES CREACION USUARIO
-                crearUsuario () {
-                    this.pedirConfirmacion = true;
-                },
-                cancelarCrearUsuario () {
-                    this.modalCrearUsuario = false;
-                    this.resetNuevoUsuario();
-                },
-                confirmarUsuario () {
-                    this.confirmandoUsuario = true;
-                    let formdata = new FormData();
-                   
-                    formdata.append("provincia", app.usuario.provincia);
-                    formdata.append("nombre", app.usuario.nombre);
-                    formdata.append("apellido", app.usuario.apellido);
-                    formdata.append("dni", app.usuario.dni);
-                    formdata.append("telefono", app.usuario.telefono);
-                    formdata.append("rol", app.usuario.rol);
-                    formdata.append("mail", app.usuario.mail);
-                    formdata.append("asignado", 1);
-                    axios.post("funciones/acciones.php?accion=crearUsuario", formdata)
-                    .then(function(response){
-                        if (response.data.error) {
-                            app.mostrarToast("Error", response.data.mensaje);
-                        } else {
-                            app.pedirConfirmacion = false;
-                            app.modalCrearUsuario = false;
-                            app.mostrarToast("Éxito", response.data.mensaje);
-                            app.consultarUsuarios();
-                            app.resetNuevoUsuario();
-                        }
-                        app.confirmandoUsuario = false;
-                    }).catch( error => {
-                        app.confirmandoUsuario = false;
-                        app.mostrarToast("Error", "No se pudo crear el usuario");
-                    })
-                },
+                    crearUsuario () {
+                        this.pedirConfirmacion = true;
+                    },
+                    cancelarCrearUsuario () {
+                        this.modalCrearUsuario = false;
+                        this.resetNuevoUsuario();
+                    },
+                    confirmarUsuario () {
+                        this.creandoUsuario = true;
+                        let formdata = new FormData();
+                    
+                        formdata.append("provincia", app.usuario.provincia);
+                        formdata.append("nombre", app.usuario.nombre);
+                        formdata.append("apellido", app.usuario.apellido);
+                        formdata.append("dni", app.usuario.dni);
+                        formdata.append("telefono", app.usuario.telefono);
+                        formdata.append("rol", app.usuario.rol);
+                        formdata.append("mail", app.usuario.mail);
+                        formdata.append("asignado", 1);
+                        axios.post("funciones/acciones.php?accion=crearUsuario", formdata)
+                        .then(function(response){
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                app.pedirConfirmacion = false;
+                                app.modalCrearUsuario = false;
+                                app.mostrarToast("Éxito", response.data.mensaje);
+                                app.consultarUsuarios();
+                                app.resetNuevoUsuario();
+                            }
+                            app.creandoUsuario = false;
+                        }).catch( error => {
+                            app.creandoUsuario = false;
+                            app.mostrarToast("Error", "No se pudo crear el usuario");
+                        })
+                    },
+                // FUNCIONES CREACION USUARIO
+
                 // FUNCIONES ELIMINAR USUARIO
                     eliminarUsuario (param) {
                         this.modalEliminarUsuario = true;
@@ -640,6 +732,76 @@
                         }
                     },
                 // FUNCIONES ELIMINAR USUARIO
+
+                //  FUNCIONES editar USUARIO
+                    edit (usuario) {
+                        this.modalEditarUsuario = true;
+                        this.usuarioEditable.id = usuario.id;
+                        this.usuarioEditable.nombre = usuario.nombre;
+                        this.usuarioEditable.apellido = usuario.apellido;
+                        this.usuarioEditable.provincia = usuario.provincia ? usuario.provincia : null;
+                        this.usuarioEditable.dni = usuario.dni;
+                        this.usuarioEditable.rol = usuario.rol;
+                        this.usuarioEditable.telefono = usuario.telefono ? usuario.telefono : null;
+                        this.usuarioEditable.mail = usuario.mail ? usuario.mail : null;
+                    },
+                    editarUsuario () {
+                        // realziar validaciones
+                        this.pedirConfirmacionEditar = true;
+                    },
+                    cancelarEditarUsuario () {
+                        this.modalEditarUsuario = false;
+                        this.resetUsuarioEditable();
+                    },
+                    resetUsuarioEditable () {
+                        this.usuarioEditable.id = null;
+                        this.usuarioEditable.nombre = null;
+                        this.usuarioEditable.apellido = null;
+                        this.usuarioEditable.provincia = null;
+                        this.usuarioEditable.dni = null;
+                        this.usuarioEditable.rol = null;
+                        this.usuarioEditable.telefono = null;
+                        this.usuarioEditable.mail = null;
+                    },
+                    confirmarEditarUsuario () {
+                        this.editandoUsuario = true;
+                        let formdata = new FormData();
+                    
+                        formdata.append("id", app.usuarioEditable.id);
+                        formdata.append("rol", app.usuarioEditable.rol);
+                        formdata.append("nombre", app.usuarioEditable.nombre);
+                        formdata.append("apellido", app.usuarioEditable.apellido);
+                        if (app.usuarioEditable.rol != 'postulante') {
+                            formdata.append("mail", app.usuarioEditable.mail);
+                        } else {
+                            formdata.append("mail", null);
+                        }
+                        if (app.usuarioEditable.rol == 'postulante') {
+                            formdata.append("provincia", app.usuarioEditable.provincia);
+                            formdata.append("telefono", app.usuarioEditable.telefono);
+                        } else {
+                            formdata.append("provincia", null);
+                            formdata.append("telefono", null);
+                        }
+
+                        axios.post("funciones/acciones.php?accion=editarUsuario", formdata)
+                        .then(function(response){
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                app.pedirConfirmacionEditar = false;
+                                app.modalEditarUsuario = false;
+                                app.mostrarToast("Éxito", response.data.mensaje);
+                                app.consultarUsuarios();
+                                app.resetUsuarioEditable();
+                            }
+                            app.editandoUsuario = false;
+                        }).catch( error => {
+                            app.editandoUsuario = false;
+                            app.mostrarToast("Error", "No se pudo editar el usuario");
+                        })
+                    },
+                // FUNCIONES ASIGNAR USUARIO
 
                 mostrarToast(titulo, texto) {
                     app.tituloToast = titulo;

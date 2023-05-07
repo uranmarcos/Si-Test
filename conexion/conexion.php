@@ -41,7 +41,7 @@ class ApptivaDB {
             if ($filtro == "voluntarios") {
                 $resultado = $this->conexion->query("SELECT id, nombre, apellido, dni, habilitado FROM usuariosnuevos WHERE rol != 'postulante' ORDER BY apellido limit 10 offset $inicio") or die();
             } else {
-                $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.pass, U.raven, U.ct, U.habilitado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
+                $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.pass, U.raven, U.ct, U.habilitado, U.asignado idAsignado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
                 INNER JOIN usuariosnuevos B ON U.asignado = B.id  WHERE U.anio = '$filtro' ORDER BY apellido limit 10 offset $inicio") or die();
             }
             // if ($buscador != "") {
@@ -65,6 +65,16 @@ class ApptivaDB {
         }
     }
 
+    public function consultarVoluntarios() {
+        try {
+            $resultado = $this->conexion->query("SELECT id, CONCAT(nombre, ' ', apellido) voluntario FROM usuariosnuevos WHERE rol != 'postulante' AND habilitado = 1 ORDER BY apellido") or die();
+            return $resultado->fetch_all(MYSQLI_ASSOC);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+
     public function insertarUsuario($datos) {
         try {
             $resultado = $this->conexion->query("INSERT INTO usuariosnuevos VALUES(null, $datos)") or die();
@@ -83,6 +93,15 @@ class ApptivaDB {
             return false;
         }
 
+    }
+
+    public function asignarUsuario($idUsuario, $idVoluntario) {
+        try {
+            $resultado = $this->conexion->query("UPDATE usuariosnuevos SET asignado = '$idVoluntario' WHERE id = '$idUsuario'") or die();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
 

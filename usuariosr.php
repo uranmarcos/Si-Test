@@ -83,6 +83,7 @@
                             <th scope="col">Raven</th>
                             <th scope="col">CT</th>
                             <th scope="col">Habilitado</th>
+                            <th scope="col">Asignado</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -98,6 +99,7 @@
                                 <td>{{usuario.raven}}</td>
                                 <td>{{usuario.ct}}</td>
                                 <td>{{usuario.habilitado == 1 ? "S" : "N"}}</td>
+                                <td>{{usuario.asignado}}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="boton dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -109,7 +111,7 @@
                                             <li><a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#">Eliminar</a></li>
                                             <li><a class="dropdown-item" href="carga.php">Resetear Contraseña</a></li>
                                             <li><a class="dropdown-item" href="carga.php">Editar</a></li>
-                                            <li><a class="dropdown-item" href="carga.php">Asignar</a></li>
+                                            <li><a class="dropdown-item" @click="asignarUsuario(usuario)" href="#" v-if="filtro != 'voluntarios'">Asignar</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -271,6 +273,70 @@
             </div>    
             <!-- END MODAL ELIMINAR USUARIO -->
 
+            <!-- START MODAL ASIGNAR USUARIO -->
+            <div v-if="modalAsignarUsuario">
+                <div id="myModal" class="modal">
+                    <div class="modal-content px-0 py-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">ASIGNAR USUARIO</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12 mt-3">
+                                    <label for="nombre">Nombre</label>
+                                    <input disabled class="form-control" v-model="usuarioAsignable.nombre">
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <label for="apellido">Apellido</label>
+                                    <input disabled class="form-control" v-model="usuarioAsignable.apellido">
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <label for="ciudad">DNI </label>
+                                    <input disabled class="form-control" v-model="usuarioAsignable.dni">
+                                </div>     
+                                <div class="col-sm-12 mt-3">
+                                    <label for="ciudad">VOLUNTARIO ASIGNADO </label>
+                                    <select class="form-control" v-model="usuarioAsignable.asignado">
+                                        <option v-for="voluntario in voluntarios" v-bind:value="voluntario.id">{{voluntario.voluntario}}</option>
+                                    </select> 
+                                </div>           
+                            </div>
+                        </div>
+                        <div v-if="!asignandoUsuario">
+                            <div class="modal-footer d-flex justify-content-between" v-if="!pedirConfirmacionAsignar">
+                                <button type="button" class="botonCancelar" @click="cancelarAsignarUsuario()" id="" data-dismiss="modal">Cancelar</button>
+                                <button type="button" @click="pedirConfirmacionAsignar= true"  class="boton">Asignar</button>
+                            </div>
+                            <div class="modal-footer" v-if="pedirConfirmacionAsignar">
+                                <div class="row d-flex justify-content-center">
+                                    ¿Confirma la asignación del usuario?
+                                </div>
+                                <div class="row d-flex justify-content-between">
+                                    <button type="button" class="botonCancelar" @click="pedirConfirmacionAsignar = false">Cancelar</button>
+                                    <button type="button" class="boton" @click="confirmarAsignacionUsuario()">Confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="asignandoUsuario">
+                            <div class="modal-footer d-flex justify-content-between">
+                                <div class="contenedorLoadingModal">
+                                    <div class="loading">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>    
+            <!-- END MODAL ELIMINAR USUARIO -->
+
             <!-- START NOTIFICACION -->
             <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
                 <div class="toast-header">
@@ -302,7 +368,9 @@
             data: {
                 modalEliminarUsuario: false,
                 modalCrearUsuario: false,
+                modalAsignarUsuario: false,
                 usuarios: [],
+                voluntarios: [],
                 usuario:{
                     provincia: null,
                     nombre: null,
@@ -311,6 +379,13 @@
                     telefono: null,
                     rol: null,
                     mail: null
+                },
+                usuarioAsignable :{
+                    id: null,
+                    nombre: null,
+                    apellido: null,
+                    dni: null,
+                    idAsignado: null
                 },
                 usuarioEliminable:{
                     id: null,
@@ -363,7 +438,9 @@
                 tituloToast: null,
                 textoToast: null,
                 pedirConfirmacionEliminar: false,
-                eliminandoUsuario: false
+                eliminandoUsuario: false,
+                pedirConfirmacionAsignar: false,
+                asignandoUsuario: false
             },
             mounted () {
                 this.consultarUsuarios()
@@ -402,6 +479,79 @@
                     });
                 },
 
+                consultarVoluntarios() {
+                    this.buscandoVoluntarios = true;
+                    axios.post("funciones/acciones.php?accion=getVoluntarios")
+                    .then(function(response){    
+                        app.buscandoVoluntarios = false;
+                        console.log(response.data);
+                        if (response.data.error) {
+                            app.mostrarToast("Error", response.data.mensaje);
+                        } else {
+                            if (response.data.usuarios != false) {
+                                app.voluntarios = response.data.usuarios;
+                            } else {
+                                app.voluntarios = []
+                            }
+                        }
+                    }).catch( error => {
+                        console.log(error);
+                        app.buscandoUsuarios = false;
+                        app.mostrarToast("Error", "No se pudo recuperar los usuarios");
+                    });
+                },
+
+
+                //  FUNCIONES ASIGNAR USUARIO
+                asignarUsuario (usuario) {
+                    this.modalAsignarUsuario = true;
+                    this.usuarioAsignable.id = usuario.id;
+                    this.usuarioAsignable.nombre = usuario.nombre;
+                    this.usuarioAsignable.apellido = usuario.apellido;
+                    this.usuarioAsignable.dni = usuario.dni;
+                    this.usuarioAsignable.asignado = usuario.idAsignado;
+
+                    if (this.voluntarios.length == 0) {
+                        this.consultarVoluntarios();
+                    }
+                },
+                cancelarAsignarUsuario () {
+                    this.modalAsignarUsuario = false;
+                    this.resetUsuarioAsignable();
+                },
+                resetUsuarioAsignable () {
+                    this.usuarioAsignable.id = null;
+                    this.usuarioAsignable.nombre = null;
+                    this.usuarioAsignable.apellido = null;
+                    this.usuarioAsignable.dni = null;
+                    this.usuarioAsignable.asignado = null
+                },
+                confirmarAsignacionUsuario () {
+                    this.asignandoUsuario = true;
+                    let formdata = new FormData();
+                   
+                    formdata.append("idUsuario", app.usuarioAsignable.id);
+                    formdata.append("idVoluntario", app.usuarioAsignable.asignado);
+                    axios.post("funciones/acciones.php?accion=asignarUsuario", formdata)
+                    .then(function(response){
+                        if (response.data.error) {
+                            app.mostrarToast("Error", response.data.mensaje);
+                        } else {
+                            app.pedirConfirmacionAsignar = false;
+                            app.modalAsignarUsuario = false;
+                            app.mostrarToast("Éxito", response.data.mensaje);
+                            app.consultarUsuarios();
+                            app.resetUsuarioAsignable();
+                        }
+                        app.asignandoUsuario = false;
+                    }).catch( error => {
+                        app.asignandoUsuario = false;
+                        app.mostrarToast("Error", "No se pudo crear el usuario");
+                    })
+                },
+
+                //
+
                 // FUNCIONES CREACION USUARIO
                 crearUsuario () {
                     this.pedirConfirmacion = true;
@@ -422,7 +572,6 @@
                     formdata.append("rol", app.usuario.rol);
                     formdata.append("mail", app.usuario.mail);
                     formdata.append("asignado", 1);
-                    console.log(this.usuario.telefono);
                     axios.post("funciones/acciones.php?accion=crearUsuario", formdata)
                     .then(function(response){
                         if (response.data.error) {
@@ -474,6 +623,9 @@
                                 app.resetUsuarioEliminable();
                                 app.consultarUsuarios(); 
                             }
+                        }).catch( error => {
+                            app.eliminandoUsuario = false;
+                            app.mostrarToast("Error", "No se pudo eliminar el usuario");
                         });
                     },
                     resetNuevoUsuario () {

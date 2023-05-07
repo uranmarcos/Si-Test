@@ -81,6 +81,21 @@
         break;
 
 
+        case 'getVoluntarios':
+            $u = $user -> consultarVoluntarios();
+
+            if ($u || $u == []) { 
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "La consulta se realizó correctamente";
+            } else {
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "Hubo un error al recuperar la información. Por favor recargue la página.";
+                $res["error"] = true;
+            } 
+
+        break;
+
+
 
         case 'crearUsuario':
 
@@ -135,6 +150,22 @@
             } else {
                 $res["u"] = $u;
                 $res["mensaje"] = "No se pudo eliminar el usuario";
+                $res["error"] = true;
+            } 
+
+        break;
+
+        case 'asignarUsuario':
+            $idUsuario = $_POST["idUsuario"];
+            $idVoluntario = $_POST["idVoluntario"];
+
+            $u = $user -> asignarUsuario($idUsuario, $idVoluntario);
+            if ($u || $u == []) { 
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "El usuario se asignó correctamente";
+            } else {
+                $res["u"] = $u;
+                $res["mensaje"] = "No se pudo asignar el usuario";
                 $res["error"] = true;
             } 
 

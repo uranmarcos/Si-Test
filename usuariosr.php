@@ -109,7 +109,11 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#">Eliminar</a></li>
-                                            <li><a class="dropdown-item" href="carga.php">Resetear Contraseña</a></li>
+                                            <li>
+                                                <a class="dropdown-item" @click="resetear(usuario)" href="#">
+                                                    Resetear Contraseña
+                                                </a>
+                                            </li>
                                             <li>
                                                 <a class="dropdown-item" @click="habilitar(usuario)" href="#">
                                                     {{usuario.habilitado == 0 ? 'Habilitar' : 'Bloquear'}}
@@ -473,6 +477,60 @@
             </div>    
             <!-- END MODAL ASIGNAR USUARIO -->
 
+              <!-- START MODAL RESETEAR CONTRASEÑA -->
+              <div v-if="modalResetear">
+                <div id="myModal" class="modal">
+                    <div class="modal-content px-0 py-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">
+                                Resetear contraseña
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12 mt-3 d-flex justify-content-center" >
+                                    ¿Desea resetear la contraseña al usuario?
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <label for="nombre">Usuario</label>
+                                    <input disabled class="form-control" v-model="usuarioReseteable.nombre">
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <label for="nombre">DNI</label>
+                                    <input disabled class="form-control" v-model="usuarioReseteable.dni">
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <label for="apellido">Rol</label>
+                                    <input disabled class="form-control" v-model="usuarioReseteable.rol">
+                                </div> 
+                            </div>
+                        </div>
+                        <div v-if="!reseteando">
+                            <div class="modal-footer d-flex justify-content-between">
+                                <button type="button" class="botonCancelar" @click="cancelarResetear()" id="" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="boton" @click="confirmarResetear()">Confirmar</button>
+                            </div>
+                        </div>
+                        <div v-if="reseteando">
+                            <div class="modal-footer d-flex justify-content-between">
+                                <div class="contenedorLoadingModal">
+                                    <div class="loading">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>    
+            <!-- END MODAL ASIGNAR USUARIO -->
+
             <!-- START NOTIFICACION -->
             <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
                 <div class="toast-header">
@@ -507,6 +565,7 @@
                 modalAsignarUsuario: false,
                 modalEditarUsuario: false,
                 modalHabilitarUsuario: false,
+                modalResetear: false,
                 usuarios: [],
                 voluntarios: [],
                 usuario:{
@@ -549,6 +608,11 @@
                     habilitado: null
                 },
                 usuarioHabilitable :{
+                    id: null,
+                    nombre: null,
+                    rol: null,
+                },
+                usuarioReseteable :{
                     id: null,
                     nombre: null,
                     rol: null,
@@ -598,6 +662,7 @@
                 asignandoUsuario: false,
                 eliminandoUsuario: false,
                 habilitandoUsuario: false,
+                reseteando: false,
                 pedirConfirmacion: false,
                 pedirConfirmacionEliminar: false,
                 pedirConfirmacionAsignar: false,
@@ -873,7 +938,7 @@
                     },
                 // FUNCIONES EDITAR USUARIO
 
-                //  FUNCIONES habilitar USUARIO
+                // FUNCIONES HABILITAR / BLOQUEAR USUARIO
                     habilitar (usuario) {
                         this.modalHabilitarUsuario = true;
                         this.usuarioHabilitable.id = usuario.id;
@@ -914,7 +979,51 @@
                             app.habilitandoUsuario = false;
                         }).catch( error => {
                             app.habilitandoUsuario = false;
-                            app.mostrarToast("Error", "No se pudo crear el usuario");
+                            app.mostrarToast("Error", "No se pudo habilitar/bloquear el usuario");
+                        })
+                    },
+                // FUNCIONES HABILITAR / BLOQUEAR USUARIO
+
+                //  FUNCIONES RESETEAR CONTRASEÑA USUARIO
+                    resetear (usuario) {
+                        this.modalResetear = true;
+                        this.usuarioReseteable.id = usuario.id;
+                        this.usuarioReseteable.dni = usuario.dni;
+                        this.usuarioReseteable.nombre = usuario.nombre + ' ' + usuario.apellido ;
+                        this.usuarioReseteable.rol = usuario.rol;
+                    },
+                    cancelarResetear () {
+                        this.modalResetear = false;
+                        this.resetUsuarioReseteable();
+                    },
+                    resetUsuarioReseteable () {
+                        this.usuarioReseteable.id = null;
+                        this.usuarioReseteable.dni = null;
+                        this.usuarioReseteable.nombre = null;
+                        this.usuarioReseteable.rol = null
+                    },
+                    confirmarResetear () {
+                        this.reseteando = true;
+                        let formdata = new FormData();
+                    
+                        formdata.append("idUsuario", app.usuarioReseteable.id);
+                        formdata.append("dni", app.usuarioReseteable.dni);
+                        formdata.append("rol", app.usuarioReseteable.rol);
+                    
+                        axios.post("funciones/acciones.php?accion=resetear", formdata)
+                        .then(function(response){
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                app.modalResetear = false;
+                                app.mostrarToast("Éxito", response.data.mensaje);
+                                app.consultarUsuarios();
+                                app.resetUsuarioReseteable();
+                            }
+                            app.reseteando = false;
+                        }).catch( error => {
+                            app.reseteando = false;
+                            app.mostrarToast("Error", "No se pudo resetar la contraseña");
                         })
                     },
                 // FUNCIONES ASIGNAR USUARIO

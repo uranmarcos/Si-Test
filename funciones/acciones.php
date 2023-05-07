@@ -204,8 +204,35 @@
                 $res["mensaje"] = "No se pudo " . $habilitado == 1 ? 'habilitar' : 'bloquear' . " el usuario";
                 $res["error"] = true;
             } 
-
         break;
+
+        case 'resetear':
+            $id = $_POST["idUsuario"];
+            $dni = $_POST["dni"];
+            $rol = $_POST["rol"];
+            $contrasenia = null;
+
+            if ($rol == "postulante") {
+                $contrasenia = rand(100000, 999999);
+            } else {
+                $contrasenia = password_hash($dni, PASSWORD_DEFAULT);
+            }
+
+            $u = $user -> resetear($id, $contrasenia);
+            if ($u || $u == []) { 
+                $res["usuarios"] = $u;
+                if ($rol == "postulante") {
+                    $res["mensaje"] = "El usuario se creó correctamente. Se le asignó la contraseña " . $contrasenia;
+                } else {
+                    $res["mensaje"] = "El usuario se creó correctamente. Se le asignó como contraseña su dni";
+                }
+            } else {
+                $res["u"] = $u;
+                $res["mensaje"] = "No se pudo resetear la contraseña";
+                $res["error"] = true;
+            } 
+        break;
+
 
 
 

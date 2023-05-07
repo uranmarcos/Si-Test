@@ -122,6 +122,15 @@ class ApptivaDB {
         }
     }
 
+    public function resetear($idUsuario, $contrasenia) {
+        try {
+            $resultado = $this->conexion->query("UPDATE usuariosnuevos SET pass = '$contrasenia' WHERE id = '$idUsuario'") or die();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 
 
 

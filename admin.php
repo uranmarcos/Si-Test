@@ -1,13 +1,13 @@
 <?php
 session_start();
-require("pdo.php");
-require("funcionesAdmin.php");
+// require("pdo.php");
+// require("funcionesAdmin.php");
 
 
-$rol=$_SESSION["rol"];
-if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
-    echo "<script>location.href='index.php';</script>";
-  }
+$rol = $_SESSION["rol"];
+// if (($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
+//     echo "<script>location.href='index.php';</script>";
+//   }
 
 ?>
 <!DOCTYPE html>
@@ -50,7 +50,7 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                             <a href="test/area9.php" class="cajaBoton">Área 9</a>
                         </div>
                                                                  
-                        <div class="botonMenuAdmin">
+                        <!-- <div class="botonMenuAdmin">
                             <input class="cajaBoton <?php echo $bgUsuarios?>" type="submit" name="usuarios" value="Usuarios">
                         </div> 
                         <div class="botonMenuAdmin">
@@ -67,13 +67,13 @@ if(($_SESSION['autenticado']!="si") || ($rol !="voluntario")){
                         </div> 
                         <div class="botonMenuAdmin">
                             <input class="cajaBoton" disabled type="submit" name="ayuda" value="Ayuda">           
-                        </div> 
+                        </div>  -->
                     </div>    
                 </form>
             </aside>
-            <main class="col-10 col-md-9"> 
+            <!-- <main class="col-10 col-md-9"> 
                 <?php include($seccion)?>
-            </main>                           
+            </main>                            -->
         </div>         
         
     

@@ -1,0 +1,163 @@
+.boton{
+    background-color: white;
+    color: rgb(124, 69, 153);
+    padding: 5px 10px;
+    border: solid 1px rgb(124, 69, 153);
+    box-shadow: none;
+    border-radius: 5px;
+    width: auto;
+}
+.boton:hover{
+    background-color: rgb(124, 69, 153);;
+    color: white;
+    border: solid 1px rgb(124, 69, 153);
+    box-shadow: none;
+}
+.botonCancelar{
+    background-color: white;
+    color: rgb(238, 100, 100);
+    padding: 5px 10px;
+    border: solid 1px rgb(238, 100, 100); 
+    box-shadow: none;
+    border-radius: 5px;
+    width: auto;
+}
+.botonCancelar:hover{
+    background-color: rgb(238, 100, 100);
+    color: white;
+    border: solid 1px rgb(238, 100, 100);   
+    box-shadow: none;
+}
+
+table{
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 5px;
+    width: 100% !important;
+}
+.sinResultados{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px 20px;
+    text-align: center;
+}
+.contenedorTabla{
+    color: rgb(124, 69, 153);
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 10px;
+    padding: 10xp;
+    margin-top: 24px;
+    width: 100%;
+}   
+
+
+
+/* TABLA   */
+th,td{
+    text-align: center !important;
+}
+table{
+    font-size: 14px !important
+}
+
+
+
+
+
+/* BREADCRUMB */
+.grey{
+    color: grey
+}
+.breadcrumb{
+    color: rgb(124, 69, 153);
+    font-size:1em;
+    padding:0 !important; 
+    margin-top: 20px;
+    text-transform: uppercase;
+    border-bottom: solid 1px rgb(124, 69, 153);
+}
+.pointer{
+    cursor: pointer;
+}
+
+/* END BREADCRUMB */
+
+
+/* MODAL  */
+.modal-header {
+    background: rgb(124, 69, 153);
+    color: white;
+}
+.close{
+    background:white;
+    border: none;
+    outline: none;
+}
+
+
+.row{
+    width: 100%;
+    margin:auto;
+}
+
+
+
+    /* ESTILOS LOADING */
+    .contenedorLoading {
+        color: rgb(124, 69, 153);
+        border: solid 1px rgb(124, 69, 153);
+        border-radius: 10px;
+        padding: 10xp;
+        margin-top: 24px;
+        width: 100%;
+        height: 200px;
+    }
+    .contenedorLoadingModal {
+        color: rgb(124, 69, 153);
+        border-radius: 10px;
+        padding: 10xp;
+        width: 100%;
+        height: 50px;
+
+    }
+    .loading {
+        width: 100%;
+        height: 100% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    /* ESTILOS LOADING */
+
+
+
+
+
+    /*  ESTILOS MODAL   */
+.tituloModal{
+    color: rgb(124, 69, 153);
+}
+/* The Modal (background) */
+.modal {
+    display: block;
+    /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+}

@@ -110,6 +110,11 @@
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#">Eliminar</a></li>
                                             <li><a class="dropdown-item" href="carga.php">Resetear Contraseña</a></li>
+                                            <li>
+                                                <a class="dropdown-item" @click="habilitar(usuario)" href="#">
+                                                    {{usuario.habilitado == 0 ? 'Habilitar' : 'Bloquear'}}
+                                                </a>
+                                            </li>
                                             <li><a class="dropdown-item" @click="edit(usuario)" href="#">Editar</a></li>
                                             <li><a class="dropdown-item" @click="asignarUsuario(usuario)" href="#" v-if="filtro != 'voluntarios'">Asignar</a></li>
                                         </ul>
@@ -418,6 +423,56 @@
             </div>   
             <!-- END MODAL NUEVO USUARIO -->
 
+            <!-- START MODAL HABILITAR / BLOQUEAR USUARIO -->
+            <div v-if="modalHabilitarUsuario">
+                <div id="myModal" class="modal">
+                    <div class="modal-content px-0 py-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">
+                                HABILITAR/BLOQUEAR USUARIO
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12 mt-3 d-flex justify-content-center" >
+                                    ¿Desea {{usuarioHabilitable.habilitado == 0 ? 'HABILITAR' : 'BLOQUEAR'}} al usuario?
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <label for="nombre">Usuario</label>
+                                    <input disabled class="form-control" v-model="usuarioHabilitable.nombre">
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <label for="apellido">Rol</label>
+                                    <input disabled class="form-control" v-model="usuarioHabilitable.rol">
+                                </div> 
+                            </div>
+                        </div>
+                        <div v-if="!habilitandoUsuario">
+                            <div class="modal-footer d-flex justify-content-between">
+                                <button type="button" class="botonCancelar" @click="cancelarHabilitarUsuario()" id="" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="boton" @click="confirmarHabilitarUsuario()">Confirmar</button>
+                            </div>
+                        </div>
+                        <div v-if="habilitandoUsuario">
+                            <div class="modal-footer d-flex justify-content-between">
+                                <div class="contenedorLoadingModal">
+                                    <div class="loading">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>    
+            <!-- END MODAL ASIGNAR USUARIO -->
+
             <!-- START NOTIFICACION -->
             <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
                 <div class="toast-header">
@@ -451,6 +506,7 @@
                 modalEliminarUsuario: false,
                 modalAsignarUsuario: false,
                 modalEditarUsuario: false,
+                modalHabilitarUsuario: false,
                 usuarios: [],
                 voluntarios: [],
                 usuario:{
@@ -483,6 +539,19 @@
                     nombre: null,
                     apellido: null,
                     dni: null
+                },
+                usuarioAsignable :{
+                    id: null,
+                    nombre: null,
+                    apellido: null,
+                    dni: null,
+                    rol: null,
+                    habilitado: null
+                },
+                usuarioHabilitable :{
+                    id: null,
+                    nombre: null,
+                    rol: null,
                 },
                 errorNombre: "",
                 errorApellido: "",
@@ -528,6 +597,7 @@
                 editandoUsuario: false,
                 asignandoUsuario: false,
                 eliminandoUsuario: false,
+                habilitandoUsuario: false,
                 pedirConfirmacion: false,
                 pedirConfirmacionEliminar: false,
                 pedirConfirmacionAsignar: false,
@@ -733,7 +803,7 @@
                     },
                 // FUNCIONES ELIMINAR USUARIO
 
-                //  FUNCIONES editar USUARIO
+                // FUNCIONES EDITAR USUARIO
                     edit (usuario) {
                         this.modalEditarUsuario = true;
                         this.usuarioEditable.id = usuario.id;
@@ -801,7 +871,54 @@
                             app.mostrarToast("Error", "No se pudo editar el usuario");
                         })
                     },
+                // FUNCIONES EDITAR USUARIO
+
+                //  FUNCIONES habilitar USUARIO
+                    habilitar (usuario) {
+                        this.modalHabilitarUsuario = true;
+                        this.usuarioHabilitable.id = usuario.id;
+                        this.usuarioHabilitable.nombre = usuario.nombre + ' ' + usuario.apellido ;
+                        this.usuarioHabilitable.rol = usuario.rol;
+                        this.usuarioHabilitable.habilitado = usuario.habilitado;
+                    },
+                    cancelarHabilitarUsuario () {
+                        this.modalHabilitarUsuario = false;
+                        this.resetUsuarioHabilitable();
+                    },
+                    resetUsuarioHabilitable () {
+                        this.usuarioHabilitable.id = null;
+                        this.usuarioHabilitable.nombre = null;
+                        this.usuarioHabilitable.rol = null
+                    },
+                    confirmarHabilitarUsuario () {
+                        this.habilitandoUsuario = true;
+                        let formdata = new FormData();
+                    
+                        formdata.append("idUsuario", app.usuarioHabilitable.id);
+                        if (app.usuarioHabilitable.habilitado == '0'){
+                            formdata.append("habilitado", '1');
+                        } else {
+                            formdata.append("habilitado", '0');
+                        }
+                    
+                        axios.post("funciones/acciones.php?accion=habilitarUsuario", formdata)
+                        .then(function(response){
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                app.modalHabilitarUsuario = false;
+                                app.mostrarToast("Éxito", response.data.mensaje);
+                                app.consultarUsuarios();
+                                app.resetUsuarioHabilitable();
+                            }
+                            app.habilitandoUsuario = false;
+                        }).catch( error => {
+                            app.habilitandoUsuario = false;
+                            app.mostrarToast("Error", "No se pudo crear el usuario");
+                        })
+                    },
                 // FUNCIONES ASIGNAR USUARIO
+
 
                 mostrarToast(titulo, texto) {
                     app.tituloToast = titulo;

@@ -113,6 +113,15 @@ class ApptivaDB {
         }
     }
 
+    public function habilitarUsuario($id, $habilitado) {
+        try {
+            $resultado = $this->conexion->query("UPDATE usuariosnuevos SET habilitado = '$habilitado' WHERE id = '$id'") or die();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 
 
 

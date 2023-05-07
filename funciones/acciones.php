@@ -80,7 +80,6 @@
 
         break;
 
-
         case 'getVoluntarios':
             $u = $user -> consultarVoluntarios();
 
@@ -94,8 +93,6 @@
             } 
 
         break;
-
-
 
         case 'crearUsuario':
 
@@ -159,7 +156,6 @@
                
             } else {
                 $res["mensaje"] = "No se pudo editar el usuario. Intente nuevamente";
-                // $res["mensaje"] = $data;
                 $res["error"] = true;
             } 
 
@@ -177,7 +173,6 @@
                 $res["mensaje"] = "No se pudo eliminar el usuario";
                 $res["error"] = true;
             } 
-
         break;
 
         case 'asignarUsuario':
@@ -191,6 +186,22 @@
             } else {
                 $res["u"] = $u;
                 $res["mensaje"] = "No se pudo asignar el usuario";
+                $res["error"] = true;
+            } 
+
+        break;
+
+        case 'habilitarUsuario':
+            $id = $_POST["idUsuario"];
+            $habilitado = $_POST["habilitado"];
+
+            $u = $user -> habilitarUsuario($id, $habilitado);
+            if ($u || $u == []) { 
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "El usuario se " . ($habilitado == 1 ? 'habilitó' : 'bloqueó') . " correctamente";
+            } else {
+                $res["u"] = $u;
+                $res["mensaje"] = "No se pudo " . $habilitado == 1 ? 'habilitar' : 'bloquear' . " el usuario";
                 $res["error"] = true;
             } 
 

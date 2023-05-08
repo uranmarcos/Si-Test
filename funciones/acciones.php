@@ -284,6 +284,38 @@
             } 
         break;
 
+        case 'editarDni':
+            $id = $_POST['id'];
+            $dni = $_POST["dni"];
+
+            // VALIDO QUE EL DNI NO ESTE CARGADO YA EN SISTEMA
+            $dataValidar = " dni LIKE '$dni'"; 
+            $validacion = $user -> hayRegistro($dataValidar);  
+                    
+            if ($validacion > 0) {
+                $res["mensaje"] = "El dni ya se encuentra registrado";
+                $res["error"] = true; 
+                break;
+            }
+            if ($validacion === false) {
+                $res["mensaje"] = "La creación no pudo realizarse";
+                $res["error"] = true;
+                break;
+            }
+
+            $u = $user -> editarDni($id, $dni);  
+        
+            if ($u) {
+                $res["error"] = false;
+                $res["mensaje"] = "El DNI se editó correctamente.";
+               
+            } else {
+                $res["mensaje"] = "No se pudo editar el dni. Intente nuevamente";
+                $res["error"] = true;
+            } 
+
+        break;
+
 
 
 

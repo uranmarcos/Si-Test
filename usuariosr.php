@@ -120,6 +120,7 @@
                                                 </a>
                                             </li>
                                             <li><a class="dropdown-item" @click="edit(usuario)" href="#">Editar</a></li>
+                                            <li><a class="dropdown-item" @click="editDni(usuario)" href="#">Modificar DNI</a></li>
                                             <li><a class="dropdown-item" @click="asignarUsuario(usuario)" href="#" v-if="filtro != 'voluntarios'">Asignar</a></li>
                                         </ul>
                                     </div>
@@ -425,7 +426,7 @@
                     </div>
                 </div>   
             </div>   
-            <!-- END MODAL NUEVO USUARIO -->
+            <!-- END MODAL EDITAR USUARIO -->
 
             <!-- START MODAL HABILITAR / BLOQUEAR USUARIO -->
             <div v-if="modalHabilitarUsuario">
@@ -477,8 +478,8 @@
             </div>    
             <!-- END MODAL ASIGNAR USUARIO -->
 
-              <!-- START MODAL RESETEAR CONTRASEÑA -->
-              <div v-if="modalResetear">
+            <!-- START MODAL RESETEAR CONTRASEÑA -->
+            <div v-if="modalResetear">
                 <div id="myModal" class="modal">
                     <div class="modal-content px-0 py-0">
                         <div class="modal-header">
@@ -529,7 +530,61 @@
                     </div>
                 </div>    
             </div>    
-            <!-- END MODAL ASIGNAR USUARIO -->
+            <!-- END MODAL RESETEAR CONTRASEÑA -->
+
+            <!-- START MODAL EDITAR DNI -->
+            <div v-if="modalEditarDni">
+                <div id="myModal" class="modal">
+                    <div class="modal-content px-0 py-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalNuevoUsuario">EDITAR DNI</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12 mt-1">
+                                    <label for="ciudad">Nombre</label>
+                                    <input disabled class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuarioDniEditable.nombre">
+                                </div>
+                                <div class="col-sm-12 mt-1">
+                                    <label for="ciudad">DNI (*) <span class="errorLabel" v-if="errorDni">{{errorDni}}</span></label>
+                                    <input class="form-control" autocomplete="off" maxlength="8" id="dni" v-model="usuarioDniEditable.dni">
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="!editandoDni">
+                            <div class="modal-footer d-flex justify-content-between" v-if="!pedirConfirmacionEditarDni">
+                                <button type="button" class="botonCancelar" @click="cancelarEditarDni()">Cancelar</button>
+                                <button type="button" @click="editarDni"  class="boton">Editar</button>
+                            </div>
+                            <div class="modal-footer" v-if="pedirConfirmacionEditarDni">
+                                <div class="row mb-2 d-flex justify-content-center">
+                                    ¿Confirma la modificación del DNI?
+                                </div>
+                                <div class="row d-flex justify-content-between">
+                                    <button type="button" class="botonCancelar" @click="pedirConfirmacionEditarDni = false">Cancelar</button>
+                                    <button type="button" class="boton" @click="confirmarEditarDni()">Confirmar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="editandoDni">
+                            <div class="modal-footer d-flex justify-content-between">
+                                <div class="contenedorLoadingModal">
+                                    <div class="loading">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>   
+            <!-- END MODAL EDITAR USUARIO -->
 
             <!-- START NOTIFICACION -->
             <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
@@ -564,6 +619,7 @@
                 modalEliminarUsuario: false,
                 modalAsignarUsuario: false,
                 modalEditarUsuario: false,
+                modalEditarDni: false,
                 modalHabilitarUsuario: false,
                 modalResetear: false,
                 usuarios: [],
@@ -584,7 +640,14 @@
                     dni: null,
                     telefono: null,
                     rol: null,
-                    mail: null
+                    mail: null,
+                    id: null
+                },
+                usuarioDniEditable:{
+                    nombre: null,
+                    apellido: null,
+                    dni: null,
+                    id: null
                 },
                 usuarioAsignable :{
                     id: null,
@@ -662,11 +725,13 @@
                 asignandoUsuario: false,
                 eliminandoUsuario: false,
                 habilitandoUsuario: false,
+                editandoDni: false,
                 reseteando: false,
                 pedirConfirmacion: false,
                 pedirConfirmacionEliminar: false,
                 pedirConfirmacionAsignar: false,
                 pedirConfirmacionEditar: false,
+                pedirConfirmacionEditarDni: false,
                 tituloToast: null,
                 textoToast: null,
                 rol: null
@@ -984,7 +1049,7 @@
                     },
                 // FUNCIONES HABILITAR / BLOQUEAR USUARIO
 
-                //  FUNCIONES RESETEAR CONTRASEÑA USUARIO
+                // FUNCIONES RESETEAR CONTRASEÑA
                     resetear (usuario) {
                         this.modalResetear = true;
                         this.usuarioReseteable.id = usuario.id;
@@ -1026,8 +1091,53 @@
                             app.mostrarToast("Error", "No se pudo resetar la contraseña");
                         })
                     },
-                // FUNCIONES ASIGNAR USUARIO
+                // FUNCIONES RESETEAR CONTRASEÑA
 
+                // FUNCIONES EDITAR DNI
+                    editDni (usuario) {
+                        this.modalEditarDni = true;
+                        this.usuarioDniEditable.id = usuario.id;
+                        this.usuarioDniEditable.nombre = usuario.nombre + " " + usuario.apellido;
+                        this.usuarioDniEditable.dni = usuario.dni;
+                    },
+                    editarDni () {
+                        // realziar validaciones
+                        this.pedirConfirmacionEditarDni = true;
+                    },
+                    cancelarEditarDni () {
+                        this.modalEditarDni = false;
+                        this.resetUsuarioDniEditable();
+                    },
+                    resetUsuarioDniEditable () {
+                        this.usuarioDniEditable.id = null;
+                        this.usuarioDniEditable.nombre = null;
+                        this.usuarioDniEditable.dni = null;
+                    },
+                    confirmarEditarDni () {
+                        this.editandoDni = true;
+                        let formdata = new FormData();
+                    
+                        formdata.append("id", app.usuarioDniEditable.id);
+                        formdata.append("dni", app.usuarioDniEditable.dni);
+
+                        axios.post("funciones/acciones.php?accion=editarDni", formdata)
+                        .then(function(response){
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                app.pedirConfirmacionEditarDni = false;
+                                app.modalEditarDni = false;
+                                app.mostrarToast("Éxito", response.data.mensaje);
+                                app.consultarUsuarios();
+                                app.resetUsuarioDniEditable();
+                            }
+                            app.editandoDni = false;
+                        }).catch( error => {
+                            app.editandoDni = false;
+                            app.mostrarToast("Error", "No se pudo editar el DNI");
+                        })
+                    },
+                // FUNCIONES EDITAR DNI
 
                 mostrarToast(titulo, texto) {
                     app.tituloToast = titulo;

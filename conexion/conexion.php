@@ -153,6 +153,15 @@ class ApptivaDB {
         }
     }
 
+    public function editarDni($id, $dni) {
+        try {
+            $resultado = $this->conexion->query("UPDATE usuariosnuevos SET dni = '$dni' WHERE id = '$id'") or die();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 
 
 

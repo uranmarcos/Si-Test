@@ -174,6 +174,18 @@ table{
     background: white;
     color: #7C4599;
 }    
+.selectCantidad{
+    position: relative;
+    padding: 0;
+}
+.labelCantidad{
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    font-size: 12px !important;
+    background-color: white;
+    color:rgb(124, 69, 153);
+}
 
 
 /* PAGINACION */

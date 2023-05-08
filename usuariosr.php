@@ -132,22 +132,32 @@
                     </table>
                 </div>
                 <div class="row mt-3 mb-5">
-                    <div class="col-4">
-                        <button @click="prev" class="btnPaginacion pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                            </svg>
-                        </button>
+                    <div class="col-3 px-0 selectCantidad">
+                        <span class="labelCantidad"> Ver de a...</span>
+                        <select class="form-control" @change="changeCantidad" v-model="cantidadPorPagina">
+                            <option v-for="opcion in opcionesCantidad" v-bind:value="opcion">{{opcion}}</option>
+                        </select>
                     </div>
-                    <div class="col-4 d-flex justify-content-center">
-                        {{page * 10 - 9}} a {{page * 10 > cantidadUsuarios ? cantidadUsuarios : page * 10}} de {{cantidadUsuarios == 1 ? " 1 resultado" : cantidadUsuarios >= 2 ? (cantidadUsuarios + " resultados") : ""}}
-                    </div>
-                    <div class="col-4 d-flex justify-content-end">
-                        <button  class="btnPaginacion pointer" @click="next">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                            </svg>
-                        </button>
+                    <div class="col-9 px-0 d-flex justify-content-end">
+                        <div class="row d-flex align-items-center justify-content-end">
+                            <div class="col-1 d-flex justify-content-end">
+                                <button @click="prev" class="btnPaginacion pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="col-4 d-flex justify-content-center">
+                                {{page * cantidadPorPagina - (cantidadPorPagina - 1)}} a {{page * cantidadPorPagina > cantidadUsuarios ? cantidadUsuarios : page * cantidadPorPagina}} de {{cantidadUsuarios == 1 ? " 1 resultado" : cantidadUsuarios >= 2 ? (cantidadUsuarios + " resultados") : ""}}
+                            </div>
+                            <div class="col-1 d-flex justify-content-start">
+                                <button  class="btnPaginacion pointer" @click="next">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -171,6 +181,15 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-12 mt-1">
+                                    <label for="ciudad">Rol (*) </label>
+                                    <select class="form-control" :disabled="pedirConfirmacion" name="rol" v-model="usuario.rol">
+                                        <option value="postulante">Postulante</option>
+                                        <option value="voluntario" v-if="rol == 'admin' || rol == 'general'">Voluntario</option>
+                                        <option value="general" v-if="rol == 'admin'">General</option>
+                                        <option value="admin" v-if="rol == 'admin'">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 mt-1">
                                     <label for="ciudad">Nombre (*) <span class="errorLabel" v-if="errorNombre">{{errorNombre}}</span></label>
                                     <input :disabled="pedirConfirmacion" class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuario.nombre">
                                 </div>
@@ -179,29 +198,21 @@
                                     <input :disabled="pedirConfirmacion" class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuario.apellido">
                                 </div>
                                 <div class="col-sm-12 mt-1">
+                                    <label for="ciudad">DNI (*) <span class="errorLabel" v-if="errorDni">{{errorDni}}</span></label>
+                                    <input :disabled="pedirConfirmacion" class="form-control" autocomplete="off" maxlength="8" id="dni" v-model="usuario.dni">
+                                </div>
+                                <div class="col-sm-12 col-md-6 mt-1" v-if="usuario.rol == 'postulante'">
+                                    <label for="ciudad">Telefono</label>
+                                    <input :disabled="pedirConfirmacion" class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuario.telefono">
+                                </div>
+                                <div class="col-sm-12 col-md-6 mt-1" v-if="usuario.rol == 'postulante'">
                                     <label for="ciudad">Provincia</label>
                                     <select class="form-control" :disabled="pedirConfirmacion" name="provincia" id="provincia" v-model="usuario.provincia">
                                         <option v-for="provincia in provincias" v-bind:value="provincia" >{{provincia}}</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-12 col-md-6 mt-1">
-                                    <label for="ciudad">DNI (*) <span class="errorLabel" v-if="errorDni">{{errorDni}}</span></label>
-                                    <input :disabled="pedirConfirmacion" class="form-control" autocomplete="off" maxlength="8" id="dni" v-model="usuario.dni">
-                                </div>
-                                <div class="col-sm-12 col-md-6 mt-1">
-                                    <label for="ciudad">Telefono</label>
-                                    <input :disabled="pedirConfirmacion" class="form-control" autocomplete="off" maxlength="50" id="nombre" v-model="usuario.telefono">
-                                </div>
-                                <div class="col-sm-12 col-md-6 mt-1">
-                                    <label for="ciudad">Rol (*) </label>
-                                    <select class="form-control" :disabled="pedirConfirmacion" name="rol" v-model="usuario.rol">
-                                        <option value="postulante">Postulante</option>
-                                        <option value="voluntario">Voluntario</option>
-                                        <option value="general">General</option>
-                                        <option value="admin">Admin</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 col-md-6 mt-1">
+                                
+                                <div class="col-sm-12 mt-1" v-if="usuario.rol != 'postulante' && usuario.rol != null">
                                     <label for="ciudad">Mail (*) <span class="errorLabel" v-if="errorMail">{{errorMail}}</span></label>
                                     <input :disabled="pedirConfirmacion" class="form-control" autocomplete="off" maxlength="60" id="mail" v-model="usuario.mail">
                                 </div>
@@ -627,7 +638,7 @@
         <!-- END NOTIFICACION -->
     </div>
 
-    <style scoped>
+    <style>
        
             
     </style>
@@ -760,25 +771,31 @@
                 rol: null,
                 page: 1,
                 cantidadUsuarios: 0,
+                opcionesCantidad: [10, 20, 50],
+                cantidadPorPagina: 10
             },
             mounted () {
                 this.consultarUsuarios();
                 // this.contarUsuarios();
-                this.rol = "admin";
+                // this.rol = "admin";
                 // this.rol = "general";
-                // this.rol = "voluntario";
+                this.rol = "voluntario";
+                if (this.rol == "voluntario") {
+                    this.usuario.rol = "postulante";
+                }
             },
             methods:{
+                changeCantidad () {
+                    this.page = 1;
+                    this.consultarUsuarios()
+                },
                 contarUsuarios () {
                     let formdata = new FormData();
                     formdata.append("filtro", this.filtro);
                     formdata.append("buscador", null);
 
-                    console.log(this.filtro);
-
                     axios.post("funciones/acciones.php?accion=contarUsuarios", formdata)
                     .then(function(response){  
-                        console.log(response.data);  
                         if (response.data.error) {
                             app.mostrarToast("Error", response.data.mensaje);
                         } else {
@@ -796,12 +813,12 @@
                     let formdata = new FormData();
                     formdata.append("filtro", this.filtro);
                     formdata.append("buscador", null);
+                    formdata.append("cantidad", this.cantidadPorPagina);
                     if (this.page == 1) {
                         formdata.append("inicio", 0);
                     } else {
-                        formdata.append("inicio", ((app.page -1) * 10));
+                        formdata.append("inicio", ((app.page -1) * this.cantidadPorPagina));
                     }
-                    // this.consultarCantidad()
                     axios.post("funciones/acciones.php?accion=getUsuarios", formdata)
                     .then(function(response){    
                         app.buscandoUsuarios = false;
@@ -827,7 +844,7 @@
                     }
                 },
                 next() {
-                    if (Math.ceil(this.cantidadUsuarios/10) > this.page) {
+                    if (Math.ceil(this.cantidadUsuarios/this.cantidadPorPagina) > this.page) {
                         this.page = this.page + 1;
                         this.consultarUsuarios();
                     }

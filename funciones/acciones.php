@@ -83,8 +83,9 @@
             $filtro = $_POST["filtro"];
             $buscador = $_POST["buscador"];
             $inicio = $_POST["inicio"];
+            $cantidad = $_POST["cantidad"];
          
-            $u = $user -> consultarUsuarios($filtro, $buscador, $inicio);
+            $u = $user -> consultarUsuarios($filtro, $buscador, $inicio, $cantidad);
 
             if ($u || $u == []) { 
                 $res["usuarios"] = $u;

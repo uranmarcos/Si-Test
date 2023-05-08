@@ -22,12 +22,13 @@
  
 </head>
 <body>
-    <header class="row fwb  header justify-content-between align-items-center">
+    <!-- <header class="row fwb  header justify-content-between align-items-center">
         <h4 class="col-4 leftTexto">¡Hola Marcos!</h4>
         <a class="col-4 centrarTexto" href="cerrarSesion.php">Cerrar Sesión</a>
-    </header>  
+    </header>   -->
+    <?php require("shared/header.html")?>
     <div id="app">
-        <div class="container">
+        <div class=" contenedor">
             <!-- START BREADCRUMB -->
             <div class="col-12 p-0">
                 <div class="breadcrumb">

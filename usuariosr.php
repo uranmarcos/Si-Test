@@ -38,7 +38,7 @@
             <div class="row d-flex justify-content-between mb-3">
                 <div class="col-6 col-md-3 px-0 ">
                     <select class="form-control" name="filtro" id="filtro" @change="consultarUsuarios" v-model="filtro">
-                        <option v-for="opcion in opciones" v-bind:value="opcion">{{opcion}}</option>
+                        <option v-for="opcion in opciones" v-bind:value="opcion.id">{{opcion.texto}}</option>
                     </select>
                 </div>
                 <div class="col-6  px-0 d-flex justify-content-end">
@@ -131,7 +131,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="row mt-3 mb-5">
+                <div class="row mt-3 mb-5" v-if="usuarios.length != 0">
                     <div class="col-3 px-0 selectCantidad">
                         <span class="labelCantidad"> Ver de a...</span>
                         <select class="form-control" @change="changeCantidad" v-model="cantidadPorPagina">
@@ -160,7 +160,12 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="contenedorTabla" v-else>
+                    <span class="sinResultados">
+                        NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
+                    </span>
+                </div>  
+            </div>
                 
  
             <!-- END TABLA -->
@@ -620,7 +625,7 @@
             <!-- END MODAL EDITAR USUARIO -->
 
             
-        </div>
+        
         <!-- START NOTIFICACION -->
         <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
             <div class="toast-header">
@@ -718,13 +723,8 @@
                 errorDni: "",
                 errorTelefono: "",
                 errorMail: "",
-                filtro: "voluntarios",
-                opciones:[
-                    "voluntarios",
-                    "2023",
-                    "2022",
-                    "anteriores"
-                ],
+                filtro: "",
+                opciones:[],
                 buscandoUsuarios: false,
                 buscandoVoluntarios: false,
                 page: 1,
@@ -775,16 +775,46 @@
                 cantidadPorPagina: 10
             },
             mounted () {
-                this.consultarUsuarios();
                 // this.contarUsuarios();
                 // this.rol = "admin";
-                // this.rol = "general";
-                this.rol = "voluntario";
+                this.rol = "general";
+                // this.rol = "voluntario";
                 if (this.rol == "voluntario") {
                     this.usuario.rol = "postulante";
                 }
+                this.generarOpciones();
+                this.consultarUsuarios();
             },
             methods:{
+                generarOpciones() {
+                    // CARGO OPCION ANTERIORES
+                    let anteriores = {
+                        id: "anteriores",
+                        texto: "Postulantes anteriores"
+                    }
+                    this.opciones.push(anteriores);
+
+                    const hoy = new Date(Date.now());
+                    let anio = hoy.getFullYear();
+                    this.filtro = anio
+
+                    for (let index = 2022; index <=anio; index++) {
+                        let obj = {
+                            id: index.toString(),
+                            texto:"Postulantes " + index
+                        }
+                        this.opciones.push(obj);
+                    }
+
+                    if (this.rol != "voluntario") {
+                        let obj = {
+                            id:"voluntarios",
+                            texto:"Voluntarios"
+                        }
+                        this.opciones.push(obj);
+                    }
+                    this.opciones = this.opciones.reverse();
+                },
                 changeCantidad () {
                     this.page = 1;
                     this.consultarUsuarios()

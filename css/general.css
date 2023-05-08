@@ -164,7 +164,19 @@ table{
 /* ESTILOS LOADING */
 
 
+/* PAGINACIO */
+.paginacion{
+    color: grey;
+    font-size: 14px;
+}
+.btnPaginacion{
+    border: none;
+    background: white;
+    color: #7C4599;
+}    
 
+
+/* PAGINACION */
 
 
 /* MODAL  */

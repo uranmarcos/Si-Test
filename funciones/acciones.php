@@ -61,6 +61,23 @@
 
         break;
 
+        
+        case 'contarUsuarios':
+            $filtro = $_POST["filtro"];
+            $buscador = $_POST["buscador"];
+
+            $u = $user -> contarUsuarios($filtro, $buscador);
+            if ($u || $u == []) { 
+                $res["cantidad"] = $u[0]["total"];
+                $res["mensaje"] = "La consulta se realizó correctamente";
+            } else {
+                $res["u"] = $u;
+                $res["mensaje"] = "Hubo un error al recuperar la información. Actualice la página";
+                $res["error"] = true;
+            } 
+
+        break;
+
 
         case 'getUsuarios':
             $filtro = $_POST["filtro"];

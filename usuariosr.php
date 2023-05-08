@@ -22,10 +22,6 @@
  
 </head>
 <body>
-    <!-- <header class="row fwb  header justify-content-between align-items-center">
-        <h4 class="col-4 leftTexto">¡Hola Marcos!</h4>
-        <a class="col-4 centrarTexto" href="cerrarSesion.php">Cerrar Sesión</a>
-    </header>   -->
     <?php require("shared/header.html")?>
     <div id="app">
         <div class=" contenedor">
@@ -41,12 +37,12 @@
          
             <!-- START OPCIONES USUARIOS -->
             <div class="row mb-3">
-                <div class="col-sm-12 px-0 col-md-6">
+                <div class="col-6 px-0 ">
                     <select class="form-control" name="filtro" id="filtro" @change="consultarUsuarios" v-model="filtro">
                         <option v-for="opcion in opciones" v-bind:value="opcion">{{opcion}}</option>
                     </select>
                 </div>
-                <div class="col-sm-12 col-md-6 px-0 d-flex justify-content-end">
+                <div class="col-6  px-0 d-flex justify-content-end">
                     <div class="dropdown">
                         <button class="boton dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Crear
@@ -155,9 +151,9 @@
                     <div class="modal-content px-0 py-0">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalNuevoUsuario">NUEVO USUARIO</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <svg xmlns="http://www.w3.org/2000/svg" @click="modalCrearUsuario = false" width="30" height="30" fill="currentColor" class="bi closeModal bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                            </svg>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -236,9 +232,9 @@
                     <div class="modal-content px-0 py-0">
                         <div class="modal-header">
                             <h5 class="modal-title" id="">ELIMINAR USUARIO</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <svg xmlns="http://www.w3.org/2000/svg" @click="modalEliminarUsuario = false" width="30" height="30" fill="currentColor" class="bi closeModal bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                            </svg>
                         </div>
                     
                         <div class="modal-body">
@@ -294,12 +290,12 @@
                     <div class="modal-content px-0 py-0">
                         <div class="modal-header">
                             <h5 class="modal-title" id="">ASIGNAR USUARIO</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <svg xmlns="http://www.w3.org/2000/svg" @click="modalAsignarUsuario = false" width="30" height="30" fill="currentColor" class="bi closeModal bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                            </svg>
                         </div>
                     
-                        <div class="modal-body">
+                        <div class="modal-body" v-if="!buscandoVoluntarios">
                             <div class="row">
                                 <div class="col-sm-12 mt-3">
                                     <label for="nombre">Nombre</label>
@@ -320,34 +316,42 @@
                                     </select> 
                                 </div>           
                             </div>
-                        </div>
-                        <div v-if="!asignandoUsuario">
-                            <div class="modal-footer d-flex justify-content-between" v-if="!pedirConfirmacionAsignar">
-                                <button type="button" class="botonCancelar" @click="cancelarAsignarUsuario()" id="" data-dismiss="modal">Cancelar</button>
-                                <button type="button" @click="pedirConfirmacionAsignar= true"  class="boton">Asignar</button>
-                            </div>
-                            <div class="modal-footer" v-if="pedirConfirmacionAsignar">
-                                <div class="row mb-2 d-flex justify-content-center">
-                                    ¿Confirma la asignación del usuario?
+                            <div v-if="!asignandoUsuario">
+                                <div class="modal-footer d-flex justify-content-between" v-if="!pedirConfirmacionAsignar">
+                                    <button type="button" class="botonCancelar" @click="cancelarAsignarUsuario()" id="" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" @click="pedirConfirmacionAsignar= true"  class="boton">Asignar</button>
                                 </div>
-                                <div class="row d-flex justify-content-between">
-                                    <button type="button" class="botonCancelar" @click="pedirConfirmacionAsignar = false">Cancelar</button>
-                                    <button type="button" class="boton" @click="confirmarAsignacionUsuario()">Confirmar</button>
+                                <div class="modal-footer" v-if="pedirConfirmacionAsignar">
+                                    <div class="row mb-2 d-flex justify-content-center">
+                                        ¿Confirma la asignación del usuario?
+                                    </div>
+                                    <div class="row d-flex justify-content-between">
+                                        <button type="button" class="botonCancelar" @click="pedirConfirmacionAsignar = false">Cancelar</button>
+                                        <button type="button" class="boton" @click="confirmarAsignacionUsuario()">Confirmar</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div v-if="asignandoUsuario">
-                            <div class="modal-footer d-flex justify-content-between">
-                                <div class="contenedorLoadingModal">
-                                    <div class="loading">
-                                        <div class="spinner-border" role="status">
-                                            <span class="sr-only"></span>
+                            <div v-if="asignandoUsuario">
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <div class="contenedorLoadingModal">
+                                        <div class="loading">
+                                            <div class="spinner-border" role="status">
+                                                <span class="sr-only"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-body" v-if="buscandoVoluntarios">
+                            <div class="loading">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    
                 </div>    
             </div>    
             <!-- END MODAL ASIGNAR USUARIO -->
@@ -358,9 +362,9 @@
                     <div class="modal-content px-0 py-0">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalNuevoUsuario">EDITAR USUARIO</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <svg xmlns="http://www.w3.org/2000/svg" @click="modalEditarUsuario = false" width="30" height="30" fill="currentColor" class="bi closeModal bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                            </svg>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -441,9 +445,9 @@
                             <h5 class="modal-title" id="">
                                 HABILITAR/BLOQUEAR USUARIO
                             </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <svg xmlns="http://www.w3.org/2000/svg" @click="modalHabilitarUsuario = false" width="30" height="30" fill="currentColor" class="bi closeModal bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                            </svg>
                         </div>
                     
                         <div class="modal-body">
@@ -481,7 +485,7 @@
                     </div>
                 </div>    
             </div>    
-            <!-- END MODAL ASIGNAR USUARIO -->
+            <!-- END MODAL HABILITAR / BLOQUEAR USUARIO -->
 
             <!-- START MODAL RESETEAR CONTRASEÑA -->
             <div v-if="modalResetear">
@@ -491,9 +495,9 @@
                             <h5 class="modal-title" id="">
                                 Resetear contraseña
                             </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <svg xmlns="http://www.w3.org/2000/svg" @click="modalResetear = false" width="30" height="30" fill="currentColor" class="bi closeModal bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                            </svg>
                         </div>
                     
                         <div class="modal-body">
@@ -542,10 +546,10 @@
                 <div id="myModal" class="modal">
                     <div class="modal-content px-0 py-0">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalNuevoUsuario">EDITAR DNI</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <h5 class="modal-title">EDITAR DNI</h5>
+                            <svg xmlns="http://www.w3.org/2000/svg" @click="modalEditarDni = false" width="30" height="30" fill="currentColor" class="bi closeModal bi-x-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                            </svg>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -698,6 +702,7 @@
                     "anteriores"
                 ],
                 buscandoUsuarios: false,
+                buscandoVoluntarios: false,
                 page: 1,
                 provincias: [
                     "Buenos Aires",
@@ -781,17 +786,20 @@
                 consultarVoluntarios() {
                     this.buscandoVoluntarios = true;
                     axios.post("funciones/acciones.php?accion=getVoluntarios")
-                    .then(function(response){    
-                        app.buscandoVoluntarios = false;
-                        if (response.data.error) {
-                            app.mostrarToast("Error", response.data.mensaje);
-                        } else {
-                            if (response.data.usuarios != false) {
-                                app.voluntarios = response.data.usuarios;
+                    .then(function(response){   
+                        setTimeout(() => {
+                            app.buscandoVoluntarios = false;
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
                             } else {
-                                app.voluntarios = []
+                                if (response.data.usuarios != false) {
+                                    app.voluntarios = response.data.usuarios;
+                                } else {
+                                    app.voluntarios = []
+                                }
                             }
-                        }
+                            
+                        }, 5000); 
                     }).catch( error => {
                         console.log(error);
                         app.buscandoUsuarios = false;

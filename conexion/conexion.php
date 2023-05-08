@@ -131,6 +131,27 @@ class ApptivaDB {
         }
     }
 
+    public function hayRegistro($condicion) {
+        try {
+            $resultado = $this->conexion->query("SELECT * FROM usuariosnuevos WHERE $condicion") or die();
+            $resultado = $resultado->fetch_all(MYSQLI_ASSOC);
+            $numero = count($resultado);
+            return $numero;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    public function validarMailExistente($condicion) {
+        try {
+            $resultado = $this->conexion->query("SELECT * FROM usuariosnuevos WHERE $condicion") or die();
+            $resultado = $resultado->fetch_all(MYSQLI_ASSOC);
+            $numero = count($resultado);
+            return $numero;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 
 
 

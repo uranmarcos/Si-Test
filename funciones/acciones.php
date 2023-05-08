@@ -109,6 +109,40 @@
             $null = null;
             $anio = null;
 
+            // VALIDO QUE EL DNI NO ESTE CARGADO YA EN SISTEMA
+            $dataValidar = " dni LIKE '$dni'"; 
+            $validacion = $user -> hayRegistro($dataValidar);  
+                    
+            if ($validacion > 0) {
+                $res["mensaje"] = "El dni ya se encuentra registrado";
+                $res["error"] = true; 
+                break;
+            }
+            if ($validacion === false) {
+                $res["mensaje"] = "La creación no pudo realizarse";
+                $res["error"] = true;
+                break;
+            }
+
+            // SI EL DNI NO ESTA CARGADO Y EL USUARIO NO ES POSTULANTE, VALIDO EL MAIL
+
+            if ($rol != 'postulante') {
+                $dataValidar = " mail LIKE '$mail'"; 
+                $validacion = $user -> hayRegistro($dataValidar);  
+                    
+                if ($validacion > 0) {
+                    $res["mensaje"] = "El mail ya se encuentra registrado";
+                    $res["error"] = true; 
+                    break;
+                }
+                if ($validacion === false) {
+                    $res["mensaje"] = "La creación no pudo realizarse";
+                    $res["error"] = true;
+                    break;
+                }
+            }
+                    
+
             if ($rol == "postulante") {
                 $contrasenia = rand(100000, 999999);
                 $anio = date("Y");
@@ -146,6 +180,23 @@
             $mail = $_POST['mail'];
             $provincia = $_POST["provincia"];
             $telefono = $_POST["telefono"];
+
+            // SI EL DNI NO ESTA CARGADO Y EL USUARIO NO ES POSTULANTE, VALIDO QUE EL MAIL NO ESTE ASIGNADO A OTRO USUARIO
+            if ($rol != 'postulante') {
+                $dataValidar = " mail LIKE '$mail' AND id <> '$id'"; 
+                $validacion = $user -> validarMailExistente($dataValidar);  
+                    
+                if ($validacion > 0) {
+                    $res["mensaje"] = "El mail ya se encuentra registrado";
+                    $res["error"] = true; 
+                    break;
+                }
+                if ($validacion === false) {
+                    $res["mensaje"] = "La creación no pudo realizarse";
+                    $res["error"] = true;
+                    break;
+                }
+            }
 
             $data = "rol = '" . $rol . "', nombre = '" . $nombre . "', apellido = '" . $apellido . "', mail = '" . $mail . "', telefono = '" . $telefono . "', provincia = '" . $provincia . "'";;
             $u = $user -> editarUsuario($data, $id);  

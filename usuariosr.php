@@ -29,15 +29,14 @@
             <div class="col-12 p-0">
                 <div class="breadcrumb">
                     <span class="pointer" @click="irA('inicio')">Inicio</span>
-                 
                     <span class="mx-2 grey"> - Usuarios </span>
                 </div>
             </div>
             <!-- END BREADCRUMB -->
          
             <!-- START OPCIONES USUARIOS -->
-            <div class="row mb-3">
-                <div class="col-6 px-0 ">
+            <div class="row d-flex justify-content-between mb-3">
+                <div class="col-6 col-md-3 px-0 ">
                     <select class="form-control" name="filtro" id="filtro" @change="consultarUsuarios" v-model="filtro">
                         <option v-for="opcion in opciones" v-bind:value="opcion">{{opcion}}</option>
                     </select>
@@ -68,78 +67,92 @@
 
             <!-- START TABLA -->
             <div v-else>
-                <table class="table" v-if="usuarios.length != 0">
-                    <thead>
-                        <tr>
-                            <th scope="col" v-if="filtro != 'voluntarios'">Provincia</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellido</th>
-                            <th scope="col">Dni</th>
-                            <th scope="col" v-if="filtro != 'voluntarios'">Teléfono</th>
-                            <th scope="col" v-if="filtro != 'voluntarios'">Contraseña</th>
-                            <th scope="col" v-if="filtro != 'voluntarios'">Raven</th>
-                            <th scope="col" v-if="filtro != 'voluntarios'">CT</th>
-                            <th scope="col">Habilitado</th>
-                            <th scope="col" v-if="filtro != 'voluntarios'">Asignado</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <div  v-if="this.usuarios.length != 0">
-                            <tr v-for="usuario in usuarios">
-                                <td v-if="filtro != 'voluntarios'">{{usuario.provincia}}</td>
-                                <td>{{usuario.nombre}}</td>
-                                <td>{{usuario.apellido}}</td>
-                                <td>{{usuario.dni}}</td>
-                                <td v-if="filtro != 'voluntarios'">{{usuario.telefono}}</td>
-                                <td v-if="filtro != 'voluntarios'">{{usuario.rol == "postulante" ? usuario.pass : "-"}}</td>
-                                <td v-if="filtro != 'voluntarios'">{{usuario.raven}}</td>
-                                <td v-if="filtro != 'voluntarios'">{{usuario.ct}}</td>
-                                <td>{{usuario.habilitado == 1 ? "S" : "N"}}</td>
-                                <td v-if="filtro != 'voluntarios'">{{usuario.asignado}}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="boton dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
-                                                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
-                                            </svg>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#" v-if="rol == 'admin' || rol == 'general'">
-                                                    Eliminar
-                                                </a>
-                                            </li>
-                                            <li v-if="(rol == 'admin' || rol == 'general') || usuario.rol == 'postulante'">
-                                                <a class="dropdown-item" @click="resetear(usuario)" href="#">
-                                                    Resetear Contraseña
-                                                </a>
-                                            </li>
-                                            <li v-if="rol == 'admin' || rol == 'general'">
-                                                <a class="dropdown-item" @click="habilitar(usuario)" href="#">
-                                                    {{usuario.habilitado == 0 ? 'Habilitar' : 'Bloquear'}}
-                                                </a>
-                                            </li>
-                                            <li><a class="dropdown-item" @click="edit(usuario)" href="#">Editar</a></li>
-                                            <li v-if="rol == 'admin' || rol == 'general'"><a class="dropdown-item" @click="editDni(usuario)" href="#">Modificar DNI</a></li>
-                                            <li><a class="dropdown-item" @click="asignarUsuario(usuario)" href="#" v-if="filtro != 'voluntarios'">Asignar</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
+                <div>
+                    <table class="table" v-if="usuarios.length != 0">
+                        <thead>
+                            <tr>
+                                <th scope="col" v-if="filtro != 'voluntarios'">Provincia</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Dni</th>
+                                <th scope="col" v-if="filtro != 'voluntarios'">Teléfono</th>
+                                <th scope="col" v-if="filtro != 'voluntarios'">Contraseña</th>
+                                <th scope="col" v-if="filtro != 'voluntarios'">Raven</th>
+                                <th scope="col" v-if="filtro != 'voluntarios'">CT</th>
+                                <th scope="col">Habilitado</th>
+                                <th scope="col" v-if="filtro != 'voluntarios'">Asignado</th>
+                                <th scope="col"></th>
                             </tr>
-                        </div>
-                    </tbody>
-                
+                        </thead>
+                        <tbody>
+                            <div  v-if="this.usuarios.length != 0">
+                                <tr v-for="usuario in usuarios">
+                                    <td v-if="filtro != 'voluntarios'">{{usuario.provincia}}</td>
+                                    <td>{{usuario.nombre}}</td>
+                                    <td>{{usuario.apellido}}</td>
+                                    <td>{{usuario.dni}}</td>
+                                    <td v-if="filtro != 'voluntarios'">{{usuario.telefono}}</td>
+                                    <td v-if="filtro != 'voluntarios'">{{usuario.rol == "postulante" ? usuario.pass : "-"}}</td>
+                                    <td v-if="filtro != 'voluntarios'">{{usuario.raven}}</td>
+                                    <td v-if="filtro != 'voluntarios'">{{usuario.ct}}</td>
+                                    <td>{{usuario.habilitado == 1 ? "S" : "N"}}</td>
+                                    <td v-if="filtro != 'voluntarios'">{{usuario.asignado}}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="boton dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                                                </svg>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#" v-if="rol == 'admin' || rol == 'general'">
+                                                        Eliminar
+                                                    </a>
+                                                </li>
+                                                <li v-if="(rol == 'admin' || rol == 'general') || usuario.rol == 'postulante'">
+                                                    <a class="dropdown-item" @click="resetear(usuario)" href="#">
+                                                        Resetear Contraseña
+                                                    </a>
+                                                </li>
+                                                <li v-if="rol == 'admin' || rol == 'general'">
+                                                    <a class="dropdown-item" @click="habilitar(usuario)" href="#">
+                                                        {{usuario.habilitado == 0 ? 'Habilitar' : 'Bloquear'}}
+                                                    </a>
+                                                </li>
+                                                <li><a class="dropdown-item" @click="edit(usuario)" href="#">Editar</a></li>
+                                                <li v-if="rol == 'admin' || rol == 'general'"><a class="dropdown-item" @click="editDni(usuario)" href="#">Modificar DNI</a></li>
+                                                <li><a class="dropdown-item" @click="asignarUsuario(usuario)" href="#" v-if="filtro != 'voluntarios'">Asignar</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row mt-3 mb-5">
+                    <div class="col-4">
+                        <button @click="prev" class="btnPaginacion pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="col-4 d-flex justify-content-center">
+                        {{page * 10 - 9}} a {{page * 10 > cantidadUsuarios ? cantidadUsuarios : page * 10}} de {{cantidadUsuarios == 1 ? " 1 resultado" : cantidadUsuarios >= 2 ? (cantidadUsuarios + " resultados") : ""}}
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                        <button  class="btnPaginacion pointer" @click="next">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
 
                 
-                </table>
-                <div class="contenedorTabla" v-else>
-                    <span class="sinResultados">
-                        NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
-                    </span>
-                </div>       
-
-            </div>
+ 
             <!-- END TABLA -->
 
 
@@ -595,27 +608,27 @@
             </div>   
             <!-- END MODAL EDITAR USUARIO -->
 
-            <!-- START NOTIFICACION -->
-            <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
-                <div class="toast-header">
-                    <!-- Nombre de la Aplicación -->
-                    <div class="row tituloToast" id="tituloToast">
-                        <strong class="mr-auto">{{tituloToast}}</strong>
-                    </div>
-                </div>
-                <div class="toast-content">
-                    <div class="row textoToast">
-                        <strong >{{textoToast}}</strong>
-                    </div>
+            
+        </div>
+        <!-- START NOTIFICACION -->
+        <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
+            <div class="toast-header">
+                <!-- Nombre de la Aplicación -->
+                <div class="row tituloToast" id="tituloToast">
+                    <strong class="mr-auto">{{tituloToast}}</strong>
                 </div>
             </div>
-            <!-- END NOTIFICACION -->
-
+            <div class="toast-content">
+                <div class="row textoToast">
+                    <strong >{{textoToast}}</strong>
+                </div>
+            </div>
         </div>
+        <!-- END NOTIFICACION -->
     </div>
 
     <style scoped>
-     
+       
             
     </style>
     <script>
@@ -744,16 +757,41 @@
                 pedirConfirmacionEditarDni: false,
                 tituloToast: null,
                 textoToast: null,
-                rol: null
+                rol: null,
+                page: 1,
+                cantidadUsuarios: 0,
             },
             mounted () {
                 this.consultarUsuarios();
+                // this.contarUsuarios();
                 this.rol = "admin";
                 // this.rol = "general";
                 // this.rol = "voluntario";
             },
             methods:{
+                contarUsuarios () {
+                    let formdata = new FormData();
+                    formdata.append("filtro", this.filtro);
+                    formdata.append("buscador", null);
+
+                    console.log(this.filtro);
+
+                    axios.post("funciones/acciones.php?accion=contarUsuarios", formdata)
+                    .then(function(response){  
+                        console.log(response.data);  
+                        if (response.data.error) {
+                            app.mostrarToast("Error", response.data.mensaje);
+                        } else {
+                            if (response.data.cantidad != false) {
+                                app.cantidadUsuarios = response.data.cantidad
+                            } else {
+                                app.cantidadUsuarios = 0;
+                            }
+                        }
+                    });
+                },
                 consultarUsuarios() {
+                    this.contarUsuarios()
                     this.buscandoUsuarios = true;
                     let formdata = new FormData();
                     formdata.append("filtro", this.filtro);
@@ -782,7 +820,18 @@
                         app.mostrarToast("Error", "No se pudo recuperar los usuarios");
                     });
                 },
-
+                prev() {
+                    if(this.page > 1) {
+                        this.page = this.page - 1;
+                        this.consultarUsuarios();
+                    }
+                },
+                next() {
+                    if (Math.ceil(this.cantidadUsuarios/10) > this.page) {
+                        this.page = this.page + 1;
+                        this.consultarUsuarios();
+                    }
+                },
                 consultarVoluntarios() {
                     this.buscandoVoluntarios = true;
                     axios.post("funciones/acciones.php?accion=getVoluntarios")
@@ -879,6 +928,7 @@
                         formdata.append("asignado", 1);
                         axios.post("funciones/acciones.php?accion=crearUsuario", formdata)
                         .then(function(response){
+                            console.log(response.data);
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
                             } else {

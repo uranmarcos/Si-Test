@@ -273,9 +273,9 @@
             if ($u || $u == []) { 
                 $res["usuarios"] = $u;
                 if ($rol == "postulante") {
-                    $res["mensaje"] = "El usuario se creó correctamente. Se le asignó la contraseña " . $contrasenia;
+                    $res["mensaje"] = "Se le asignó la contraseña " . $contrasenia;
                 } else {
-                    $res["mensaje"] = "El usuario se creó correctamente. Se le asignó como contraseña su dni";
+                    $res["mensaje"] = "Se le asignó como contraseña su dni";
                 }
             } else {
                 $res["u"] = $u;

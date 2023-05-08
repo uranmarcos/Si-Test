@@ -108,19 +108,23 @@
                                             </svg>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#">Eliminar</a></li>
                                             <li>
+                                                <a class="dropdown-item" @click="eliminarUsuario(usuario)" href="#" v-if="rol == 'admin' || rol == 'general'">
+                                                    Eliminar
+                                                </a>
+                                            </li>
+                                            <li v-if="(rol == 'admin' || rol == 'general') || usuario.rol == 'postulante'">
                                                 <a class="dropdown-item" @click="resetear(usuario)" href="#">
                                                     Resetear Contraseña
                                                 </a>
                                             </li>
-                                            <li>
+                                            <li v-if="rol == 'admin' || rol == 'general'">
                                                 <a class="dropdown-item" @click="habilitar(usuario)" href="#">
                                                     {{usuario.habilitado == 0 ? 'Habilitar' : 'Bloquear'}}
                                                 </a>
                                             </li>
                                             <li><a class="dropdown-item" @click="edit(usuario)" href="#">Editar</a></li>
-                                            <li><a class="dropdown-item" @click="editDni(usuario)" href="#">Modificar DNI</a></li>
+                                            <li v-if="rol == 'admin' || rol == 'general'"><a class="dropdown-item" @click="editDni(usuario)" href="#">Modificar DNI</a></li>
                                             <li><a class="dropdown-item" @click="asignarUsuario(usuario)" href="#" v-if="filtro != 'voluntarios'">Asignar</a></li>
                                         </ul>
                                     </div>
@@ -504,10 +508,10 @@
                                     <label for="nombre">DNI</label>
                                     <input disabled class="form-control" v-model="usuarioReseteable.dni">
                                 </div>
-                                <div class="col-sm-12 mt-3">
+                                <!-- <div class="col-sm-12 mt-3">
                                     <label for="apellido">Rol</label>
                                     <input disabled class="form-control" v-model="usuarioReseteable.rol">
-                                </div> 
+                                </div>  -->
                             </div>
                         </div>
                         <div v-if="!reseteando">
@@ -739,6 +743,8 @@
             mounted () {
                 this.consultarUsuarios();
                 this.rol = "admin";
+                // this.rol = "general";
+                // this.rol = "voluntario";
             },
             methods:{
                 consultarUsuarios() {

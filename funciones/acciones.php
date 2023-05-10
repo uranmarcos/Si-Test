@@ -64,9 +64,8 @@
         
         case 'contarUsuarios':
             $filtro = $_POST["filtro"];
-            $buscador = $_POST["buscador"];
 
-            $u = $user -> contarUsuarios($filtro, $buscador);
+            $u = $user -> contarUsuarios($filtro);
             if ($u || $u == []) { 
                 $res["cantidad"] = $u[0]["total"];
                 $res["mensaje"] = "La consulta se realizó correctamente";
@@ -81,11 +80,27 @@
 
         case 'getUsuarios':
             $filtro = $_POST["filtro"];
-            $buscador = $_POST["buscador"];
             $inicio = $_POST["inicio"];
             $cantidad = $_POST["cantidad"];
+           
          
-            $u = $user -> consultarUsuarios($filtro, $buscador, $inicio, $cantidad);
+            $u = $user -> consultarUsuarios($filtro, $inicio, $cantidad);
+
+            if ($u || $u == []) { 
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "La consulta se realizó correctamente";
+            } else {
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "Hubo un error al recuperar la información. Por favor recargue la página.";
+                $res["error"] = true;
+            } 
+
+        break;
+
+        case 'buscarUsuario':
+            $dniBusqueda = $_POST["dniBusqueda"];
+                    
+            $u = $user -> buscarUsuario($dniBusqueda);
 
             if ($u || $u == []) { 
                 $res["usuarios"] = $u;

@@ -90,8 +90,59 @@ table{
     margin-top: 24px;
     width: 100%;
 }   
+.selectUsuarios{
+    position: relative;
+    padding: 0;
+}
+.labelUsuarios{
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    font-size: 12px !important;
+    background-color: white;
+    color:rgb(124, 69, 153);
+}
 
 
+
+
+/* BUSCADOR  */
+.selectBuscar{
+    position: relative;
+    padding: 0;
+    max-width: 250px;
+}
+.labelBuscar{
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    font-size: 12px !important;
+    background-color: white;
+    color:rgb(124, 69, 153);
+}
+.navBusqueda{
+    background-color: rgb(245, 244, 244);
+    padding: 5px 0px;
+}
+/*
+.selectBuscar:active{
+    outline: none;
+    box-shadow: none;
+ }
+ .selectBuscar:focus{
+    outline: none;
+    box-shadow: none;
+ }
+.inputBuscar:active{
+   outline: none;
+   box-shadow: none;
+}
+.inputBuscar:focus{
+    outline: none;
+    box-shadow: none;
+ } */
+ 
+/* BUSCADOR  */
 
 
 /* TABLA   */

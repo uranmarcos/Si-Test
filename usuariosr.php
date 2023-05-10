@@ -36,12 +36,51 @@
          
             <!-- START OPCIONES USUARIOS -->
             <div class="row d-flex justify-content-between mb-3">
-                <div class="col-6 col-md-3 px-0 ">
+                <div class="col-3 col-md-3 px-0 selectUsuarios">
+                    <span class="labelUsuarios"> Ver usuarios...</span>
                     <select class="form-control" name="filtro" id="filtro" @change="consultarUsuarios" v-model="filtro">
                         <option v-for="opcion in opciones" v-bind:value="opcion.id">{{opcion.texto}}</option>
                     </select>
                 </div>
-                <div class="col-6  px-0 d-flex justify-content-end">
+                <div class="col-6 px-0">
+                    <div class="row d-flex justify-content-center">
+                        <div class="selectBuscar">
+                            <span class="labelBuscar"> Buscar por dni...</span>
+                            <input 
+                                class="form-control inputBuscar" 
+                                autocomplete="off" 
+                                v-model="dniBusqueda"
+                            >
+                        </div>
+                        <button 
+                            type="button" 
+                            @click="buscarUsuario"  
+                            class="boton mx-2"
+                            v-if="dniBusqueda != null"    
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </button>
+        
+                        <button 
+                            type="button" 
+                            @click="borrarBusqueda"  
+                            class="botonCancelar mx-"
+                            v-if="busqueda"    
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                            </svg>
+                        </button>
+
+
+                    </div>
+                </div>
+                    
+                                
+             
+                <div class="col-3  px-0 d-flex justify-content-end">
                     <div class="dropdown">
                         <button class="boton dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Crear
@@ -54,6 +93,10 @@
                 </div>
             </div>
             <!-- END OPCIONES USUARIOS -->
+
+            <div class="alert alert-warning d-flex justify-content-center" role="alert" v-if="alertBusqueda">
+                El usuario buscado está cargado como voluntario 
+            </div>
             
             <!-- START COMPONENTE LOADING BUSCANDO USUARIOS -->
             <div class="contenedorLoading" v-if="buscandoUsuarios">
@@ -80,6 +123,7 @@
                                 <th scope="col" v-if="filtro != 'voluntarios'">Raven</th>
                                 <th scope="col" v-if="filtro != 'voluntarios'">CT</th>
                                 <th scope="col">Habilitado</th>
+                                <th scope="col" v-if="filtro == 'busqueda'">Año</th>
                                 <th scope="col" v-if="filtro != 'voluntarios'">Asignado</th>
                                 <th scope="col"></th>
                             </tr>
@@ -96,6 +140,7 @@
                                     <td v-if="filtro != 'voluntarios'">{{usuario.raven}}</td>
                                     <td v-if="filtro != 'voluntarios'">{{usuario.ct}}</td>
                                     <td>{{usuario.habilitado == 1 ? "S" : "N"}}</td>
+                                    <td v-if="filtro == 'busqueda'">{{usuario.anio}}</td>
                                     <td v-if="filtro != 'voluntarios'">{{usuario.asignado}}</td>
                                     <td>
                                         <div class="dropdown">
@@ -622,9 +667,7 @@
                     </div>
                 </div>   
             </div>   
-            <!-- END MODAL EDITAR USUARIO -->
-
-            
+            <!-- END MODAL EDITAR DNI -->            
         
         <!-- START NOTIFICACION -->
         <div role="alert" id="mitoast" aria-live="assertive" aria-atomic="true" class="toast">
@@ -660,6 +703,9 @@
                 modalEditarDni: false,
                 modalHabilitarUsuario: false,
                 modalResetear: false,
+                modalBuscar: false,
+                busqueda: "default",
+                dniBusqueda: null,
                 usuarios: [],
                 voluntarios: [],
                 usuario:{
@@ -761,6 +807,7 @@
                 habilitandoUsuario: false,
                 editandoDni: false,
                 reseteando: false,
+                buscando: false,
                 pedirConfirmacion: false,
                 pedirConfirmacionEliminar: false,
                 pedirConfirmacionAsignar: false,
@@ -769,23 +816,38 @@
                 tituloToast: null,
                 textoToast: null,
                 rol: null,
+                nombre: null,
                 page: 1,
                 cantidadUsuarios: 0,
                 opcionesCantidad: [10, 20, 50],
-                cantidadPorPagina: 10
+                cantidadPorPagina: 10,
+                alertBusqueda: false,
+                busqueda: false
             },
             mounted () {
                 // this.contarUsuarios();
                 // this.rol = "admin";
                 this.rol = "general";
+                this.nombre = "Manuel";
                 // this.rol = "voluntario";
                 if (this.rol == "voluntario") {
                     this.usuario.rol = "postulante";
                 }
+                document.getElementById("spanNombre").innerHTML = this.nombre.toUpperCase();
+                document.getElementById("spanRol").innerHTML = this.rol.toUpperCase();
                 this.generarOpciones();
                 this.consultarUsuarios();
             },
             methods:{
+                borrarBusqueda(){
+                   this.dniBusqueda = null;
+                   this.busqueda = false;
+                   this.consultarUsuarios();
+                },
+                mostrarModalBuscar(param) {
+                    this.modalBuscar = true;
+                    this.busqueda = param;
+                },
                 generarOpciones() {
                     // CARGO OPCION ANTERIORES
                     let anteriores = {
@@ -822,7 +884,6 @@
                 contarUsuarios () {
                     let formdata = new FormData();
                     formdata.append("filtro", this.filtro);
-                    formdata.append("buscador", null);
 
                     axios.post("funciones/acciones.php?accion=contarUsuarios", formdata)
                     .then(function(response){  
@@ -837,12 +898,44 @@
                         }
                     });
                 },
+                buscarUsuario() {
+                    this.busqueda = false;
+                    this.alertBusqueda = false;
+                    this.buscandoUsuarios = true;
+                    let formdata = new FormData();
+                    formdata.append("dniBusqueda", this.dniBusqueda);
+                    axios.post("funciones/acciones.php?accion=buscarUsuario", formdata)
+                    .then(function(response){    
+                        app.buscandoUsuarios = false;
+                        if (response.data.error) {
+                            app.mostrarToast("Error", response.data.mensaje);
+                        } else {
+                            if (response.data.usuarios != false) {
+                                app.busqueda = true;
+                                if (response.data.usuarios[0].rol != 'postulante') {
+                                    app.alertBusqueda = true;
+                                    app.usuarios = []
+                                    return
+                                } 
+                                app.cantidadUsuarios = 1;
+                                app.usuarios = response.data.usuarios;
+                            } else {
+                                app.usuarios = []
+                            }
+                        }
+                    }).catch( error => {
+                        app.buscandoUsuarios = false;
+                        app.mostrarToast("Error", "No se pudo recuperar los usuarios");
+                    });
+                },
                 consultarUsuarios() {
+                    this.busqueda = false;
+                    this.dniBusqueda = null;
+                    this.alertBusqueda = false;
                     this.contarUsuarios()
                     this.buscandoUsuarios = true;
                     let formdata = new FormData();
                     formdata.append("filtro", this.filtro);
-                    formdata.append("buscador", null);
                     formdata.append("cantidad", this.cantidadPorPagina);
                     if (this.page == 1) {
                         formdata.append("inicio", 0);

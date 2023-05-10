@@ -36,7 +36,7 @@ class ApptivaDB {
         }
     }
 
-    public function consultarUsuarios($filtro, $buscador,  $inicio, $cantidad) {
+    public function consultarUsuarios($filtro, $inicio, $cantidad) {
         try {
             if ($filtro == "voluntarios") {
                 $resultado = $this->conexion->query("SELECT id, nombre, apellido, dni, mail, habilitado, rol FROM usuariosnuevos WHERE rol != 'postulante' ORDER BY apellido limit $cantidad offset $inicio") or die();
@@ -44,21 +44,18 @@ class ApptivaDB {
                 $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.pass, U.raven, U.ct, U.habilitado, U.asignado idAsignado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
                 INNER JOIN usuariosnuevos B ON U.asignado = B.id  WHERE U.anio = '$filtro' AND U.rol = 'postulante' ORDER BY apellido limit $cantidad offset $inicio") or die();
             }
-            // if ($buscador != "") {
-            //     // $busqueda = '%' . $buscador . '%';
-            //     // if ($idCategoria == 0) {
-            //     // } else {
-            //     //     $condicion = '%-' . $idCategoria . '-%';
-            //     //     $resultado = $this->conexion->query("SELECT nombre, apellido, provincia, telefono, pass, raven, ct FROM usuariosNuevos WHERE categoria LIKE '$condicion' AND nombre LIKE '$busqueda' ORDER BY nombre limit 5 offset $inicio") or die();
-            //     // }
-            // } else {
-            //     if ($idCategoria == 0) {
-            //         $resultado = $this->conexion->query("SELECT nombre, apellido, provincia, telefono, pass, raven, ct FROM usuariosNuevos WHERE tipo = '$tipo' ORDER BY nombre limit 5 offset $inicio") or die();
-            //     } else {
-            //         $condicion = '%-' . $idCategoria . '-%';
-            //         $resultado = $this->conexion->query("SELECT nombre, apellido, provincia, telefono, pass, raven, ct FROM usuariosNuevos WHERE categoria LIKE '$condicion' ORDER BY nombre limit 5 offset $inicio") or die();
-            //     }
-            // }
+            return $resultado->fetch_all(MYSQLI_ASSOC);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    public function buscarUsuario($dni) {
+        try {
+            $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.anio, U.pass, U.raven, U.ct, U.habilitado, U.asignado idAsignado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
+            INNER JOIN usuariosnuevos B 
+            ON U.asignado = B.id  
+            WHERE U.dni = '$dni'") or die();
             return $resultado->fetch_all(MYSQLI_ASSOC);
         } catch (\Throwable $th) {
             return false;
@@ -162,26 +159,13 @@ class ApptivaDB {
         }
     }
 
-    public function contarUsuarios($filtro, $buscador) {
+    public function contarUsuarios($filtro) {
         try {
             if ($filtro == 'voluntarios') {
                 $resultado = $this->conexion->query("SELECT COUNT(*) total FROM usuariosnuevos WHERE rol != 'postulante'");
             } else {
                 $resultado = $this->conexion->query("SELECT COUNT(*) total FROM usuariosnuevos WHERE rol = 'postulante' AND anio LIKE '$filtro'");
             }
-
-            // if ($filtro == "voluntarios") {
-            //     $resultado = $this->conexion->query("SELECT id, nombre, apellido, dni, mail, habilitado, rol FROM usuariosnuevos WHERE rol != 'postulante' ORDER BY apellido limit 10 offset $inicio") or die();
-            // } else {
-            //     $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.pass, U.raven, U.ct, U.habilitado, U.asignado idAsignado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
-            //     INNER JOIN usuariosnuevos B ON U.asignado = B.id  WHERE U.anio = '$filtro' AND U.rol = 'postulante' ORDER BY apellido limit 10 offset $inicio") or die();
-            // }
-            // if ($idCategoria == 0) {
-            //     $resultado = $this->conexion->query("SELECT COUNT(*) total FROM recursos WHERE tipo = 'recurso'") or die();
-            // } else {
-            //     $condicion = '%-' . $idCategoria . '-%';
-            //     $resultado = $this->conexion->query("SELECT COUNT(*) total FROM recursos WHERE tipo = 'recurso' AND categoria LIKE '$condicion'") or die();
-            // }
             return $resultado->fetch_all(MYSQLI_ASSOC);
         } catch (\Throwable $th) {
             return false;

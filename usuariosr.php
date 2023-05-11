@@ -123,7 +123,7 @@
                                 <th scope="col" v-if="filtro != 'voluntarios'">Raven</th>
                                 <th scope="col" v-if="filtro != 'voluntarios'">CT</th>
                                 <th scope="col">Habilitado</th>
-                                <th scope="col" v-if="filtro == 'busqueda'">Año</th>
+                                <th scope="col" v-if="busqueda">Año</th>
                                 <th scope="col" v-if="filtro != 'voluntarios'">Asignado</th>
                                 <th scope="col"></th>
                             </tr>
@@ -140,7 +140,7 @@
                                     <td v-if="filtro != 'voluntarios'">{{usuario.raven}}</td>
                                     <td v-if="filtro != 'voluntarios'">{{usuario.ct}}</td>
                                     <td>{{usuario.habilitado == 1 ? "S" : "N"}}</td>
-                                    <td v-if="filtro == 'busqueda'">{{usuario.anio}}</td>
+                                    <td v-if="busqueda">{{usuario.anio}}</td>
                                     <td v-if="filtro != 'voluntarios'">{{usuario.asignado}}</td>
                                     <td>
                                         <div class="dropdown">

@@ -61,7 +61,6 @@
 
         break;
 
-        
         case 'contarUsuarios':
             $filtro = $_POST["filtro"];
 
@@ -77,7 +76,6 @@
 
         break;
 
-
         case 'getUsuarios':
             $filtro = $_POST["filtro"];
             $inicio = $_POST["inicio"];
@@ -85,6 +83,26 @@
            
          
             $u = $user -> consultarUsuarios($filtro, $inicio, $cantidad);
+
+            if ($u || $u == []) { 
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "La consulta se realizó correctamente";
+            } else {
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "Hubo un error al recuperar la información. Por favor recargue la página.";
+                $res["error"] = true;
+            } 
+
+        break;
+
+        case 'getUsuariosAsignados':
+            $idAsignado = $_POST["idAsignado"];
+            $inicio = $_POST["inicio"];
+            $anio = $_POST["anio"];
+            $cantidad = $_POST["cantidad"];
+           
+         
+            $u = $user -> consultarUsuariosAsignados($idAsignado, $inicio, $cantidad, $anio);
 
             if ($u || $u == []) { 
                 $res["usuarios"] = $u;

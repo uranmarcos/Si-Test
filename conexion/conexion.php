@@ -50,6 +50,16 @@ class ApptivaDB {
         }
     }
 
+    public function consultarUsuariosAsignados($idAsignado, $inicio, $cantidad, $anio) {
+        try {
+            $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.pass, U.raven, U.ct, U.habilitado, U.asignado idAsignado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
+            INNER JOIN usuariosnuevos B ON U.asignado = B.id  WHERE U.anio = $anio AND U.rol = 'postulante' AND U.asignado = $idAsignado ORDER BY apellido limit $cantidad offset $inicio") or die();
+            return $resultado->fetch_all(MYSQLI_ASSOC);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
     public function buscarUsuario($dni) {
         try {
             $resultado = $this->conexion->query("SELECT U.id, U.nombre, U.apellido, U.dni, U.provincia, U.telefono, U.rol, U.anio, U.pass, U.raven, U.ct, U.habilitado, U.asignado idAsignado, CONCAT(B.nombre, ' ',  B.apellido) asignado FROM usuariosnuevos U
